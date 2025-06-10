@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'CMMS_SOMACOR'
+    'CMMS_SOMACOR',
+    'CMMS_SOMACOR_app'
 ]
 
 MIDDLEWARE = [
@@ -74,10 +75,15 @@ WSGI_APPLICATION = 'CMMS_SOMACOR.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import pymysql
+pymysql.install_as_MySQLdb()
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'CMMS_SOMACOR_db',
+        'USER': 'root',
+        'PASSWORD': ''
     }
 }
 
