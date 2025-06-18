@@ -1,34 +1,150 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import apiClient from '../api/apiClient';
-import { useAuth } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+// Se importa el hook para la navegación
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+interface Rol {
+    idrol: number;
+    nombrerol: string;
+}
+
+const AuthPage: React.FC = () => {
+    const [isLoginView, setIsLoginView] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [nombreCompleto, setNombreCompleto] = useState('');
+    const [selectedRol, setSelectedRol] = useState<string>('');
+    const [roles, setRoles] = useState<Rol[]>([]);
     const [error, setError] = useState('');
-    const { login } = useAuth();
-    const handleLogin = async (e) => { e.preventDefault(); setError(''); try { await login(username, password); } catch (err) { setError('Usuario o contraseña incorrectos.'); } };
-    return (<form className="space-y-6" onSubmit={handleLogin}><input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Usuario" className="w-full px-4 py-2 border rounded-md" required /><input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Contraseña" className="w-full px-4 py-2 border rounded-md" required />{error && <p className="text-red-500 text-sm text-center">{error}</p>}<button type="submit" className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">Ingresar</button></form>);
-};
 
-const RegisterForm = () => {
-    const [formData, setFormData] = useState({ username: '', password: '', nombre_completo: '', email: '', rol_id: '' });
-    const [roles, setRoles] = useState([]);
-    const [error, setError] = useState('');
-    useEffect(() => { apiClient.get('/roles/').then(res => setRoles(res.data)).catch(err => console.error(err)); }, []);
-    const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    const handleRegister = async (e) => { e.preventDefault(); setError(''); try { await apiClient.post('/register/', formData); alert('¡Usuario creado con éxito! Por favor, inicia sesión.'); } catch (err) { setError('Error al crear el usuario.'); } };
-    return (<form className="space-y-4" onSubmit={handleRegister}><input name="username" onChange={handleChange} placeholder="Nombre de Usuario" className="w-full px-4 py-2 border rounded-md" required /><input type="password" name="password" onChange={handleChange} placeholder="Contraseña" className="w-full px-4 py-2 border rounded-md" required /><input name="nombre_completo" onChange={handleChange} placeholder="Nombre Completo" className="w-full px-4 py-2 border rounded-md" required /><input type="email" name="email" onChange={handleChange} placeholder="Email" className="w-full px-4 py-2 border rounded-md" required/><select name="rol_id" onChange={handleChange} className="w-full px-4 py-2 border rounded-md" required><option value="">-- Seleccione un Rol --</option>{roles.map(r => <option key={r.idrol} value={r.idrol}>{r.nombrerol}</option>)}</select>{error && <p className="text-red-500 text-sm text-center">{error}</p>}<button type="submit" className="w-full px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700">Crear Cuenta</button></form>);
-};
+    const auth = useContext(AuthContext);
+    // Se inicializa el hook de navegación
+    const navigate = useNavigate();
 
-const AuthPage = () => {
-    const [isLoginView, setIsLoginView] = useState(true);
+    // Redirige si el usuario ya está logueado
+    useEffect(() => {
+        if (auth?.token) {
+            navigate('/dashboard');
+        }
+    }, [auth, navigate]);
+
+
+    useEffect(() => {
+        if (!isLoginView) {
+            const fetchRoles = async () => {
+                try {
+                    const response = await apiClient.get<Rol[]>('/roles/');
+                    setRoles(response.data);
+                    if (response.data.length > 0) {
+                        setSelectedRol(String(response.data[0].idrol));
+                    }
+                } catch (err) {
+                    setError('No se pudieron cargar los roles. Verifique la conexión.');
+                    console.error("Error fetching roles:", err);
+                }
+            };
+            fetchRoles();
+        }
+    }, [isLoginView]);
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        try {
+            await auth!.login(username, password);
+            // Se reactiva la redirección al dashboard después del login
+            navigate('/dashboard'); 
+        } catch (err: any) {
+            setError('Error al iniciar sesión. Verifique sus credenciales.');
+            console.error("Login error:", err);
+        }
+    };
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        try {
+            if (password !== confirmPassword) {
+                setError('Las contraseñas no coinciden');
+                return;
+            }
+            if (!selectedRol) {
+                setError('Debe seleccionar un rol');
+                return;
+            }
+
+            const payload = {
+                username,
+                password,
+                email,
+                nombreCompleto,
+                idrol: parseInt(selectedRol, 10),
+            };
+
+            await apiClient.post('/register/', payload);
+            alert('¡Usuario registrado con éxito! Ahora puede iniciar sesión.');
+            setIsLoginView(true);
+            setUsername('');
+            setPassword('');
+            setConfirmPassword('');
+            setEmail('');
+            setNombreCompleto('');
+        } catch (err: any) {
+            console.error("Registration error object:", err.response);
+            if (err.response && err.response.data) {
+                const errorData = err.response.data;
+                const errorMessages = Object.entries(errorData).map(([field, messages]) => {
+                    const messageText = Array.isArray(messages) ? messages.join(', ') : String(messages);
+                    return `${field}: ${messageText}`;
+                }).join('; ');
+                setError(`Error: ${errorMessages}`);
+            } else {
+                setError('Error al crear el usuario. Verifique su conexión y los datos ingresados.');
+            }
+        }
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
-                <div className="text-center"><h2 className="text-2xl font-bold text-gray-800">{isLoginView ? 'Iniciar Sesión' : 'Crear Cuenta'} - Somacor CMMS</h2></div>
-                {isLoginView ? <LoginForm /> : <RegisterForm />}
-                <div className="text-center"><button onClick={() => setIsLoginView(!isLoginView)} className="text-sm text-blue-600 hover:underline">{isLoginView ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes una cuenta? Inicia Sesión'}</button></div>
+            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold text-center text-gray-800">
+                    {isLoginView ? 'Iniciar Sesión' : 'Crear Cuenta - Somacor CMMS'}
+                </h2>
+                <form onSubmit={isLoginView ? handleLogin : handleRegister}>
+                    {error && <p className="text-sm text-center text-red-500 bg-red-100 p-2 rounded">{error}</p>}
+                    
+                    <div className="space-y-4">
+                        <input className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        <input className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        
+                        {!isLoginView && (
+                            <>
+                                <input className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" placeholder="Confirmar Contraseña" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                                <input className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Nombre Completo" value={nombreCompleto} onChange={(e) => setNombreCompleto(e.target.value)} required />
+                                <input className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value={selectedRol} onChange={(e) => setSelectedRol(e.target.value)} required>
+                                    <option value="" disabled>-- Seleccione un Rol --</option>
+                                    {roles.map(rol => (
+                                        <option key={rol.idrol} value={rol.idrol}>{rol.nombrerol}</option>
+                                    ))}
+                                </select>
+                            </>
+                        )}
+                    </div>
+                    
+                    <button type="submit" className="w-full px-4 py-2 mt-6 font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300">
+                        {isLoginView ? 'Entrar' : 'Crear Cuenta'}
+                    </button>
+                </form>
+                <p className="text-sm text-center text-gray-600">
+                    {isLoginView ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
+                    <button onClick={() => { setIsLoginView(!isLoginView); setError(''); }} className="ml-1 font-semibold text-blue-600 hover:underline">
+                        {isLoginView ? 'Regístrate' : 'Inicia Sesión'}
+                    </button>
+                </p>
             </div>
         </div>
     );

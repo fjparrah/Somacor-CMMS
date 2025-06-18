@@ -1,4 +1,3 @@
-# Se importa IsAuthenticatedOrReadOnly
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -12,9 +11,14 @@ from .serializers import *
 class IsAdminUser(permissions.BasePermission):
     """ Permiso que solo permite el acceso a usuarios con el rol 'Administrador'. """
     def has_permission(self, request, view):
-        if not request.user or not request.user.is_authenticated: return False
-        try: return request.user.usuarios.idrol.nombrerol == 'Administrador'
-        except Usuarios.DoesNotExist: return False
+        # Primero, asegurar que el usuario esté autenticado.
+        if not request.user or not request.user.is_authenticated:
+            return False
+        # Luego, verificar su rol. Se usa un bloque try-except por si el perfil no existe.
+        try:
+            return request.user.usuarios.idrol.nombrerol == 'Administrador'
+        except Usuarios.DoesNotExist:
+            return False
 
 # --- Vistas de Autenticación ---
 class CustomAuthToken(ObtainAuthToken):
@@ -22,7 +26,6 @@ class CustomAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        # [Mejora] Se incluye el objeto 'user' completo con su rol en la respuesta del login
         user_data = UserSerializer(user, context={'request': request}).data
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key, 'user': user_data})
@@ -39,67 +42,62 @@ class LogoutView(generics.GenericAPIView):
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny] # Permite que cualquiera se registre
+    permission_classes = [permissions.AllowAny]
 
 # --- Vistas del Modelo (ViewSets) ---
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser] # CAMBIO: Solo los admins pueden ver la lista de usuarios.
 
 class RolViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet para manejar los Roles.
-    Se permite la lectura (GET) a cualquier usuario (incluso no autenticado)
-    para poder listarlos en el formulario de registro.
-    La creación, edición y eliminación requieren autenticación.
-    """
     queryset = Roles.objects.all()
     serializer_class = RolSerializer
-    # CAMBIO: Se reemplaza IsAuthenticated por IsAuthenticatedOrReadOnly
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 # --- Vistas de Catálogos / Mantenedores ---
+# CAMBIO: Se aplica el permiso IsAdminUser a todos los mantenedores.
 
 class EspecialidadViewSet(viewsets.ModelViewSet):
     queryset = Especialidades.objects.all()
     serializer_class = EspecialidadSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class FaenaViewSet(viewsets.ModelViewSet):
     queryset = Faenas.objects.all()
     serializer_class = FaenaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class TipoEquipoViewSet(viewsets.ModelViewSet):
     queryset = TiposEquipo.objects.all()
     serializer_class = TipoEquipoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class EstadoEquipoViewSet(viewsets.ModelViewSet):
     queryset = EstadosEquipo.objects.all()
     serializer_class = EstadoEquipoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class TipoTareaViewSet(viewsets.ModelViewSet):
     queryset = TiposTarea.objects.all()
     serializer_class = TipoTareaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class TipoMantenimientoOTViewSet(viewsets.ModelViewSet):
     queryset = TiposMantenimientoOT.objects.all()
     serializer_class = TipoMantenimientoOTSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 class EstadoOrdenTrabajoViewSet(viewsets.ModelViewSet):
     queryset = EstadosOrdenTrabajo.objects.all()
     serializer_class = EstadoOrdenTrabajoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 
 # --- Vistas de Modelos Principales ---
+# Estos pueden tener permisos más flexibles, pero por ahora se mantienen protegidos.
 
 class RepuestoViewSet(viewsets.ModelViewSet):
     queryset = Repuestos.objects.all()
