@@ -1,3 +1,4 @@
+# Se importa IsAuthenticatedOrReadOnly
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -29,29 +30,39 @@ class CustomAuthToken(ObtainAuthToken):
 class LogoutView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
-        if hasattr(request.user, 'auth_token') and request.user.auth_token:
+        try:
             request.user.auth_token.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except (AttributeError, Token.DoesNotExist):
+            return Response({"error": "Token no encontrado o usuario no autenticado."}, status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterView(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny] # Cualquiera puede registrarse
-    serializer_class = UserCreateSerializer
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.AllowAny] # Permite que cualquiera se registre
 
-# --- ViewSets para todos los modelos ---
+# --- Vistas del Modelo (ViewSets) ---
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.select_related('usuarios__idrol').all().order_by('id')
-    permission_classes = [IsAdminUser] # Solo los administradores pueden gestionar usuarios
-    def get_serializer_class(self):
-        return UserCreateSerializer if self.action == 'create' else UserSerializer
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-class RolViewSet(viewsets.ReadOnlyModelViewSet):
+class RolViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para manejar los Roles.
+    Se permite la lectura (GET) a cualquier usuario (incluso no autenticado)
+    para poder listarlos en el formulario de registro.
+    La creación, edición y eliminación requieren autenticación.
+    """
     queryset = Roles.objects.all()
     serializer_class = RolSerializer
-    permission_classes = [permissions.IsAuthenticated] # Cualquiera autenticado puede ver los roles
+    # CAMBIO: Se reemplaza IsAuthenticated por IsAuthenticatedOrReadOnly
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-# --- Viewsets para "Mantenedores" (Catálogos) ---
-# Permisos relajados para que cualquier usuario autenticado pueda leerlos.
+
+# --- Vistas de Catálogos / Mantenedores ---
+
 class EspecialidadViewSet(viewsets.ModelViewSet):
     queryset = Especialidades.objects.all()
     serializer_class = EspecialidadSerializer
@@ -87,41 +98,17 @@ class EstadoOrdenTrabajoViewSet(viewsets.ModelViewSet):
     serializer_class = EstadoOrdenTrabajoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# --- Viewsets de Operaciones Principales ---
 
-class EquipoViewSet(viewsets.ModelViewSet):
-    """
-    [CORREGIDO] ViewSet de Equipos que usa diferentes serializers para lectura y escritura.
-    """
-    queryset = Equipos.objects.select_related(
-        'idtipoequipo', 'idfaenaactual', 'idestadoactual', 'idoperarioasignadopredeterminado__user'
-    ).all()
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_serializer_class(self):
-        if self.action in ['create', 'update', 'partial_update']:
-            return EquipoWriteSerializer
-        return EquipoSerializer
-
-class OrdenTrabajoViewSet(viewsets.ModelViewSet):
-    """
-    [MEJORADO] ViewSet de OT que usa diferentes serializers.
-    """
-    queryset = OrdenesTrabajo.objects.select_related(
-        'idequipo', 'idtipomantenimientoot', 'idestadoot', 'idsolicitante__user'
-    ).all()
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def get_serializer_class(self):
-        if self.action in ['create', 'update', 'partial_update']:
-            return OrdenTrabajoWriteSerializer
-        return OrdenTrabajoSerializer
-
-# --- El resto de los Viewsets pueden permanecer simples por ahora ---
+# --- Vistas de Modelos Principales ---
 
 class RepuestoViewSet(viewsets.ModelViewSet):
     queryset = Repuestos.objects.all()
     serializer_class = RepuestoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class EquipoViewSet(viewsets.ModelViewSet):
+    queryset = Equipos.objects.all()
+    serializer_class = EquipoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class TareaEstandarViewSet(viewsets.ModelViewSet):
@@ -132,6 +119,11 @@ class TareaEstandarViewSet(viewsets.ModelViewSet):
 class PlanMantenimientoViewSet(viewsets.ModelViewSet):
     queryset = PlanesMantenimiento.objects.all()
     serializer_class = PlanMantenimientoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class OrdenTrabajoViewSet(viewsets.ModelViewSet):
+    queryset = OrdenesTrabajo.objects.all()
+    serializer_class = OrdenTrabajoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class DetallePlanMantenimientoViewSet(viewsets.ModelViewSet):

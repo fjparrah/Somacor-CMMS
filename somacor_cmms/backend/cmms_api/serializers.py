@@ -10,6 +10,89 @@ from .models import (
     Notificaciones
 )
 
+# --- Serializers de Usuarios y Autenticación ---
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer para el registro de nuevos usuarios. Maneja la creación del
+    usuario de Django y del perfil 'Usuarios' asociado en una sola transacción.
+    """
+    # Campo para recibir el ID del rol desde el frontend. Es de solo escritura.
+    idrol = serializers.IntegerField(write_only=True)
+    
+    # Hacemos que los campos del modelo User sean requeridos para el registro
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        # Campos que se esperan del frontend para el registro
+        fields = ('username', 'password', 'email', 'first_name', 'last_name', 'idrol')
+        extra_kwargs = {
+            'password': {'write_only': True, 'style': {'input_type': 'password'}},
+            'last_name': {'required': False} # El apellido es opcional
+        }
+
+    def validate_idrol(self, value):
+        """ Valida que el rol con el ID proporcionado exista en la base de datos. """
+        if not Roles.objects.filter(pk=value).exists():
+            raise serializers.ValidationError("El rol seleccionado no es válido.")
+        return value
+
+    def create(self, validated_data):
+        """
+        Sobrescribe el método create para manejar la lógica de registro.
+        Crea el objeto User y el perfil Usuarios asociado de forma atómica.
+        """
+        # Extraemos el idrol, ya que no pertenece al modelo User
+        idrol = validated_data.pop('idrol')
+        
+        try:
+            # transaction.atomic asegura que ambas operaciones (crear User y Usuarios)
+            # se completen con éxito. Si una falla, la otra se revierte.
+            with transaction.atomic():
+                # Creamos el usuario usando el método helper que hashea la contraseña
+                user = User.objects.create_user(
+                    username=validated_data['username'],
+                    email=validated_data['email'],
+                    password=validated_data['password'],
+                    first_name=validated_data.get('first_name', ''),
+                    last_name=validated_data.get('last_name', '')
+                )
+                
+                # Obtenemos la instancia del Rol a partir del ID
+                rol = Roles.objects.get(pk=idrol)
+                
+                # Creamos el perfil de usuario personalizado
+                Usuarios.objects.create(idusuario=user, idrol=rol)
+                
+        except Exception as e:
+            # Si algo falla durante la transacción, se lanza un error de validación
+            raise serializers.ValidationError({"error": f"No se pudo crear el usuario: {str(e)}"})
+
+        return user
+
+
+class UsuariosSerializer(serializers.ModelSerializer):
+    """ Serializer para el modelo de perfil de usuario (Usuarios). """
+    # Permite mostrar el nombre del rol en lugar de solo su ID.
+    nombrerol = serializers.CharField(source='idrol.nombrerol', read_only=True)
+
+    class Meta:
+        model = Usuarios
+        fields = ['idrol', 'nombrerol', 'idespecialidad', 'telefono', 'cargo']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """ Serializer para el modelo User de Django, incluyendo el perfil anidado. """
+    # Anidamos el serializer del perfil 'Usuarios' para incluirlo en la respuesta.
+    usuarios = UsuariosSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'usuarios']
+
+
 # --- Serializers de Catálogos (Simples) ---
 # Estos serializers se usan para los "mantenedores" y no requieren lógica compleja.
 
@@ -53,131 +136,32 @@ class EstadoOrdenTrabajoSerializer(serializers.ModelSerializer):
         model = EstadosOrdenTrabajo
         fields = '__all__'
 
+
+# --- Serializers de Modelos Principales ---
+
 class RepuestoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repuestos
         fields = '__all__'
-        
+
+class EquipoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Equipos
+        fields = '__all__'
+
 class TareaEstandarSerializer(serializers.ModelSerializer):
     class Meta:
         model = TareasEstandar
         fields = '__all__'
 
-# --- Serializers de Autenticación y Usuarios ---
-
-class UserSerializer(serializers.ModelSerializer):
-    """Serializer para LEER datos de usuario, mostrando el nombre del rol."""
-    rol = RolSerializer(source='usuarios.idrol', read_only=True)
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'rol']
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    """Serializer para CREAR usuarios, aceptando el ID del rol."""
-    rol_id = serializers.IntegerField(write_only=True)
-    nombre_completo = serializers.CharField(write_only=True)
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'email', 'nombre_completo', 'rol_id')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def validate_rol_id(self, value):
-        if not Roles.objects.filter(pk=value).exists():
-            raise serializers.ValidationError("El rol especificado no existe.")
-        return value
-
-    @transaction.atomic
-    def create(self, validated_data):
-        rol_id = validated_data.pop('rol_id')
-        nombre_completo = validated_data.pop('nombre_completo')
-        rol = Roles.objects.get(pk=rol_id)
-        
-        # Divide el nombre completo
-        first_name = nombre_completo.split(' ')[0]
-        last_name = ' '.join(nombre_completo.split(' ')[1:])
-        
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            password=validated_data['password'],
-            email=validated_data.get('email', ''),
-            first_name=first_name,
-            last_name=last_name
-        )
-        if rol.nombrerol == 'Administrador':
-            user.is_staff = True
-            user.is_superuser = True
-        user.save()
-        Usuarios.objects.create(user=user, idrol=rol, activo=True)
-        return user
-
-# --- Serializers para Equipos (Lectura y Escritura) ---
-
-class EquipoSerializer(serializers.ModelSerializer):
-    """Serializer para LEER equipos, mostrando nombres de relaciones."""
-    idtipoequipo = TipoEquipoSerializer(read_only=True)
-    idfaenaactual = FaenaSerializer(read_only=True)
-    idestadoactual = EstadoEquipoSerializer(read_only=True)
-    idoperarioasignadopredeterminado = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Equipos
-        fields = '__all__'
-
-class EquipoWriteSerializer(serializers.ModelSerializer):
-    """[CORREGIDO] Serializer para CREAR/ACTUALIZAR equipos, aceptando IDs."""
-    idtipoequipo = serializers.PrimaryKeyRelatedField(queryset=TiposEquipo.objects.all(), source='idtipoequipo')
-    idfaenaactual = serializers.PrimaryKeyRelatedField(queryset=Faenas.objects.all(), source='idfaenaactual', required=False, allow_null=True)
-    idestadoactual = serializers.PrimaryKeyRelatedField(queryset=EstadosEquipo.objects.all(), source='idestadoactual')
-    # El operario es opcional
-    idoperarioasignadopredeterminado = serializers.PrimaryKeyRelatedField(queryset=Usuarios.objects.all(), source='idoperarioasignadopredeterminado', required=False, allow_null=True)
-
-    class Meta:
-        model = Equipos
-        fields = (
-            'codigointerno', 'nombreequipo', 'idtipoequipo', 'marca', 'modelo',
-            'aniofabricacion', 'fechaadquisicion', 'idfaenaactual',
-            'horometroactual', 'idestadoactual', 'idoperarioasignadopredeterminado',
-            'imagenurl', 'observaciones', 'activo'
-        )
-
-# --- Serializers para Órdenes de Trabajo ---
-
-class OrdenTrabajoSerializer(serializers.ModelSerializer):
-    """Serializer para LEER OTs."""
-    idequipo = EquipoSerializer(read_only=True)
-    idtipomantenimientoot = TipoMantenimientoOTSerializer(read_only=True)
-    idestadoot = EstadoOrdenTrabajoSerializer(read_only=True)
-    idsolicitante = UserSerializer(read_only=True)
-
-    class Meta:
-        model = OrdenesTrabajo
-        fields = '__all__'
-
-class OrdenTrabajoWriteSerializer(serializers.ModelSerializer):
-    """[NUEVO] Serializer para CREAR/ACTUALIZAR OTs."""
-    idequipo = serializers.PrimaryKeyRelatedField(queryset=Equipos.objects.all())
-    idtipomantenimientoot = serializers.PrimaryKeyRelatedField(queryset=TiposMantenimientoOT.objects.all())
-    idestadoot = serializers.PrimaryKeyRelatedField(queryset=EstadosOrdenTrabajo.objects.all())
-    idsolicitante = serializers.PrimaryKeyRelatedField(queryset=Usuarios.objects.all())
-    idreportadopor = serializers.PrimaryKeyRelatedField(queryset=Usuarios.objects.all(), required=False, allow_null=True)
-    idtecnicoasignadoprincipal = serializers.PrimaryKeyRelatedField(queryset=Usuarios.objects.all(), required=False, allow_null=True)
-    
-    class Meta:
-        model = OrdenesTrabajo
-        # Asegúrate de incluir todos los campos que el frontend enviará
-        fields = (
-            'numeroot', 'idequipo', 'idtipomantenimientoot', 'idestadoot',
-            'idsolicitante', 'idreportadopor', 'idtecnicoasignadoprinciapl',
-            'fechareportefalla', 'fechaprogramadainicio',
-            'descripcionproblemareportado', 'prioridad'
-        )
-
-
-# --- Otros Serializers Complejos (si los hubiera) ---
-
 class PlanMantenimientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanesMantenimiento
+        fields = '__all__'
+
+class OrdenTrabajoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrdenesTrabajo
         fields = '__all__'
 
 class DetallePlanMantenimientoSerializer(serializers.ModelSerializer):
@@ -191,6 +175,7 @@ class ActividadOTSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AgendaSerializer(serializers.ModelSerializer):
+    # Mapeo de campos para compatibilidad con librerías de calendario en frontend
     id = serializers.IntegerField(source='idagenda', read_only=True)
     title = serializers.CharField(source='tituloevento')
     start = serializers.DateTimeField(source='fechahorainicio')
