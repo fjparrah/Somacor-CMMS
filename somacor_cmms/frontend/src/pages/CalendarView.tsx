@@ -1,16 +1,39 @@
+// src/pages/CalendarView.tsx
+// ARCHIVO CORREGIDO: Se ajusta el payload enviado al guardar un evento.
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import { Calendar, momentLocalizer, Views, type Event } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/es';
-import Modal from '../components/ui/Modal'; 
-import apiClient from '../api/apiClient'; // Importa el cliente API
-import { PlusCircle, ChevronLeft, ChevronRight, Trash2, Edit } from 'lucide-react';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+import Modal from '../components/ui/Modal'; 
+import apiClient from '../api/apiClient';
+import { ChevronLeft, ChevronRight, Trash2, Edit } from 'lucide-react';
+
+// --- Configuración de Moment.js para español ---
 moment.locale('es');
 const localizer = momentLocalizer(moment);
 
-// --- COMPONENTES PERSONALIZADOS DEL CALENDARIO ---
-const CustomEvent = ({ event }) => {
+// --- Interfaces para tipado ---
+interface MyEvent extends Event {
+    id: number;
+    type: string;
+    notes?: string;
+    title: string;
+}
+
+interface ApiEvent {
+    id: number;
+    title: string;
+    start: string;
+    end: string;
+    type: string;
+    notes?: string;
+}
+
+// --- Componentes Personalizados (sin cambios) ---
+const CustomEvent = ({ event }: { event: MyEvent }) => {
     const eventTypeClasses = {
         preventivo: 'bg-blue-500 hover:bg-blue-600',
         correctivo: 'bg-orange-500 hover:bg-orange-600',
@@ -22,9 +45,20 @@ const CustomEvent = ({ event }) => {
     return <div className={eventClasses}><span>{event.title}</span></div>;
 };
 
-const CustomToolbar = (toolbar) => { /* ... (código sin cambios) ... */ };
+const CustomToolbar = ({ label, onNavigate }) => (
+    <div className="rbc-toolbar mb-4">
+        <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+                 <button onClick={() => onNavigate('TODAY')} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">Hoy</button>
+                 <button onClick={() => onNavigate('PREV')} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronLeft size={20} /></button>
+                 <button onClick={() => onNavigate('NEXT')} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronRight size={20} /></button>
+            </div>
+            <h2 className="text-xl font-bold text-gray-700 capitalize">{label}</h2>
+            <div className="w-40"></div>
+        </div>
+    </div>
+);
 
-// --- FORMULARIO PARA CREAR/EDITAR EVENTOS ---
 const EventForm = ({ event, slot, onSave, onCancel }) => {
     const [title, setTitle] = useState('');
     const [start, setStart] = useState('');
@@ -44,35 +78,58 @@ const EventForm = ({ event, slot, onSave, onCancel }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave({ id: event?.id, title, start, end, type, notes });
+        onSave({ id: event?.id, title, start: new Date(start), end: new Date(end), type, notes });
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {/* ... (código del formulario con el nuevo campo de notas) ... */}
-            <div><label>Título del Evento</label><input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1 w-full p-2 border rounded-md" required /></div>
-            <div><label>Tipo</label><select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full p-2 border rounded-md"><option value="general">General</option><option value="preventivo">Preventivo</option><option value="correctivo">Correctivo</option><option value="inspeccion">Inspección</option></select></div>
-            <div><label>Notas</label><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="mt-1 w-full p-2 border rounded-md"></textarea></div>
-            <div><label>Inicio</label><input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} className="mt-1 w-full p-2 border rounded-md" required /></div>
-            <div><label>Fin</label><input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} className="mt-1 w-full p-2 border rounded-md" required /></div>
-            <div className="flex justify-end pt-4 space-x-3"><button type="button" onClick={onCancel}>Cancelar</button><button type="submit">Guardar</button></div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Título del Evento</label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Tipo</label>
+                <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    <option value="general">General</option>
+                    <option value="preventivo">Preventivo</option>
+                    <option value="correctivo">Correctivo</option>
+                    <option value="inspeccion">Inspección</option>
+                </select>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Notas</label>
+                <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Inicio</label>
+                    <input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Fin</label>
+                    <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required />
+                </div>
+            </div>
+            <div className="flex justify-end pt-4 space-x-3">
+                <button type="button" onClick={onCancel} className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">Cancelar</button>
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Guardar</button>
+            </div>
         </form>
     );
 };
 
-// --- VISTA PRINCIPAL DEL CALENDARIO ---
+
+// --- Vista Principal del Calendario ---
 const CalendarView = () => {
-    const [events, setEvents] = useState([]);
-    const [modalState, setModalState] = useState({ isOpen: false, mode: null, data: null });
+    const [events, setEvents] = useState<MyEvent[]>([]);
+    const [modalState, setModalState] = useState<{isOpen: boolean; mode: 'create' | 'edit' | 'view' | null; data: any}>({ isOpen: false, mode: null, data: null });
     const [loading, setLoading] = useState(true);
 
-    // Función para obtener los eventos desde el backend
     const fetchEvents = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await apiClient.get('/agendas/');
-            // Transforma los datos del backend al formato que espera react-big-calendar
-            const formattedEvents = response.data.map(event => ({
+            const response = await apiClient.get<{results: ApiEvent[]}>('agendas/');
+            const formattedEvents: MyEvent[] = (response.data.results || response.data).map((event: any) => ({
                 id: event.id,
                 title: event.title,
                 start: new Date(event.start),
@@ -82,7 +139,7 @@ const CalendarView = () => {
             }));
             setEvents(formattedEvents);
         } catch (error) {
-            console.error("Error fetching events:", error);
+            console.error("Error al cargar los eventos:", error);
             alert("No se pudieron cargar los eventos del calendario.");
         } finally {
             setLoading(false);
@@ -94,60 +151,101 @@ const CalendarView = () => {
     }, [fetchEvents]);
 
     const handleSelectSlot = useCallback((slotInfo) => {
-        if (slotInfo.action === 'click' && slotInfo.slots.length <= 1) return;
         setModalState({ isOpen: true, mode: 'create', data: { slot: slotInfo } });
     }, []);
 
-    const handleSelectEvent = useCallback((event) => {
+    const handleSelectEvent = useCallback((event: MyEvent) => {
         setModalState({ isOpen: true, mode: 'view', data: { event } });
     }, []);
     
-    const handleSaveEvent = useCallback(async (eventData) => {
-        // Mapea los datos del formulario al formato esperado por el backend/serializer
+    const handleSaveEvent = useCallback(async (eventData: MyEvent) => {
+        // --- CORRECCIÓN ---
+        // Se ajusta el payload para que coincida con los campos que espera
+        // el AgendaSerializer del backend ('title', 'start', 'end', etc.).
         const payload = {
-            tituloevento: eventData.title,
-            fechahorainicio: moment(eventData.start).toISOString(),
-            fechahorafin: moment(eventData.end).toISOString(),
-            tipoevento: eventData.type,
-            descripcionevento: eventData.notes,
+            title: eventData.title,
+            start: moment(eventData.start).toISOString(),
+            end: moment(eventData.end).toISOString(),
+            type: eventData.type,
+            notes: eventData.notes,
         };
 
         try {
             if (modalState.mode === 'create') {
-                await apiClient.post('/agendas/', payload);
+                await apiClient.post('agendas/', payload);
             } else if (modalState.mode === 'edit') {
-                await apiClient.put(`/agendas/${eventData.id}/`, payload);
+                await apiClient.put(`agendas/${eventData.id}/`, payload);
             }
             setModalState({ isOpen: false, mode: null, data: null });
-            fetchEvents(); // Vuelve a cargar los eventos para mostrar los cambios
+            fetchEvents();
         } catch (error) {
-            console.error("Error saving event:", error);
-            alert("No se pudo guardar el evento.");
+            console.error("Error al guardar el evento:", error.response?.data || error.message);
+            alert("No se pudo guardar el evento. Revise la consola para más detalles.");
         }
     }, [modalState.mode, fetchEvents]);
     
-    const handleDeleteEvent = useCallback(async (eventId) => {
+    const handleDeleteEvent = useCallback(async (eventId: number) => {
         if (window.confirm("¿Está seguro de que desea eliminar este evento?")) {
             try {
-                await apiClient.delete(`/agendas/${eventId}/`);
+                await apiClient.delete(`agendas/${eventId}/`);
                 setModalState({ isOpen: false, mode: null, data: null });
-                fetchEvents(); // Vuelve a cargar los eventos para reflejar la eliminación
+                fetchEvents();
             } catch (error) {
-                console.error("Error deleting event:", error);
+                console.error("Error al eliminar el evento:", error);
                 alert("No se pudo eliminar el evento.");
             }
         }
     }, [fetchEvents]);
 
-    const components = useMemo(() => ({ event: CustomEvent, toolbar: CustomToolbar }), []);
+    const components = useMemo(() => ({
+        event: CustomEvent,
+        toolbar: CustomToolbar
+    }), []);
+
+    const messages = {
+      allDay: 'Todo el día',
+      previous: 'Anterior',
+      next: 'Siguiente',
+      today: 'Hoy',
+      month: 'Mes',
+      week: 'Semana',
+      day: 'Día',
+      agenda: 'Agenda',
+      date: 'Fecha',
+      time: 'Hora',
+      event: 'Evento',
+      noEventsInRange: 'No hay eventos en este rango.',
+      showMore: total => `+ Ver más (${total})`
+    };
     
     if (loading) return <p>Cargando calendario...</p>;
 
-    const renderModalContent = () => { /* ... (código sin cambios) ... */ };
+    const renderModalContent = () => {
+        const { mode, data } = modalState;
+        if (mode === 'create' || mode === 'edit') {
+            return <EventForm event={data?.event} slot={data?.slot} onSave={handleSaveEvent} onCancel={() => setModalState({ isOpen: false, mode: null, data: null })} />;
+        }
+        if (mode === 'view' && data?.event) {
+            const event = data.event as MyEvent;
+            return (
+                <div className="space-y-4">
+                    <p><strong className="text-gray-600">Tipo:</strong> <span className="capitalize">{event.type}</span></p>
+                    <p><strong className="text-gray-600">Desde:</strong> {moment(event.start).format('DD/MM/YYYY HH:mm')}</p>
+                    <p><strong className="text-gray-600">Hasta:</strong> {moment(event.end).format('DD/MM/YYYY HH:mm')}</p>
+                    {event.notes && <p><strong className="text-gray-600">Notas:</strong> {event.notes}</p>}
+                    <div className="flex justify-end pt-4 space-x-3">
+                        <button onClick={() => handleDeleteEvent(event.id)} className="bg-red-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-red-600"><Trash2 size={16} className="mr-2"/>Eliminar</button>
+                        <button onClick={() => setModalState({ ...modalState, mode: 'edit' })} className="bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-indigo-600"><Edit size={16} className="mr-2"/>Editar</button>
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    };
 
     return (
         <div>
-            {/* ... (código del layout del calendario sin cambios) ... */}
+            <h1 className="text-3xl font-bold text-gray-800 mb-8">Calendario de Mantenimiento</h1>
             <div className="bg-white p-6 rounded-xl shadow-md h-[75vh]">
                 <Calendar
                     localizer={localizer}
@@ -157,9 +255,19 @@ const CalendarView = () => {
                     onSelectEvent={handleSelectEvent}
                     selectable
                     defaultView={Views.MONTH}
+                    messages={messages}
+                    culture='es'
                 />
             </div>
-            <Modal isOpen={modalState.isOpen} onClose={() => setModalState({isOpen: false, mode: null, data: null})} title={"Gestionar Evento"}>
+            <Modal 
+                isOpen={modalState.isOpen} 
+                onClose={() => setModalState({ isOpen: false, mode: null, data: null })} 
+                title={
+                    modalState.mode === 'create' ? 'Crear Nuevo Evento' :
+                    modalState.mode === 'edit' ? `Editar: ${modalState.data?.event?.title}` :
+                    modalState.data?.event?.title || 'Detalles del Evento'
+                }
+            >
                 {renderModalContent()}
             </Modal>
         </div>

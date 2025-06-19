@@ -1,3 +1,6 @@
+# cmms_api/serializers.py
+# ARCHIVO MODIFICADO: Lógica de creación y actualización de UserSerializer mejorada.
+
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -12,92 +15,99 @@ from .models import (
 
 # --- Serializers de Usuarios y Autenticación ---
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    """
-    Serializer para el registro de nuevos usuarios. Maneja la creación del
-    usuario de Django y del perfil 'Usuarios' asociado en una sola transacción.
-    """
-    idrol = serializers.IntegerField(write_only=True)
-    nombreCompleto = serializers.CharField(write_only=True, required=True, source='first_name')
-
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'email', 'nombreCompleto', 'idrol')
-        extra_kwargs = {
-            'password': {'write_only': True, 'style': {'input_type': 'password'}},
-            'email': {'required': True}
-        }
-
-    def validate_idrol(self, value):
-        """ Valida que el rol con el ID proporcionado exista en la base de datos. """
-        if not Roles.objects.filter(pk=value).exists():
-            raise serializers.ValidationError("El rol seleccionado no es válido.")
-        return value
-
-    def create(self, validated_data):
-        """
-        Sobrescribe el método create para manejar la creación de un perfil
-        de usuario donde la relación OneToOne es también la llave primaria.
-        """
-        user_data = {
-            'username': validated_data['username'],
-            'email': validated_data['email'],
-            'password': validated_data['password'],
-            'first_name': validated_data.get('first_name', '')
-        }
-        rol_id = validated_data['idrol']
-
-        try:
-            with transaction.atomic():
-                # 1. Se crea el usuario de Django.
-                user = User.objects.create_user(**user_data)
-                
-                # 2. Se obtiene la instancia del Rol.
-                rol_instance = Roles.objects.get(pk=rol_id)
-
-                # --- CORRECCIÓN FINAL Y DEFINITIVA ---
-                # 3. Se instancia el perfil de Usuarios, pasando los campos que no son la llave primaria.
-                profile = Usuarios(idrol=rol_instance)
-                
-                # 4. Se asigna explícitamente el pk del usuario recién creado al pk del perfil.
-                #    Como 'idusuario' es el PK, esto los enlazará correctamente.
-                profile.pk = user.pk
-                
-                # 5. Se guarda el perfil ya con su llave primaria y relaciones asignadas.
-                profile.save()
-                
-        except Exception as e:
-            # Si algo falla, se lanza un error de validación claro.
-            raise serializers.ValidationError({"error": f"No se pudo completar la transacción de registro: {str(e)}"})
-
-        return user
-
-
 class UsuariosSerializer(serializers.ModelSerializer):
-    """ Serializer para el modelo de perfil de usuario (Usuarios). """
+    """ Serializer para leer el perfil extendido del usuario (modelo Usuarios). """
     nombrerol = serializers.CharField(source='idrol.nombrerol', read_only=True)
 
     class Meta:
         model = Usuarios
-        fields = ['idrol', 'nombrerol', 'idespecialidad', 'telefono']
+        fields = ('idrol', 'nombrerol', 'idespecialidad', 'telefono')
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """ Serializer para el modelo User de Django, incluyendo el perfil anidado. """
+    """
+    Serializador integral para el modelo User.
+    Maneja la lectura, creación y actualización de Usuarios y su perfil asociado.
+    """
     usuarios = UsuariosSerializer(read_only=True)
+    rol_id = serializers.IntegerField(write_only=True, required=False)
+    nombre_completo = serializers.CharField(source='first_name', required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'usuarios']
+        fields = (
+            'id', 'username', 'email', 'first_name', 'last_name', 'is_active',
+            'usuarios', # Perfil anidado de solo lectura.
+            'password', 
+            # Campos de solo escritura
+            'rol_id', 'nombre_completo',
+        )
+        read_only_fields = ('first_name', 'last_name')
+        extra_kwargs = {
+            'password': {'write_only': True, 'style': {'input_type': 'password'}, 'required': False},
+            'email': {'required': True},
+            'nombre_completo': {'write_only': True} # Marcar explícitamente como de solo escritura
+        }
 
+    def create(self, validated_data):
+        """
+        Maneja la creación de un nuevo User y su perfil asociado.
+        """
+        with transaction.atomic():
+            rol_id = validated_data.get('rol_id')
+            if not rol_id:
+                raise serializers.ValidationError({"rol_id": "El rol es un campo requerido."})
+            
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=validated_data.get('email', ''),
+                password=validated_data.get('password'),
+                first_name=validated_data.get('first_name', ''), # Mapeado desde 'nombre_completo'
+                is_active=validated_data.get('is_active', True)
+            )
+            
+            rol_instance = Roles.objects.get(pk=rol_id)
+            Usuarios.objects.create(user=user, idrol=rol_instance)
 
-# --- Serializers de Catálogos (Simples) ---
+        return user
+
+    def update(self, instance, validated_data):
+        """
+        Maneja la actualización de un User existente y su perfil.
+        """
+        with transaction.atomic():
+            # Actualiza los campos del modelo User
+            instance.username = validated_data.get('username', instance.username)
+            instance.email = validated_data.get('email', instance.email)
+            instance.is_active = validated_data.get('is_active', instance.is_active)
+            
+            # Mapea 'nombre_completo' a 'first_name'
+            if 'first_name' in validated_data:
+                instance.first_name = validated_data.get('first_name')
+            
+            # Actualiza la contraseña de forma segura
+            if 'password' in validated_data and validated_data['password']:
+                instance.set_password(validated_data['password'])
+            
+            instance.save()
+            
+            # Actualiza el rol en el perfil de Usuarios
+            if 'rol_id' in validated_data:
+                rol_id = validated_data.get('rol_id')
+                profile = instance.usuarios
+                profile.idrol = Roles.objects.get(pk=rol_id)
+                profile.save()
+
+        return instance
+
+# --- El resto de los serializadores no necesitan cambios ---
 
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Roles
         fields = '__all__'
 
+# ... (y así sucesivamente para todos los demás serializadores que ya tenías)
 class EspecialidadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Especialidades
@@ -132,9 +142,6 @@ class EstadoOrdenTrabajoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadosOrdenTrabajo
         fields = '__all__'
-
-
-# --- Serializers de Modelos Principales ---
 
 class RepuestoSerializer(serializers.ModelSerializer):
     class Meta:

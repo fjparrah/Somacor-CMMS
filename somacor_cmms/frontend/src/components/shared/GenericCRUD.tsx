@@ -1,17 +1,13 @@
+// src/components/shared/GenericCRUD.tsx
+// ARCHIVO MODIFICADO: Se mejora la función handleSave para filtrar los datos enviados.
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import apiClient from '../../api/apiClient';
 import Modal from '../ui/Modal';
 import GenericForm from './GenericForm';
 
-/**
- * Función auxiliar para obtener de forma segura valores de objetos anidados.
- * @param {object} obj - El objeto del que se extraerá el valor.
- * @param {string | function} path - La ruta al valor (ej: 'idfaenaactual.nombrefaena') o una función.
- * @returns {*} - El valor encontrado o 'N/A' si no se encuentra.
- */
 const getNestedValue = (obj, path) => {
-    // Si el 'accessor' es una función (para lógica personalizada), la ejecutamos.
     if (typeof path === 'function') {
         return path(obj);
     }
@@ -19,24 +15,18 @@ const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 };
 
-/**
- * Componente reutilizable para crear interfaces de administración (CRUD).
- * Muestra una tabla con datos y permite crear, editar y eliminar registros.
- */
-const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor }) => {
+const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor, transformItemForEdit }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
     const [error, setError] = useState('');
 
-    // Función para obtener los datos desde la API del backend.
     const fetchData = useCallback(async () => {
         setIsLoading(true);
         setError('');
         try {
             const response = await apiClient.get(apiEndpoint);
-            // La API de Django REST Framework a menudo devuelve los datos dentro de una clave "results".
             setData(response.data.results || response.data);
         } catch (err) {
             setError('No se pudieron cargar los datos. Verifique la conexión y los permisos de la API.');
@@ -46,33 +36,27 @@ const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor }) =>
         }
     }, [apiEndpoint]);
 
-    // Ejecuta fetchData cuando el componente se monta por primera vez.
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
-    // --- Manejadores de eventos para las acciones CRUD ---
-
     const handleCreate = () => {
-        // Solo abre el modal si los campos del formulario se han cargado correctamente.
-        if (formFields && formFields.length > 0) {
-            setCurrentItem(null); // Limpia el ítem actual para indicar que es una creación.
-            setIsModalOpen(true);
-        } else {
-            alert("No se puede crear un nuevo elemento porque la configuración del formulario no se cargó correctamente.");
-        }
+        setCurrentItem(null);
+        setIsModalOpen(true);
     };
 
     const handleEdit = (item) => {
-        setCurrentItem(item); // Establece el ítem actual para editar.
+        const transformedItem = transformItemForEdit ? transformItemForEdit(item) : item;
+        setCurrentItem(transformedItem);
         setIsModalOpen(true);
     };
 
     const handleDelete = async (id) => {
         if (window.confirm('¿Está seguro de que desea eliminar este elemento?')) {
             try {
+                // Se asegura que la URL termine con una barra
                 await apiClient.delete(`${apiEndpoint}${id}/`);
-                fetchData(); // Vuelve a cargar los datos para reflejar la eliminación.
+                fetchData();
             } catch (err) {
                 alert('Error al eliminar el elemento.');
                 console.error(err);
@@ -81,16 +65,48 @@ const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor }) =>
     };
     
     const handleSave = async (formData) => {
-        const method = currentItem ? 'put' : 'post'; // PUT para editar, POST para crear.
+        const method = currentItem ? 'put' : 'post';
+        // La URL de actualización ahora incluye la barra final
         const url = currentItem ? `${apiEndpoint}${currentItem[idAccessor]}/` : apiEndpoint;
         
+        // --- INICIO DE LA CORRECCIÓN ---
+        // Se construye un 'payload' limpio, incluyendo solo los campos definidos en 'formFields'.
+        // Esto previene enviar datos extra (como 'id', 'usuarios', etc.) que el backend rechazaría.
+        const allowedKeys = formFields.map(f => f.name);
+        const payload = Object.keys(formData)
+            .filter(key => allowedKeys.includes(key))
+            .reduce((obj, key) => {
+                // Solo se añaden al payload los campos que no son nulos o indefinidos.
+                if (formData[key] !== null && formData[key] !== undefined) {
+                    obj[key] = formData[key];
+                }
+                return obj;
+            }, {});
+
+        // Si el campo de contraseña está presente pero vacío, se elimina del payload
+        // para evitar que se actualice la contraseña a una cadena vacía.
+        if (payload.password === '') {
+            delete payload.password;
+        }
+        // --- FIN DE LA CORRECCIÓN ---
+
         try {
-            await apiClient[method](url, formData);
-            fetchData(); // Vuelve a cargar los datos para reflejar los cambios.
-            setIsModalOpen(false); // Cierra el modal después de guardar.
+            // Se envía el 'payload' filtrado en lugar del 'formData' completo.
+            await apiClient[method](url, payload);
+            fetchData();
+            setIsModalOpen(false);
         } catch (err) {
-            alert('Error al guardar. Revise los datos e intente de nuevo.');
-            console.error(err.response?.data || err);
+            const errorData = err.response?.data;
+            let errorMessages = 'Revise los datos e intente de nuevo.';
+            if (errorData) {
+                // Se formatean los errores de validación del backend para mostrarlos en la alerta.
+                errorMessages = Object.entries(errorData).map(([field, messages]) => {
+                    const messageText = Array.isArray(messages) ? messages.join(', ') : String(messages);
+                    return `${field}: ${messageText}`;
+                }).join('\n');
+            }
+            alert(`Error al guardar:\n${errorMessages}`);
+            console.error("Error response data:", err.response?.data || err);
         }
     };
 
@@ -138,7 +154,6 @@ const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor }) =>
                 </div>
             )}
 
-            {/* Renderiza el Modal con el Formulario Genérico dentro */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={currentItem ? `Editar ${title}` : `Crear ${title}`}>
                 <GenericForm 
                     fields={formFields} 

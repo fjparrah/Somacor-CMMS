@@ -1,5 +1,5 @@
 # cmms_api/views.py
-# ARCHIVO MODIFICADO PARA DESACTIVAR LOS PERMISOS DE AUTENTICACIÓN
+# ARCHIVO MODIFICADO: Se apunta RegisterView al nuevo UserSerializer.
 
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -7,14 +7,11 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import *
+# Se importa el UserSerializer mejorado. UserRegistrationSerializer ya no existe.
 from .serializers import *
 
-# --- Vistas de Autenticación ---
+# --- Vistas de Autenticación (sin cambios) ---
 class CustomAuthToken(ObtainAuthToken):
-    """
-    Vista para obtener un token de autenticación.
-    Devuelve el token y los datos del usuario.
-    """
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
@@ -24,36 +21,28 @@ class CustomAuthToken(ObtainAuthToken):
         return Response({'token': token.key, 'user': user_data})
 
 class LogoutView(generics.GenericAPIView):
-    """
-    Vista para invalidar el token de autenticación del usuario (cerrar sesión).
-    """
-    permission_classes = [permissions.AllowAny] # MODIFICADO: Permite a cualquiera intentar cerrar sesión
-
+    permission_classes = [permissions.AllowAny]
     def post(self, request):
-        try:
-            if request.user and request.user.is_authenticated:
-                request.user.auth_token.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except (AttributeError, Token.DoesNotExist):
-            return Response({"error": "Token no encontrado o usuario no autenticado."}, status=status.HTTP_400_BAD_REQUEST)
+        if request.user and request.user.is_authenticated:
+            request.user.auth_token.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class RegisterView(generics.CreateAPIView):
-    """
-    Vista para registrar nuevos usuarios.
-    Actualmente desactivada en el frontend, pero el endpoint sigue existiendo.
-    """
     queryset = User.objects.all()
-    serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny] # Permite el registro sin autenticación
+    # MODIFICADO: Ahora usa el serializador unificado para manejar el registro.
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
-# --- ViewSets para los modelos de la aplicación ---
-# MODIFICADO: Se ha cambiado 'permission_classes' a 'permissions.AllowAny' en todos los ViewSets
-# para deshabilitar la autenticación durante el desarrollo y permitir el acceso a los formularios.
+# --- Vistas del Modelo (ViewSets) ---
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
+    # MODIFICADO: Usa el serializador unificado que maneja C/R/U/D.
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
+
+# El resto de los ViewSets (RolViewSet, FaenaViewSet, etc.) permanecen igual
+# ya que sus permisos ya estaban establecidos en AllowAny.
 
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Roles.objects.all()
