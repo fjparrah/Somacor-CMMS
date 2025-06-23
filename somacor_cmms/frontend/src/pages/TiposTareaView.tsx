@@ -22,6 +22,7 @@ const TiposTareaView = () => {
             columns={columns}
             formFields={formFields}
             idAccessor="idtipotarea"
+            transformItemForEdit={(item) => item}
         />
     );
 };

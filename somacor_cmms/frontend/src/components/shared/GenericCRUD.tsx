@@ -73,7 +73,7 @@ const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor, tran
         // Se construye un 'payload' limpio, incluyendo solo los campos definidos en 'formFields'.
         // Esto previene enviar datos extra (como 'id', 'usuarios', etc.) que el backend rechazaría.
         const allowedKeys = formFields.map(f => f.name);
-        const payload = Object.keys(formData)
+        const payload: Record<string, any> = Object.keys(formData)
             .filter(key => allowedKeys.includes(key))
             .reduce((obj, key) => {
                 // Solo se añaden al payload los campos que no son nulos o indefinidos.
@@ -85,7 +85,10 @@ const GenericCRUD = ({ title, apiEndpoint, columns, formFields, idAccessor, tran
 
         // Si el campo de contraseña está presente pero vacío, se elimina del payload
         // para evitar que se actualice la contraseña a una cadena vacía.
-        if (payload.password === '') {
+        if (
+            Object.prototype.hasOwnProperty.call(payload, 'password') &&
+            payload.password === ''
+        ) {
             delete payload.password;
         }
         // --- FIN DE LA CORRECCIÓN ---

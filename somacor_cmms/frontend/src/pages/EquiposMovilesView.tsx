@@ -106,6 +106,7 @@ const EquiposMovilesView = () => {
             columns={columns}
             formFields={formFields}
             idAccessor="idequipo"
+            transformItemForEdit={(item) => item}
         />
     );
 };

@@ -1,62 +1,190 @@
 // src/App.tsx
-// MODIFICADO: Se elimina la lógica condicional de autenticación para renderizar
-// directamente el layout principal de la aplicación. Esto permite acceder a todas
-// las vistas sin necesidad de iniciar sesión.
+// ARCHIVO ACTUALIZADO: Se añaden ErrorBoundary y optimizaciones de rendimiento
 
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import ErrorBoundary from './components/shared/ErrorBoundary';
+import LoadingSpinner from './components/shared/LoadingSpinner';
 import AppLayout from './components/layout/AppLayout';
-import AuthPage from './pages/AuthPage';
-import DashboardView from './pages/DashboardView';
-import EstadoMaquinaView from './pages/EstadoMaquinaView';
-import EquiposMovilesView from './pages/EquiposMovilesView';
-import CalendarView from './pages/CalendarView';
-import UnplannedMaintenanceView from './pages/UnplannedMaintenanceView';
-import ProfilesView from './pages/ProfilesView';
-import FaenasView from './pages/FaenasView';
-import TiposEquipoView from './pages/TiposEquipoView';
-import TiposTareaView from './pages/TiposTareaView';
-import MaintenanceConfigView from './pages/MaintenanceConfigView';
-import MaintenanceFormView from './pages/MaintenanceFormView';
-import PlaceholderPage from './components/shared/PlaceholderPage';
+
+// Lazy loading de componentes para mejorar el rendimiento
+const DashboardView = React.lazy(() => import('./pages/DashboardView'));
+const EstadoMaquinaView = React.lazy(() => import('./pages/EstadoMaquinaView'));
+const EquiposMovilesView = React.lazy(() => import('./pages/EquiposMovilesView'));
+const CalendarView = React.lazy(() => import('./pages/CalendarView'));
+const UnplannedMaintenanceView = React.lazy(() => import('./pages/UnplannedMaintenanceView'));
+const ProfilesView = React.lazy(() => import('./pages/ProfilesView'));
+const FaenasView = React.lazy(() => import('./pages/FaenasView'));
+const TiposEquipoView = React.lazy(() => import('./pages/TiposEquipoView'));
+const TiposTareaView = React.lazy(() => import('./pages/TiposTareaView'));
+const MaintenanceConfigView = React.lazy(() => import('./pages/MaintenanceConfigView'));
+const MaintenanceFormView = React.lazy(() => import('./pages/MaintenanceFormView'));
+const PlaceholderPage = React.lazy(() => import('./components/shared/PlaceholderPage'));
+const PlanesMantenimientoView = React.lazy(() => import('./pages/PlanesMantenimientoView'));
+const OrdenesTrabajoView = React.lazy(() => import('./pages/OrdenesTrabajoView'));
+const EjecucionOTView = React.lazy(() => import('./pages/EjecucionOTView'));
+const ChecklistView = React.lazy(() => import('./pages/ChecklistView'));
 
 function App() {
-  // Ya no se necesita el hook useAuth aquí, la lógica se simplifica.
   return (
-    <Routes>
-      {/* Redirige cualquier intento de acceder a /auth al dashboard principal. */}
-      <Route path="/auth" element={<Navigate to="/dashboard" />} />
-      
-      {/* La ruta raíz ahora renderiza incondicionalmente AppLayout, que contiene la
-        navegación principal y el área de contenido (Outlet).
-      */}
-      <Route path="/" element={<AppLayout />}>
-        {/* La ruta índice (/) redirige automáticamente al dashboard. */}
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        
-        {/* Definición de todas las rutas de las páginas de la aplicación. */}
-        <Route path="dashboard" element={<DashboardView />} />
-        <Route path="estado-maquina" element={<EstadoMaquinaView />} />
-        <Route path="equipos-moviles" element={<EquiposMovilesView />} />
-        <Route path="calendario" element={<CalendarView />} />
-        <Route path="mantenimiento-planificado" element={<MaintenanceFormView />} />
-        <Route path="mantenimiento-no-planificado" element={<UnplannedMaintenanceView />} />
-        
-        {/* Rutas de Administración */}
-        <Route path="admin/perfiles" element={<ProfilesView />} />
-        
-        {/* Rutas de Mantenedores */}
-        <Route path="mantenedores/faenas" element={<FaenasView />} />
-        <Route path="mantenedores/tipos-equipo" element={<TiposEquipoView />} />
-        <Route path="mantenedores/tipos-tarea" element={<TiposTareaView />} />
-        
-        {/* Rutas de Configuración */}
-        <Route path="config/mantenimiento" element={<MaintenanceConfigView />} />
-        
-        {/* Ruta comodín para páginas no encontradas. */}
-        <Route path="*" element={<PlaceholderPage title="Página no encontrada" />} />
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          
+          <Route 
+            path="dashboard" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Dashboard..." />}>
+                <DashboardView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="estado-maquina" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Estado de Máquina..." />}>
+                <EstadoMaquinaView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="equipos-moviles" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Equipos Móviles..." />}>
+                <EquiposMovilesView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="calendario" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Calendario..." />}>
+                <CalendarView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="mantenimiento-planificado" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Mantenimiento Planificado..." />}>
+                <MaintenanceFormView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="mantenimiento-no-planificado" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Reporte de Fallas..." />}>
+                <UnplannedMaintenanceView />
+              </Suspense>
+            } 
+          />
+          
+          {/* Rutas de Órdenes de Trabajo */}
+          <Route path="ordenes-trabajo">
+            <Route 
+              index 
+              element={
+                <Suspense fallback={<LoadingSpinner text="Cargando Órdenes de Trabajo..." />}>
+                  <OrdenesTrabajoView />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path=":id" 
+              element={
+                <Suspense fallback={<LoadingSpinner text="Cargando Ejecución de OT..." />}>
+                  <EjecucionOTView />
+                </Suspense>
+              } 
+            />
+          </Route>
+          
+          {/* Nueva ruta para Checklist */}
+          <Route 
+            path="checklist" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Checklist..." />}>
+                <ChecklistView />
+              </Suspense>
+            } 
+          />
+          
+          {/* Administración */}
+          <Route 
+            path="admin/perfiles" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Perfiles..." />}>
+                <ProfilesView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="admin/programas" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Programas de Mantenimiento..." />}>
+                <PlanesMantenimientoView />
+              </Suspense>
+            } 
+          />
+          
+          {/* Mantenedores */}
+          <Route 
+            path="mantenedores/faenas" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Faenas..." />}>
+                <FaenasView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="mantenedores/tipos-equipo" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Tipos de Equipo..." />}>
+                <TiposEquipoView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="mantenedores/tipos-tarea" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Tipos de Tarea..." />}>
+                <TiposTareaView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="config/mantenimiento" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando Configuración..." />}>
+                <MaintenanceConfigView />
+              </Suspense>
+            } 
+          />
+          
+          <Route 
+            path="*" 
+            element={
+              <Suspense fallback={<LoadingSpinner text="Cargando..." />}>
+                <PlaceholderPage title="Página no encontrada" />
+              </Suspense>
+            } 
+          />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
 export default App;
+

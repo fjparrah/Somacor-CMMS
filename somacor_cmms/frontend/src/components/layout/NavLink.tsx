@@ -1,6 +1,12 @@
 import React from 'react';
 
-const NavLink = ({ icon, label, onClick }) => (
+interface NavLinkProps {
+  icon?: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({ icon, label, onClick }) => (
     <a 
         href="#" 
         onClick={(e) => {

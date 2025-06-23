@@ -33,8 +33,8 @@ interface ApiEvent {
 }
 
 // --- Componentes Personalizados (sin cambios) ---
-const CustomEvent = ({ event }: { event: MyEvent }) => {
-    const eventTypeClasses = {
+const CustomEvent: React.FC<{ event: MyEvent }> = ({ event }) => {
+    const eventTypeClasses: { [key: string]: string } = {
         preventivo: 'bg-blue-500 hover:bg-blue-600',
         correctivo: 'bg-orange-500 hover:bg-orange-600',
         inspeccion: 'bg-teal-500 hover:bg-teal-600',
@@ -45,38 +45,52 @@ const CustomEvent = ({ event }: { event: MyEvent }) => {
     return <div className={eventClasses}><span>{event.title}</span></div>;
 };
 
-const CustomToolbar = ({ label, onNavigate }) => (
-    <div className="rbc-toolbar mb-4">
-        <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-                 <button onClick={() => onNavigate('TODAY')} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">Hoy</button>
-                 <button onClick={() => onNavigate('PREV')} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronLeft size={20} /></button>
-                 <button onClick={() => onNavigate('NEXT')} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronRight size={20} /></button>
-            </div>
-            <h2 className="text-xl font-bold text-gray-700 capitalize">{label}</h2>
-            <div className="w-40"></div>
-        </div>
-    </div>
-);
+interface CustomToolbarProps {
+    label: string;
+    onNavigate: (action: string) => void;
+}
 
-const EventForm = ({ event, slot, onSave, onCancel }) => {
-    const [title, setTitle] = useState('');
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
-    const [type, setType] = useState('general');
-    const [notes, setNotes] = useState('');
+const CustomToolbar: React.FC<CustomToolbarProps> = ({ label, onNavigate }) => {
+    return (
+        <div className="rbc-toolbar mb-4">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                     <button onClick={() => onNavigate("TODAY")} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">Hoy</button>
+                     <button onClick={() => onNavigate("PREV")} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronLeft size={20} /></button>
+                     <button onClick={() => onNavigate("NEXT")} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronRight size={20} /></button>
+                </div>
+                <h2 className="text-xl font-bold text-gray-700 capitalize">{label}</h2>
+                <div className="w-40"></div>
+            </div>
+        </div>
+    );
+};
+
+interface EventFormProps {
+    event?: MyEvent;
+    slot?: { start: Date; end: Date; };
+    onSave: (eventData: MyEvent) => void;
+    onCancel: () => void;
+}
+
+const EventForm: React.FC<EventFormProps> = ({ event, slot, onSave, onCancel }) => {
+    const [title, setTitle] = useState<string>("");
+    const [start, setStart] = useState<string>("");
+    const [end, setEnd] = useState<string>("");
+    const [type, setType] = useState<string>("general");
+    const [notes, setNotes] = useState<string>("");
 
     useEffect(() => {
         const initialStart = event?.start || slot?.start;
         const initialEnd = event?.end || slot?.end;
-        setTitle(event?.title || '');
-        setStart(moment(initialStart).format('YYYY-MM-DDTHH:mm'));
-        setEnd(moment(initialEnd).format('YYYY-MM-DDTHH:mm'));
-        setType(event?.type || 'general');
-        setNotes(event?.notes || '');
+        setTitle(event?.title || "");
+        setStart(moment(initialStart).format("YYYY-MM-DDTHH:mm"));
+        setEnd(moment(initialEnd).format("YYYY-MM-DDTHH:mm"));
+        setType(event?.type || "general");
+        setNotes(event?.notes || "");
     }, [event, slot]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSave({ id: event?.id, title, start: new Date(start), end: new Date(end), type, notes });
     };
@@ -129,7 +143,7 @@ const CalendarView = () => {
         setLoading(true);
         try {
             const response = await apiClient.get<{results: ApiEvent[]}>('agendas/');
-            const formattedEvents: MyEvent[] = (response.data.results || response.data).map((event: any) => ({
+            const formattedEvents: MyEvent[] = (Array.isArray(response.data) ? response.data : response.data.results || []).map((event: any) => ({
                 id: event.id,
                 title: event.title,
                 start: new Date(event.start),

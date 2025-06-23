@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import { Calendar, momentLocalizer, Views, type Event } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/es';
 import Modal from '../components/ui/Modal'; 
@@ -9,39 +9,89 @@ import { PlusCircle, ChevronLeft, ChevronRight, Trash2, Edit } from 'lucide-reac
 moment.locale('es');
 const localizer = momentLocalizer(moment);
 
-const initialEvents = [
+interface MyEvent extends Event {
+    id: number;
+    type: string;
+    notes?: string;
+    title: string;
+    start: Date;
+    end: Date;
+}
+
+interface ApiEvent {
+    id: number;
+    title: string;
+    start: string;
+    end: string;
+    type: string;
+    notes?: string;
+}
+
+const initialEvents: MyEvent[] = [
     { id: 1, title: 'Mantenimiento Preventivo - Cargador Frontal 966 GC', start: new Date(2025, 5, 12, 9, 0, 0), end: new Date(2025, 5, 12, 11, 0, 0), type: 'preventivo', notes: 'Revisión de motor y cambio de aceite.' },
     { id: 2, title: 'Reparación Correctiva - Retroexcavadora 3157TR', start: new Date(2025, 5, 15, 14, 0, 0), end: new Date(2025, 5, 15, 17, 30, 0), type: 'correctivo', notes: 'Falla en el sistema hidráulico.' },
     { id: 3, title: 'Inspección Semanal - Camión Minero 797F', start: new Date(2025, 5, 17, 8, 0, 0), end: new Date(2025, 5, 17, 9, 0, 0), type: 'inspeccion', notes: 'Verificar niveles y estado de neumáticos.' },
 ];
 
 // --- COMPONENTES PERSONALIZADOS DEL CALENDARIO (sin cambios) ---
-const CustomEvent = ({ event }) => { /* ... */ };
-const CustomToolbar = (toolbar) => { /* ... */ };
+const CustomEventComponent: React.FC<{ event: MyEvent }> = ({ event }) => {
+    const eventTypeClasses: { [key: string]: string } = {
+        preventivo: 'bg-blue-500 hover:bg-blue-600',
+        correctivo: 'bg-orange-500 hover:bg-orange-600',
+        inspeccion: 'bg-teal-500 hover:bg-teal-600',
+        general: 'bg-gray-500 hover:bg-gray-600',
+    };
+    const baseClasses = 'p-1 text-white rounded-lg text-xs truncate transition-colors h-full flex items-center';
+    const eventClasses = `${baseClasses} ${eventTypeClasses[event.type] || eventTypeClasses.general}`;
+    return <div className={eventClasses}><span>{event.title}</span></div>;
+};
 
+interface CustomToolbarProps {
+    label: string;
+    onNavigate: (action: string) => void;
+}
 
-// --- FORMULARIO PARA CREAR/EDITAR EVENTOS ---
-const EventForm = ({ event, slot, onSave, onCancel }) => {
-    const [title, setTitle] = useState('');
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
-    const [type, setType] = useState('general');
+const CustomToolbar: React.FC<CustomToolbarProps> = ({ label, onNavigate }) => (
+    <div className="rbc-toolbar mb-4">
+        <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+                 <button onClick={() => onNavigate("TODAY")} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">Hoy</button>
+                 <button onClick={() => onNavigate("PREV")} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronLeft size={20} /></button>
+                 <button onClick={() => onNavigate("NEXT")} className="p-2 text-gray-600 bg-gray-200 rounded-full hover:bg-gray-300"><ChevronRight size={20} /></button>
+            </div>
+            <h2 className="text-xl font-bold text-gray-700 capitalize">{label}</h2>
+            <div className="w-40"></div>
+        </div>
+    </div>
+);
+
+interface EventFormProps {
+    event?: MyEvent;
+    slot?: { start: Date; end: Date; };
+    onSave: (eventData: MyEvent) => void;
+    onCancel: () => void;
+}
+
+const EventForm: React.FC<EventFormProps> = ({ event, slot, onSave, onCancel }) => {
+    const [title, setTitle] = useState<string>("");
+    const [start, setStart] = useState<string>("");
+    const [end, setEnd] = useState<string>("");
+    const [type, setType] = useState<string>("general");
 
     useEffect(() => {
-        // Rellena el formulario si se está editando un evento o creando desde un slot
         const initialStart = event?.start || slot?.start;
         const initialEnd = event?.end || slot?.end;
         
-        setTitle(event?.title || '');
-        setStart(moment(initialStart).format('YYYY-MM-DDTHH:mm'));
-        setEnd(moment(initialEnd).format('YYYY-MM-DDTHH:mm'));
-        setType(event?.type || 'general');
+        setTitle(event?.title || "");
+        setStart(moment(initialStart).format("YYYY-MM-DDTHH:mm"));
+        setEnd(moment(initialEnd).format("YYYY-MM-DDTHH:mm"));
+        setType(event?.type || "general");
     }, [event, slot]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const eventData = {
-            id: event?.id,
+        const eventData: MyEvent = {
+            id: event?.id || 0,
             title,
             start: new Date(start),
             end: new Date(end),
@@ -116,7 +166,7 @@ const CalendarView = () => {
         }
     }, []);
 
-    const components = useMemo(() => ({ event: CustomEvent, toolbar: CustomToolbar }), []);
+    const components = useMemo(() => ({ event: CustomEventComponent, toolbar: CustomToolbar }), []);
 
     const renderModalContent = () => {
         const { mode, data } = modalState;

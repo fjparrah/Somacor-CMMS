@@ -1,40 +1,50 @@
+# cmms_api/urls.py
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views_maintenance import MantenimientoWorkflowViewSet
+from .views_checklist import ChecklistWorkflowViewSet
 
-# El router de Django REST Framework se encarga de generar
-# automáticamente las URLs para cada ViewSet.
 router = DefaultRouter()
 
-# Registra una ruta para cada modelo de la aplicación.
+# Registros de la API básica
 router.register(r'users', views.UserViewSet)
 router.register(r'roles', views.RolViewSet)
-router.register(r'especialidades', views.EspecialidadViewSet)
 router.register(r'faenas', views.FaenaViewSet)
 router.register(r'tipos-equipo', views.TipoEquipoViewSet)
 router.register(r'estados-equipo', views.EstadoEquipoViewSet)
-router.register(r'tipos-tarea', views.TipoTareaViewSet)
-router.register(r'tipos-mantenimiento-ot', views.TipoMantenimientoOTViewSet)
-router.register(r'estados-orden-trabajo', views.EstadoOrdenTrabajoViewSet)
-router.register(r'repuestos', views.RepuestoViewSet)
 router.register(r'equipos', views.EquipoViewSet)
+
+# Checklist API routes
+router.register(r'checklist-templates', views.ChecklistTemplateViewSet)
+router.register(r'checklist-categories', views.ChecklistCategoryViewSet)
+router.register(r'checklist-items', views.ChecklistItemViewSet)
+router.register(r'checklist-instances', views.ChecklistInstanceViewSet)
+router.register(r'checklist-answers', views.ChecklistAnswerViewSet)
+
+# Agenda de Mantenimiento Preventivo API routes
+router.register(r'tipos-tarea', views.TipoTareaViewSet)
 router.register(r'tareas-estandar', views.TareaEstandarViewSet)
 router.register(r'planes-mantenimiento', views.PlanMantenimientoViewSet)
-router.register(r'detalles-plan-mantenimiento', views.DetallePlanMantenimientoViewSet)
+router.register(r'detalles-plan-mantenimiento', views.DetallesPlanMantenimientoViewSet)
+router.register(r'tipos-mantenimiento-ot', views.TiposMantenimientoOTViewSet)
+router.register(r'estados-orden-trabajo', views.EstadosOrdenTrabajoViewSet)
+
+# Registro de Mantenimientos API routes
 router.register(r'ordenes-trabajo', views.OrdenTrabajoViewSet)
 router.register(r'actividades-ot', views.ActividadOrdenTrabajoViewSet)
 router.register(r'agendas', views.AgendaViewSet)
-router.register(r'historial-horometros', views.HistorialHorometrosViewSet)
-router.register(r'historial-estados-equipo', views.HistorialEstadosEquipoViewSet)
-router.register(r'documentos', views.DocumentoAdjuntoViewSet)
-router.register(r'notificaciones', views.NotificacionViewSet)
 
+# Workflows especializados
+router.register(r'mantenimiento-workflow', MantenimientoWorkflowViewSet, basename='mantenimiento-workflow')
+router.register(r'checklist-workflow', ChecklistWorkflowViewSet, basename='checklist-workflow')
 
-# Las URLs de la API son determinadas automáticamente por el router.
-# Además, se incluyen las rutas para login, logout y registro.
+# URLs de la API
 urlpatterns = [
     path('', include(router.urls)),
+    # Rutas de autenticación
     path('login/', views.CustomAuthToken.as_view(), name='auth_token'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('register/', views.RegisterView.as_view(), name='register'),
 ]
+

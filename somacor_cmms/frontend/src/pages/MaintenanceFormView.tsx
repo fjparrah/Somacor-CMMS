@@ -1,64 +1,66 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/MaintenanceFormView.tsx
+// ARCHIVO CORREGIDO: Se añade una lógica de respaldo para el ID del solicitante.
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { equiposService, planesMantenimientoService, userService } from '../services/apiService';
 import apiClient from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { Wrench, CheckCircle, AlertCircle } from 'lucide-react';
 
-// Estado inicial para una tarea
-const initialTaskState = {
-    idtareaestandar: '',
-    descripcionactividad: '',
-    completada: false,
-    observacionesactividad: ''
-};
+// --- Interfaces para el tipado de datos ---
+interface Equipo {
+    idequipo: number;
+    nombreequipo: string;
+    codigointerno: string;
+    idtipoequipo: number;
+}
+interface Plan {
+    idplanmantenimiento: number;
+    nombreplan: string;
+    idtipoequipo: number;
+    detalles?: { intervalohorasoperacion: number }[];
+}
+interface User {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+}
 
 const MaintenanceFormView = () => {
     const { user } = useAuth();
-    // Estados para los datos de los dropdowns
-    const [equipos, setEquipos] = useState([]);
-    const [tecnicos, setTecnicos] = useState([]);
-    const [tiposMantenimiento, setTiposMantenimiento] = useState([]);
-    const [tareasEstandar, setTareasEstandar] = useState([]);
+
+    // --- Estados para los datos de los selects ---
+    const [equipos, setEquipos] = useState<Equipo[]>([]);
+    const [planes, setPlanes] = useState<Plan[]>([]);
+    const [tecnicos, setTecnicos] = useState<User[]>([]);
+    
+    // --- Estados del formulario ---
+    const [selectedEquipoId, setSelectedEquipoId] = useState<string>('');
+    const [selectedPlanId, setSelectedPlanId] = useState<string>('');
+    const [selectedIntervalo, setSelectedIntervalo] = useState<string>('');
+    const [selectedTecnicoId, setSelectedTecnicoId] = useState<string>('');
+    const [fechaEjecucion, setFechaEjecucion] = useState<string>('');
+
+    // --- Estados de la UI ---
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // Estado principal del formulario
-    const [formData, setFormData] = useState({
-        idequipo: '',
-        idtecnicoasignadoprincipal: '',
-        idtipomantenimientoot: '',
-        horometroequipoingreso: '',
-        fechaprogramadainicio: '',
-        descripcionproblemareportado: ''
-    });
-
-    // Estado para las actividades (tareas) de la OT
-    const [actividades, setActividades] = useState([initialTaskState]);
-
-    // Cargar datos para los selects al montar el componente
+    // --- Carga inicial de datos ---
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
-            setError('');
             try {
-                // [CORREGIDO] Se hacen las llamadas a los endpoints correctos
-                const [equiposRes, tecnicosRes, tiposMantenimientoRes, tareasRes] = await Promise.all([
-                    apiClient.get('/equipos/'),
-                    apiClient.get('/users/'), // Filtrar por rol en el backend si es posible, si no, se filtra en el frontend
-                    apiClient.get('/tipos-mantenimiento-ot/'), // URL corregida
-                    apiClient.get('/tareas-estandar/')
+                const [equiposRes, planesRes, usersRes] = await Promise.all([
+                    equiposService.getAll(),
+                    planesMantenimientoService.getAll(),
+                    userService.getAll()
                 ]);
-                setEquipos(equiposRes.data.results || equiposRes.data);
-                
-                // Filtra usuarios que tengan el rol de "Técnico" o similar
-                const tecnicosFiltrados = (tecnicosRes.data.results || tecnicosRes.data).filter(u => u.rol?.nombrerol.toLowerCase().includes('tecnico'));
-                setTecnicos(tecnicosFiltrados);
-
-                setTiposMantenimiento(tiposMantenimientoRes.data.results || tiposMantenimientoRes.data);
-                setTareasEstandar(tareasRes.data.results || tareasRes.data);
-            } catch (error) {
-                console.error("Error cargando datos para el formulario:", error);
-                setError("No se pudieron cargar los datos necesarios para el formulario. Revise la consola y la conexión con la API.");
+                setEquipos(equiposRes.results || []);
+                setPlanes(planesRes.results || []);
+                setTecnicos(usersRes.results || []);
+            } catch (err) {
+                setError("No se pudieron cargar los datos necesarios. Verifique la API.");
             } finally {
                 setLoading(false);
             }
@@ -66,131 +68,133 @@ const MaintenanceFormView = () => {
         fetchData();
     }, []);
 
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    // --- Lógica de filtrado ---
+    const planesDisponibles = useMemo(() => {
+        if (!equipos || !Array.isArray(equipos) || !planes || !Array.isArray(planes)) return [];
+        const equipoSeleccionado = equipos.find(eq => eq.idequipo.toString() === selectedEquipoId);
+        if (!equipoSeleccionado) return [];
+        return planes.filter(p => p.idtipoequipo === equipoSeleccionado.idtipoequipo);
+    }, [selectedEquipoId, equipos, planes]);
 
-    const handleActividadChange = (index, e) => {
-        const { name, value, type, checked } = e.target;
-        const list = [...actividades];
-        if (name === 'idtareaestandar') {
-            const selectedTask = tareasEstandar.find(t => t.idtareaestandar.toString() === value);
-            list[index]['idtareaestandar'] = value;
-            list[index]['descripcionactividad'] = selectedTask ? selectedTask.descripciontarea : '';
-        } else {
-            list[index][name] = type === 'checkbox' ? checked : value;
-        }
-        setActividades(list);
-    };
+    const intervalosDisponibles = useMemo(() => {
+        if (!planes || !Array.isArray(planes)) return [];
+        const planSeleccionado = planes.find(p => p.idplanmantenimiento.toString() === selectedPlanId);
+        if (!planSeleccionado || !planSeleccionado.detalles || !Array.isArray(planSeleccionado.detalles)) return [];
+        const intervalos = planSeleccionado.detalles.map(d => d.intervalohorasoperacion);
+        return [...new Set(intervalos)].sort((a, b) => a - b);
+    }, [selectedPlanId, planes]);
 
-    const handleAddActividad = () => {
-        setActividades([...actividades, { ...initialTaskState }]);
+    // --- Manejadores de eventos ---
+    const resetForm = () => {
+        setSelectedEquipoId('');
+        setSelectedPlanId('');
+        setSelectedIntervalo('');
+        setSelectedTecnicoId('');
+        setFechaEjecucion('');
     };
     
-    const handleRemoveActividad = (index) => {
-        const list = [...actividades];
-        list.splice(index, 1);
-        setActividades(list);
-    };
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSuccess('');
         setError('');
+        setSuccess('');
+
+        // --- CORRECCIÓN ---
+        // Se asegura de que haya un 'idsolicitante' válido.
+        // Si el usuario actual es el 'mockUser' (ID 0), se usa el ID del primer técnico como respaldo.
+        let idSolicitanteValido = user?.id;
+        if (user?.id === 0 && tecnicos.length > 0) {
+            idSolicitanteValido = tecnicos[0].id;
+            console.warn(`Usuario 'mock' detectado. Usando el primer técnico (ID: ${idSolicitanteValido}) como solicitante.`);
+        }
+
+        if (!selectedEquipoId || !selectedPlanId || !selectedIntervalo || !selectedTecnicoId || !fechaEjecucion || !idSolicitanteValido) {
+            setError("Por favor, complete todos los campos, incluyendo el solicitante.");
+            return;
+        }
 
         const payload = {
-            ...formData,
-            numeroot: `OT-PLAN-${Date.now()}`,
-            idsolicitante: user.id,
-            idestadoot: 1, // Asume que '1' es el ID para "Creada" o "Abierta"
-            prioridad: 'Media', // Prioridad por defecto para planificadas
-            // actividades_a_crear: actividades.filter(a => a.idtareaestandar)
+            idequipo: parseInt(selectedEquipoId, 10),
+            idplanorigen: parseInt(selectedPlanId, 10),
+            horometro: parseInt(selectedIntervalo, 10),
+            idtecnicoasignado: parseInt(selectedTecnicoId, 10),
+            idsolicitante: idSolicitanteValido,
+            fechaejecucion: fechaEjecucion
         };
-
+        
         try {
-            await apiClient.post('/ordenes-trabajo/', payload);
-            setSuccess('¡Orden de Trabajo creada exitosamente!');
-            // Resetear formulario
+            await apiClient.post('ordenes-trabajo/crear-desde-plan/', payload);
+            setSuccess('¡Orden de Trabajo creada exitosamente desde el programa!');
+            resetForm();
         } catch (err) {
-            console.error("Error al crear la Orden de Trabajo:", err.response?.data || err.message);
-            setError('Error al guardar la Orden de Trabajo. Revise los datos e intente de nuevo.');
+            console.error("Error al crear la OT:", err.response?.data);
+            setError(err.response?.data?.error || 'Ocurrió un error al crear la OT.');
         }
     };
 
-    if(loading) return <p>Cargando formulario...</p>
+    if (loading) return <p>Cargando...</p>;
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">Formulario de Mantenimiento Planificado</h1>
-             
-            {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">{error}</div>}
-            {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">{success}</div>}
+            <div className="flex items-center mb-8">
+                <Wrench size={32} className="text-blue-600 mr-4" />
+                <h1 className="text-3xl font-bold text-gray-800">Crear Mantenimiento Planificado</h1>
+            </div>
 
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Campos Principales */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Equipo</label>
-                        <select name="idequipo" value={formData.idequipo} onChange={handleInputChange} className="mt-1 w-full p-2 border rounded-md" required>
-                            <option value="">-- Seleccione --</option>
-                            {equipos.map(eq => <option key={eq.idequipo} value={eq.idequipo}>{eq.nombreequipo} ({eq.codigointerno})</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Técnico Principal Asignado</label>
-                        <select name="idtecnicoasignadoprincipal" value={formData.idtecnicoasignadoprincipal} onChange={handleInputChange} className="mt-1 w-full p-2 border rounded-md" required>
-                            <option value="">-- Seleccione --</option>
-                            {tecnicos.map(t => <option key={t.id} value={t.id}>{t.first_name} {t.last_name}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Tipo de Mantenimiento</label>
-                        <select name="idtipomantenimientoot" value={formData.idtipomantenimientoot} onChange={handleInputChange} className="mt-1 w-full p-2 border rounded-md" required>
-                           <option value="">-- Seleccione --</option>
-                           {tiposMantenimiento.map(tm => <option key={tm.idtipomantenimientoot} value={tm.idtipomantenimientoot}>{tm.nombretipomantenimientoot}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Fecha Programada</label>
-                        <input type="date" name="fechaprogramadainicio" value={formData.fechaprogramadainicio} onChange={handleInputChange} className="mt-1 w-full p-2 border rounded-md" required/>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Horómetro de Ingreso</label>
-                        <input type="number" name="horometroequipoingreso" value={formData.horometroequipoingreso} onChange={handleInputChange} className="mt-1 w-full p-2 border rounded-md" placeholder="ej: 12500" required/>
-                    </div>
-                </div>
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Descripción General / Problema Reportado</label>
-                    <textarea name="descripcionproblemareportado" value={formData.descripcionproblemareportado} onChange={handleInputChange} rows="3" className="mt-1 w-full p-2 border rounded-md"></textarea>
-                 </div>
-
-                {/* Sección de Actividades (funcionalidad futura) */}
-                <div className="pt-4 opacity-50">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Actividades a Realizar (En desarrollo)</h3>
-                    {actividades.map((actividad, i) => (
-                        <div key={i} className="grid grid-cols-12 gap-4 items-center mb-4 p-3 border rounded-md bg-gray-50">
-                            <div className="col-span-4">
-                                <label className="text-xs font-medium text-gray-600">Tarea Estándar</label>
-                                <select name="idtareaestandar" value={actividad.idtareaestandar || ''} onChange={e => handleActividadChange(i, e)} className="w-full p-2 border rounded-md" disabled>
-                                     <option value="">-- Seleccione Tarea --</option>
-                                     {tareasEstandar.map(t => <option key={t.idtareaestandar} value={t.idtareaestandar}>{t.descripciontarea.substring(0, 40)}...</option>)}
-                                </select>
-                            </div>
-                            <div className="col-span-5">
-                                <label className="text-xs font-medium text-gray-600">Observaciones</label>
-                                <input type="text" name="observacionesactividad" value={actividad.observacionesactividad} onChange={e => handleActividadChange(i, e)} className="w-full p-2 border rounded-md" disabled/>
-                            </div>
-                            <div className="col-span-2 flex items-center space-x-2">
-                                <label className="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="completada" checked={actividad.completada} onChange={e => handleActividadChange(i, e)} className="h-5 w-5" disabled/><span>OK</span></label>
-                                <button type="button" onClick={() => handleRemoveActividad(i)} className="text-red-500 hover:text-red-700" disabled><Trash2 size={16} /></button>
-                            </div>
-                        </div>
-                    ))}
-                    <button type="button" onClick={handleAddActividad} className="text-sm text-blue-600 hover:underline flex items-center" disabled><PlusCircle size={16} className="mr-1"/> Añadir otra actividad</button>
+                
+                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-4" role="alert"><AlertCircle size={20}/> {error}</div>}
+                {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex items-center gap-4" role="alert"><CheckCircle size={20}/> {success}</div>}
+                
+                {/* Paso 1: Seleccionar Equipo */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">1. Seleccione el Equipo</label>
+                    <select value={selectedEquipoId} onChange={e => { setSelectedEquipoId(e.target.value); setSelectedPlanId(''); setSelectedIntervalo(''); }} className="w-full p-2 border rounded-md" required>
+                        <option value="">-- Elija un equipo --</option>
+                        {Array.isArray(equipos) && equipos.map(eq => <option key={eq.idequipo} value={eq.idequipo}>{eq.nombreequipo} ({eq.codigointerno})</option>)}
+                    </select>
                 </div>
 
+                {/* Paso 2: Seleccionar Programa de Mantenimiento */}
+                {selectedEquipoId && (
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">2. Seleccione el Programa de Mantenimiento</label>
+                        <select value={selectedPlanId} onChange={e => { setSelectedPlanId(e.target.value); setSelectedIntervalo(''); }} className="w-full p-2 border rounded-md" required disabled={planesDisponibles.length === 0}>
+                            <option value="">{planesDisponibles.length === 0 ? 'No hay programas para este tipo de equipo' : '-- Elija un programa --'}</option>
+                            {Array.isArray(planesDisponibles) && planesDisponibles.map(p => <option key={p.idplanmantenimiento} value={p.idplanmantenimiento}>{p.nombreplan}</option>)}
+                        </select>
+                    </div>
+                )}
+                
+                {/* Paso 3: Seleccionar Intervalo (Pauta) */}
+                {selectedPlanId && (
+                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">3. Seleccione la Pauta a Ejecutar (Horómetro)</label>
+                        <select value={selectedIntervalo} onChange={e => setSelectedIntervalo(e.target.value)} className="w-full p-2 border rounded-md" required>
+                            <option value="">-- Elija un intervalo de horas --</option>
+                            {Array.isArray(intervalosDisponibles) && intervalosDisponibles.map(intervalo => <option key={intervalo} value={intervalo}>PM ({intervalo} HRS)</option>)}
+                        </select>
+                    </div>
+                )}
+
+                {/* Paso 4: Asignar Técnico y Fecha */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">4. Asignar Técnico Principal</label>
+                        <select value={selectedTecnicoId} onChange={e => setSelectedTecnicoId(e.target.value)} className="w-full p-2 border rounded-md" required>
+                            <option value="">-- Elija un técnico --</option>
+                            {Array.isArray(tecnicos) && tecnicos.map(t => <option key={t.id} value={t.id}>{t.first_name} {t.last_name || `(${t.username})`}</option>)}
+                        </select>
+                    </div>
+                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">5. Fecha de Ejecución Programada</label>
+                        <input type="date" value={fechaEjecucion} onChange={e => setFechaEjecucion(e.target.value)} className="w-full p-2 border rounded-md" required />
+                    </div>
+                </div>
+                
                 <div className="flex justify-end pt-6">
-                    <button type="submit" className="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700 text-base shadow-md transition-colors">Crear Orden de Trabajo</button>
+                    <button type="submit" className="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700 text-base shadow-md">
+                        Generar Orden de Trabajo
+                    </button>
                 </div>
             </form>
         </div>

@@ -27,6 +27,7 @@ const FaenasView = () => {
             columns={columns}
             formFields={formFields}
             idAccessor="idfaena"
+            transformItemForEdit={(item) => item}
         />
     );
 };

@@ -1,7 +1,10 @@
+// src/pages/UnplannedMaintenanceView.tsx
+// ARCHIVO CORREGIDO: Ahora apunta a la nueva acción 'reportar-falla' del backend.
+
 import React, { useState, useEffect } from 'react';
 import apiClient from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 
 const UnplannedMaintenanceView = () => {
     const { user } = useAuth();
@@ -13,7 +16,6 @@ const UnplannedMaintenanceView = () => {
         idequipo: '',
         prioridad: 'Alta', // Valor por defecto para emergencias
         descripcionproblemareportado: '',
-        fechareportefalla: new Date().toISOString().slice(0, 16), // Fecha y hora actual
     });
 
     const [loading, setLoading] = useState(false);
@@ -24,7 +26,7 @@ const UnplannedMaintenanceView = () => {
     useEffect(() => {
         const fetchEquipos = async () => {
             try {
-                const response = await apiClient.get('/equipos/');
+                const response = await apiClient.get('equipos/');
                 setEquipos(response.data.results || response.data);
             } catch (error) {
                 console.error("Error cargando equipos:", error);
@@ -39,35 +41,39 @@ const UnplannedMaintenanceView = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
         setSuccess('');
 
+        // Se simplifica el payload para que coincida con lo que espera la nueva acción.
         const payload = {
-            ...formData,
-            numeroot: `OT-CORR-${Date.now()}`, // Genera un número de OT único
-            idsolicitante: user.id,
-            idreportadopor: user.id,
-            idtipomantenimientoot: 2, // Asume que '2' es el ID para "Correctivo"
-            idestadoot: 1, // Asume que '1' es el ID para "Abierta"
-            fechacreacionot: new Date().toISOString(),
+            idequipo: parseInt(formData.idequipo, 10),
+            prioridad: formData.prioridad,
+            descripcionproblemareportado: formData.descripcionproblemareportado,
+            idsolicitante: user?.id, // El backend usará esto para 'reportado por' y 'asignado' inicialmente
         };
 
+        if (!payload.idequipo || !payload.idsolicitante) {
+            setError("Faltan datos requeridos. Asegúrese de seleccionar un equipo.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            await apiClient.post('/ordenes-trabajo/', payload);
+            // Se apunta a la nueva acción personalizada 'reportar-falla'.
+            await apiClient.post('ordenes-trabajo/reportar-falla/', payload);
             setSuccess('¡Reporte de falla y OT Correctiva creada exitosamente!');
             // Resetear el formulario
             setFormData({
                 idequipo: '',
                 prioridad: 'Alta',
                 descripcionproblemareportado: '',
-                fechareportefalla: new Date().toISOString().slice(0, 16),
             });
         } catch (err) {
             console.error("Error al crear la Orden de Trabajo:", err.response?.data);
-            setError('Error al guardar el reporte. Revise los datos e intente de nuevo.');
+            setError(err.response?.data?.error || 'Error al guardar el reporte. Revise los datos e intente de nuevo.');
         } finally {
             setLoading(false);
         }
@@ -81,8 +87,9 @@ const UnplannedMaintenanceView = () => {
             </div>
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md space-y-6">
                 
-                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">{error}</div>}
-                {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">{success}</div>}
+                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-4" role="alert"><AlertTriangle size={20}/> {error}</div>}
+                {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex items-center gap-4" role="alert"><CheckCircle size={20}/> {success}</div>}
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -115,18 +122,6 @@ const UnplannedMaintenanceView = () => {
                     ></textarea>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Fecha y Hora del Reporte</label>
-                    <input 
-                        type="datetime-local" 
-                        name="fechareportefalla" 
-                        value={formData.fechareportefalla} 
-                        onChange={handleInputChange} 
-                        className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-50"
-                        readOnly 
-                    />
-                </div>
-                
                 <div className="flex justify-end pt-6">
                     <button 
                         type="submit" 
@@ -142,4 +137,3 @@ const UnplannedMaintenanceView = () => {
 };
 
 export default UnplannedMaintenanceView;
-

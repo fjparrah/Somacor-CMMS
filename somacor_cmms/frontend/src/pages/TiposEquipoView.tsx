@@ -22,6 +22,7 @@ const TiposEquipoView = () => {
             columns={columns}
             formFields={formFields}
             idAccessor="idtipoequipo"
+            transformItemForEdit={(item) => item}
         />
     );
 };
