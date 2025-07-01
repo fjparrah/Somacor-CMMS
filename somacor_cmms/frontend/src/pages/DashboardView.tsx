@@ -1,296 +1,213 @@
-import React from 'react';
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Wrench,
-  TrendingUp,
-  Calendar,
-  Users
-} from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { useDashboard, useEquiposCriticos } from '../hooks';
+import React, { useState, useEffect } from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
+import { Truck, Wrench, AlertTriangle, CalendarCheck, BarChart2 } from 'lucide-react';
+
+// =================================================================================
+// INICIO DE DEPENDENCIAS LOCALES
+// Para asegurar que el componente sea autocontenido y funcione en el entorno de
+// previsualización, se definen aquí las dependencias.
+// =================================================================================
+
+// --- Dependencia: apiClient ---
+const API_URL = 'https://8000-iy1ndwd6rwjciifvad9i7-14fa1d09.manusvm.computer/api';
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+// En una aplicación real, se agregaría aquí el manejo de tokens de autenticación.
+apiClient.interceptors.request.use(config => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        config.headers.Authorization = `Token ${token}`;
+    }
+    return config;
+});
+
+// --- Dependencia: LoadingSpinner ---
+const LoadingSpinner: React.FC = () => (
+  <div className="flex justify-center items-center h-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+);
+
+// --- Dependencias: Componentes de UI ---
+const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
+  <div ref={ref} className={`rounded-xl border bg-white text-gray-900 shadow-lg transition-all hover:shadow-2xl ${className}`} {...props} />
+));
+Card.displayName = 'Card';
+
+const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
+  <div ref={ref} className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props} />
+));
+CardHeader.displayName = 'CardHeader';
+
+const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(({ className, ...props }, ref) => (
+  <h3 ref={ref} className={`text-lg font-semibold leading-none tracking-tight text-gray-700 ${className}`} {...props} />
+));
+CardTitle.displayName = 'CardTitle';
+
+const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
+  <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
+));
+CardContent.displayName = 'CardContent';
+
+
+// =================================================================================
+// FIN DE DEPENDENCIAS LOCALES
+// =================================================================================
+
+// Tipos de datos para el dashboard
+interface DashboardStats {
+  total_equipos: number;
+  equipos_operativos: number;
+  ots_abiertas: number;
+  ots_vencidas: number;
+  mantenimientos_proximos: number;
+}
+
+interface EstadoEquipoData {
+  nombreestado: string;
+  cantidad: number;
+}
+
+interface TipoOtData {
+    nombretipomantenimientoot: string;
+    cantidad: number;
+}
 
 const DashboardView: React.FC = () => {
-  const { stats, loading: statsLoading, error: statsError } = useDashboard();
-  const { equipos: equiposCriticos, loading: equiposLoading } = useEquiposCriticos();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [equiposPorEstado, setEquiposPorEstado] = useState<EstadoEquipoData[]>([]);
+  const [otsPorTipo, setOtsPorTipo] = useState<TipoOtData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Colores para los gráficos
-  const COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.get('/mantenimiento-workflow/dashboard/');
+        const data = response.data;
+        setStats(data.estadisticas_generales);
+        setEquiposPorEstado(data.equipos_por_estado);
+        setOtsPorTipo(data.ots_por_tipo);
+        setError(null);
+      } catch (err) {
+        setError("No se pudo cargar la información del dashboard. Verifique la conexión con el servidor.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Datos para el gráfico de barras de OTs por tipo
-  const otsPorTipoData = stats?.ots_por_tipo?.map(item => ({
-    tipo: item.nombretipomantenimientoot,
-    cantidad: item.cantidad
-  })) || [];
+    fetchData();
+  }, []);
 
-  // Datos para el gráfico de pie de equipos por estado
-  const equiposPorEstadoData = stats?.equipos_por_estado?.map((item, index) => ({
-    ...item,
-    color: COLORS[index % COLORS.length]
-  })) || [];
+  // Colores para el gráfico de torta
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1943'];
 
-  if (statsLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Cargando dashboard...</div>
-      </div>
-    );
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
-  if (statsError) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-md p-4">
-        <div className="flex">
-          <AlertTriangle className="h-5 w-5 text-red-400" />
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-red-800">Error</h3>
-            <div className="mt-2 text-sm text-red-700">{statsError}</div>
-          </div>
-        </div>
-      </div>
-    );
+  if (error) {
+    return <div className="p-8 text-center text-red-500 bg-red-100 rounded-lg">{error}</div>;
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-600 mt-2">
-          Resumen general del estado de mantenimiento de la flota
-        </p>
-      </div>
+    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard General</h1>
 
-      {/* Estadísticas principales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-blue-100">
-              <Activity className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Equipos</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {stats?.estadisticas_generales?.total_equipos || 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-green-100">
-              <CheckCircle className="h-6 w-6 text-green-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Equipos Operativos</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {stats?.estadisticas_generales?.equipos_operativos || 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-yellow-100">
-              <Clock className="h-6 w-6 text-yellow-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">OTs Abiertas</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {stats?.estadisticas_generales?.ots_abiertas || 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-red-100">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">OTs Vencidas</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                {stats?.estadisticas_generales?.ots_vencidas || 0}
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Tarjetas de Estadísticas Principales */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <StatCard icon={<Truck className="h-8 w-8 text-blue-500" />} title="Equipos Totales" value={stats?.total_equipos} />
+        <StatCard icon={<Wrench className="h-8 w-8 text-green-500" />} title="Equipos Operativos" value={stats?.equipos_operativos} />
+        <StatCard icon={<AlertTriangle className="h-8 w-8 text-yellow-500" />} title="OTs Abiertas" value={stats?.ots_abiertas} />
+        <StatCard icon={<AlertTriangle className="h-8 w-8 text-red-500" />} title="OTs Vencidas" value={stats?.ots_vencidas} />
+        <StatCard icon={<CalendarCheck className="h-8 w-8 text-purple-500" />} title="Mant. Próximos (7d)" value={stats?.mantenimientos_proximos} />
       </div>
 
       {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Gráfico de OTs por tipo */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Wrench className="h-5 w-5 mr-2" />
-            Órdenes de Trabajo por Tipo
-          </h3>
-          {otsPorTipoData.length > 0 ? (
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <BarChart2 className="mr-2 h-5 w-5 text-gray-600" />
+              Órdenes de Trabajo por Tipo
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+             <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                    <Pie data={otsPorTipo} dataKey="cantidad" nameKey="nombretipomantenimientoot" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
+                         {otsPorTipo.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip formatter={(value) => `${value} OTs`} />
+                    <Legend />
+                </PieChart>
+             </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Truck className="mr-2 h-5 w-5 text-gray-600" />
+              Equipos por Estado
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={otsPorTipoData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="tipo" 
-                  tick={{ fontSize: 12 }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="cantidad" fill="#3B82F6" />
-              </BarChart>
+                <PieChart>
+                    <Pie 
+                        data={equiposPorEstado} 
+                        dataKey="cantidad" 
+                        nameKey="nombreestado" 
+                        cx="50%" 
+                        cy="50%" 
+                        outerRadius={70} 
+                        fill="#82ca9d" 
+                        labelLine={true}
+                        label={({ percent, nombreestado }) => {
+                            // Solo mostrar etiqueta si el porcentaje es mayor al 5%
+                            if (percent > 0.05) {
+                                return `${(percent * 100).toFixed(0)}%`;
+                            }
+                            return '';
+                        }}
+                    >
+                        {equiposPorEstado.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip formatter={(value, name) => [`${value} equipos`, name]} />
+                    <Legend 
+                        wrapperStyle={{fontSize: '12px', paddingTop: '10px'}}
+                        layout="horizontal"
+                        align="center"
+                        verticalAlign="bottom"
+                    />
+                </PieChart>
             </ResponsiveContainer>
-          ) : (
-            <div className="flex items-center justify-center h-64 text-gray-500">
-              No hay datos disponibles
-            </div>
-          )}
-        </div>
-
-        {/* Gráfico de equipos por estado */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <TrendingUp className="h-5 w-5 mr-2" />
-            Equipos por Estado
-          </h3>
-          {equiposPorEstadoData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={equiposPorEstadoData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ nombreestado, cantidad }) => `${nombreestado}: ${cantidad}`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="cantidad"
-                >
-                  {equiposPorEstadoData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="flex items-center justify-center h-64 text-gray-500">
-              No hay datos disponibles
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Secciones adicionales */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Equipos críticos */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <AlertTriangle className="h-5 w-5 mr-2 text-red-500" />
-            Equipos que Requieren Atención
-          </h3>
-          {equiposLoading ? (
-            <div className="text-gray-500">Cargando equipos críticos...</div>
-          ) : equiposCriticos.length > 0 ? (
-            <div className="space-y-3">
-              {equiposCriticos.slice(0, 5).map(equipo => (
-                <div key={equipo.idequipo} className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900">{equipo.codigointerno}</div>
-                    <div className="text-sm text-gray-600">{equipo.nombreequipo}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-medium text-red-600">
-                      {equipo.horometroactual} hrs
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {equipo.estado_actual?.nombreestado}
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {equiposCriticos.length > 5 && (
-                <div className="text-center text-sm text-gray-500">
-                  Y {equiposCriticos.length - 5} equipos más...
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <CheckCircle size={48} className="mx-auto mb-2 text-green-400" />
-              <p>Todos los equipos están en buen estado</p>
-            </div>
-          )}
-        </div>
-
-        {/* Próximos mantenimientos */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Calendar className="h-5 w-5 mr-2 text-blue-500" />
-            Próximos Mantenimientos
-          </h3>
-          {stats?.mantenimientos_proximos && stats.mantenimientos_proximos.length > 0 ? (
-            <div className="space-y-3">
-              {stats.mantenimientos_proximos.slice(0, 5).map((mantenimiento, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900">{mantenimiento.equipo}</div>
-                    <div className="text-sm text-gray-600">{mantenimiento.tipo_mantenimiento}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-medium text-blue-600">
-                      {new Date(mantenimiento.fecha_programada).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Clock size={48} className="mx-auto mb-2 text-gray-400" />
-              <p>No hay mantenimientos próximos programados</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Resumen de actividad reciente */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-          <Users className="h-5 w-5 mr-2" />
-          Resumen de Actividad
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">
-              {stats?.estadisticas_generales?.mantenimientos_proximos || 0}
-            </div>
-            <div className="text-sm text-gray-600">Mantenimientos Próximos</div>
-          </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">
-              {((stats?.estadisticas_generales?.equipos_operativos || 0) / 
-                (stats?.estadisticas_generales?.total_equipos || 1) * 100).toFixed(1)}%
-            </div>
-            <div className="text-sm text-gray-600">Disponibilidad de Flota</div>
-          </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-orange-600">
-              {stats?.estadisticas_generales?.ots_abiertas || 0}
-            </div>
-            <div className="text-sm text-gray-600">Trabajos Pendientes</div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 };
 
-export default DashboardView;
+// Componente auxiliar para las tarjetas de estadísticas
+const StatCard: React.FC<{ icon: React.ReactNode; title: string; value?: number }> = ({ icon, title, value }) => (
+  <Card>
+    <CardHeader className="flex flex-row items-center justify-between pb-2">
+      <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      {icon}
+    </CardHeader>
+    <CardContent>
+      <div className="text-4xl font-bold text-gray-900">{value ?? '...'}</div>
+    </CardContent>
+  </Card>
+);
 
+export default DashboardView;

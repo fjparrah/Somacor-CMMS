@@ -10,6 +10,7 @@ from django.db.models import Q, Count
 from .models import *
 from .serializers import *
 import datetime
+import json # Importante añadir json
 
 class ChecklistWorkflowViewSet(viewsets.ViewSet):
     """
@@ -43,27 +44,39 @@ class ChecklistWorkflowViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='completar-checklist')
     def completar_checklist(self, request):
         """
-        Completa un checklist y analiza los resultados para generar alertas
+        Completa un checklist y analiza los resultados para generar alertas.
+        Ahora procesa multipart/form-data.
         """
-        serializer = ChecklistInstanceSerializer(data=request.data)
-        
+        # --- INICIO DE LA CORRECCIÓN ---
+        # Copiamos los datos para poder modificarlos.
+        data = request.data.copy()
+
+        # El campo 'answers' viene como un string JSON, lo convertimos a un objeto Python.
+        if 'answers' in data and isinstance(data['answers'], str):
+            try:
+                data['answers'] = json.loads(data['answers'])
+            except json.JSONDecodeError:
+                return Response({'error': 'Formato de "answers" inválido.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Pasamos los datos modificados al serializador.
+        serializer = ChecklistInstanceSerializer(data=data, context={'request': request})
+
         if serializer.is_valid():
             try:
                 with transaction.atomic():
-                    instance = serializer.save()
-                    
-                    # Analizar respuestas críticas
+                    instance = serializer.save()                  
+                    # La lógica de análisis de respuestas y creación de OT sigue igual.
                     alertas = self._analizar_respuestas_criticas(instance)
                     
-                    # Si hay elementos críticos en mal estado, crear OT correctiva
-                    if alertas['elementos_criticos_malos']:
+                    if alertas.get('elementos_criticos_malos'):
                         ot_creada = self._crear_ot_correctiva_desde_checklist(instance, alertas)
                         alertas['ot_creada'] = ot_creada
                     
-                    return Response({
-                        'checklist': ChecklistInstanceSerializer(instance).data,
-                        'alertas': alertas
-                    }, status=status.HTTP_201_CREATED)
+                    # Devolvemos la instancia serializada (incluirá la URL de la imagen si se subió).
+                    response_data = ChecklistInstanceSerializer(instance).data
+                    response_data['alertas'] = alertas
+                    
+                    return Response(response_data, status=status.HTTP_201_CREATED)
                     
             except Exception as e:
                 return Response(
@@ -71,6 +84,7 @@ class ChecklistWorkflowViewSet(viewsets.ViewSet):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
         else:
+            # Si la validación falla, retornamos los errores para depuración.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def _analizar_respuestas_criticas(self, instance):
@@ -338,4 +352,3 @@ class ChecklistWorkflowViewSet(viewsets.ViewSet):
             },
             'elementos_mas_fallidos': resultado[:20]  # Top 20
         })
-

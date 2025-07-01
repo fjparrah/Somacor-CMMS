@@ -142,9 +142,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files
+# --- INICIO DE LA MODIFICACIÓN ---
+# Media files (Archivos subidos por los usuarios como las imágenes de evidencia)
+# URL pública para acceder a los archivos multimedia en el navegador.
 MEDIA_URL = '/media/'
+# Ruta en el sistema de archivos donde se guardarán los archivos subidos.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# --- FIN DE LA MODIFICACIÓN ---
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -230,4 +235,3 @@ LOGGING = {
 
 # Crear directorio de logs si no existe
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
-

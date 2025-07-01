@@ -1,5 +1,4 @@
 // src/pages/ProfilesView.tsx
-// ARCHIVO MODIFICADO: Se corrige el valor de 'apiEndpoint'.
 
 import React, { useState, useEffect } from 'react';
 import GenericCRUD from '../components/shared/GenericCRUD';
@@ -15,7 +14,7 @@ const ProfilesView = () => {
         { header: 'Nombre de Usuario', accessor: 'username' },
         { header: 'Nombre Completo', accessor: 'first_name' },
         { header: 'Email', accessor: 'email' },
-        { header: 'Rol', accessor: (item) => item.usuarios?.nombrerol || 'N/A' },
+        { header: 'Rol', accessor: (item) => item.nombrerol || 'N/A' }, // Usar nombrerol directamente del UserSerializer
         { header: 'Activo', accessor: 'is_active' },
     ];
 
@@ -24,7 +23,6 @@ const ProfilesView = () => {
             setLoading(true);
             setError('');
             try {
-                // La URL aquí debe tener la barra al inicio porque es una llamada directa.
                 const rolesRes = await apiClient.get('/roles/');
                 
                 const fields = [
@@ -36,10 +34,10 @@ const ProfilesView = () => {
                         required: false,
                         placeholder: 'Dejar en blanco para no cambiar' 
                     },
-                    { name: 'nombre_completo', label: 'Nombre Completo' },
+                    { name: 'first_name', label: 'Nombre Completo' }, // Cambiado de nombre_completo a first_name
                     { name: 'email', label: 'Correo Electrónico', type: 'email' },
                     { 
-                        name: 'rol_id', 
+                        name: 'idrol', // Cambiado de rol_id a idrol para coincidir con el serializer
                         label: 'Rol del Usuario', 
                         type: 'select',
                         options: (rolesRes.data.results || rolesRes.data).map(r => ({ value: r.idrol, label: r.nombrerol }))
@@ -61,8 +59,8 @@ const ProfilesView = () => {
     const transformUserDataForEdit = (user) => {
         return {
             ...user,
-            nombre_completo: user.first_name,
-            rol_id: user.usuarios?.idrol,
+            // No es necesario transformar nombre_completo si el campo es first_name
+            idrol: user.usuarios?.idrol, // Asegurarse de que el idrol se pase correctamente
         };
     };
 
@@ -72,9 +70,6 @@ const ProfilesView = () => {
     return (
         <GenericCRUD
             title="Gestión de Perfiles (Usuarios)"
-            // CORREGIDO: Se elimina la barra diagonal inicial. Esto asegura que Axios
-            // construya la URL correctamente: baseURL + apiEndpoint.
-            // Ej: "http://localhost:8000/api/" + "users/"
             apiEndpoint="users/" 
             columns={columns}
             formFields={formFields}
@@ -85,3 +80,5 @@ const ProfilesView = () => {
 };
 
 export default ProfilesView;
+
+

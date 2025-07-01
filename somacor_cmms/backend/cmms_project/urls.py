@@ -15,9 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include # Asegúrate de que 'include' esté importado
+from django.urls import path, include
+
+# --- INICIO DE LA MODIFICACIÓN ---
+from django.conf import settings
+from django.conf.urls.static import static
+# --- FIN DE LA MODIFICACIÓN ---
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('cmms_api.urls')), # Añade esta línea
+    path('api/', include('cmms_api.urls')),  # Asegúrate que esta línea exista
 ]
+
+# --- INICIO DE LA MODIFICACIÓN ---
+# Esta configuración permite a Django servir archivos subidos por usuarios (media files)
+# durante el desarrollo. En producción, esto se debe manejar con un servidor web como Nginx.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# --- FIN DE LA MODIFICACIÓN ---

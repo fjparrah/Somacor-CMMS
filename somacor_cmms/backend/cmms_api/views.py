@@ -258,15 +258,15 @@ class OrdenTrabajoViewSet(viewsets.ModelViewSet):
         Crea una orden de trabajo correctiva por falla reportada
         """
         id_equipo = request.data.get('idequipo')
-        id_solicitante = request.data.get('idsolicitante')
         descripcion = request.data.get('descripcionproblemareportado')
 
-        if not all([id_equipo, id_solicitante, descripcion]):
+        if not all([id_equipo, descripcion]):
             return Response({'error': 'Faltan datos requeridos.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             equipo = Equipos.objects.get(pk=id_equipo)
-            solicitante = User.objects.get(pk=id_solicitante)
+            # Asignar automáticamente el usuario actual como solicitante
+            solicitante = request.user
 
             # Obtener o crear el estado y tipo de OT
             try:
@@ -349,4 +349,27 @@ class AgendaViewSet(viewsets.ModelViewSet):
             })
         
         return Response(eventos)
+
+
+# --- VIEWSET PARA EVIDENCIAS FOTOGRÁFICAS ---
+
+class EvidenciaOTViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestionar evidencias fotográficas de órdenes de trabajo
+    """
+    queryset = EvidenciaOT.objects.all()
+    serializer_class = EvidenciaOTSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        orden_trabajo_id = self.request.query_params.get('orden_trabajo', None)
+        if orden_trabajo_id:
+            queryset = queryset.filter(idordentrabajo=orden_trabajo_id)
+        return queryset
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 

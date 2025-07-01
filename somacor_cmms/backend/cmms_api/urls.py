@@ -34,6 +34,7 @@ router.register(r'estados-orden-trabajo', views.EstadosOrdenTrabajoViewSet)
 # Registro de Mantenimientos API routes
 router.register(r'ordenes-trabajo', views.OrdenTrabajoViewSet)
 router.register(r'actividades-ot', views.ActividadOrdenTrabajoViewSet)
+router.register(r'evidencias-ot', views.EvidenciaOTViewSet)
 router.register(r'agendas', views.AgendaViewSet)
 
 # Workflows especializados
