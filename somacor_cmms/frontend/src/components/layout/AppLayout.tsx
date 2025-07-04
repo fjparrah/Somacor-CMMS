@@ -1,11 +1,11 @@
 // src/components/layout/AppLayout.tsx
-// ARCHIVO ACTUALIZADO: Se añade el enlace a "Checklist" en el menú de Control.
+// ARCHIVO ACTUALIZADO: Se añade el enlace a "Checklist" en el menú de Control y sistema de autenticación.
 
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
 import NavLink from './NavLink';
 import NavGroup from './NavGroup';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { getUserInfo, getUserRole, logout } from '../../utils/auth';
 
 import { 
     LayoutDashboard, ClipboardList, Settings, Activity, Calendar as CalendarIcon, 
@@ -14,8 +14,13 @@ import {
 } from 'lucide-react';
 
 const AppLayout = () => {
-    const { user, logout } = useAuth();
+    const user = getUserInfo();
+    const role = getUserRole();
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+    };
 
     return (
         <div className="flex h-screen bg-gray-100 font-sans" data-testid="app-layout">
@@ -51,9 +56,9 @@ const AppLayout = () => {
                     <div className="text-sm mb-2 truncate" title={user?.username}>
                         Usuario: <strong>{user?.username ?? 'No autenticado'}</strong> 
                         <br/>
-                        Rol: ({user?.usuarios?.nombrerol ?? 'N/A'})
+                        Rol: <strong>{role?.nombre ?? 'N/A'}</strong>
                     </div>
-                    <button onClick={logout} className="w-full flex items-center justify-center px-4 py-2 rounded-md bg-red-600 hover:bg-red-700">
+                    <button onClick={handleLogout} className="w-full flex items-center justify-center px-4 py-2 rounded-md bg-red-600 hover:bg-red-700">
                         <LogOut size={16} className="mr-2"/>
                         Cerrar Sesión
                     </button>

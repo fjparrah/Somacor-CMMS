@@ -234,3 +234,133 @@ class MantenimientoWorkflowViewSet(viewsets.ViewSet):
             'eficiencia_por_tipo': eficiencia_por_tipo
         })
 
+
+    @action(detail=False, methods=['post'], url_path='crear-ot-planificada')
+    def crear_ot_planificada(self, request):
+        """
+        Crea una orden de trabajo planificada basada en un plan de mantenimiento
+        """
+        try:
+            # Obtener datos del request
+            idequipo = request.data.get('idequipo')
+            idplanmantenimiento = request.data.get('idplanmantenimiento')
+            intervalohorasoperacion = request.data.get('intervalohorasoperacion')
+            idtecnicoasignado = request.data.get('idtecnicoasignado')
+            fechaejecucionprogramada = request.data.get('fechaejecucionprogramada')
+            idsolicitante = request.data.get('idsolicitante', 1)
+
+            # Validar datos requeridos
+            if not all([idequipo, idplanmantenimiento, intervalohorasoperacion, idtecnicoasignado, fechaejecucionprogramada]):
+                return Response(
+                    {'error': 'Faltan datos requeridos: idequipo, idplanmantenimiento, intervalohorasoperacion, idtecnicoasignado, fechaejecucionprogramada'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Obtener objetos relacionados
+            try:
+                equipo = Equipos.objects.get(pk=idequipo)
+                plan_mantenimiento = PlanesMantenimiento.objects.get(pk=idplanmantenimiento)
+                tecnico_asignado = User.objects.get(pk=idtecnicoasignado)
+                solicitante = User.objects.get(pk=idsolicitante)
+            except (Equipos.DoesNotExist, PlanesMantenimiento.DoesNotExist, User.DoesNotExist) as e:
+                return Response(
+                    {'error': f'Objeto no encontrado: {str(e)}'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            # Obtener o crear estado y tipo de OT
+            try:
+                estado_inicial = EstadosOrdenTrabajo.objects.get(nombreestadoot='Abierta')
+            except EstadosOrdenTrabajo.DoesNotExist:
+                estado_inicial = EstadosOrdenTrabajo.objects.create(
+                    nombreestadoot='Abierta',
+                    descripcion='OT recién creada y pendiente de asignación'
+                )
+
+            try:
+                tipo_ot = TiposMantenimientoOT.objects.get(nombretipomantenimientoot='Preventivo')
+            except TiposMantenimientoOT.DoesNotExist:
+                tipo_ot = TiposMantenimientoOT.objects.create(
+                    nombretipomantenimientoot='Preventivo',
+                    descripcion='Mantenimiento planificado y programado'
+                )
+
+            # Crear la orden de trabajo
+            with transaction.atomic():
+                # Generar número de OT único
+                numero_ot = f"OT-PREV-{equipo.codigointerno or equipo.idequipo}-{timezone.now().strftime('%Y%m%d%H%M')}"
+                
+                nueva_ot = OrdenesTrabajo.objects.create(
+                    numeroot=numero_ot,
+                    idequipo=equipo,
+                    idtipomantenimientoot=tipo_ot,
+                    idestadoot=estado_inicial,
+                    descripcionproblemareportado=f"Mantenimiento preventivo programado - {plan_mantenimiento.nombreplan} (Intervalo: {intervalohorasoperacion} hrs)",
+                    fechaejecucion=fechaejecucionprogramada,
+                    fechareportefalla=timezone.now(),
+                    idsolicitante=solicitante,
+                    idtecnicoasignado=tecnico_asignado,
+                    prioridad='Media',
+                    idplanorigen=plan_mantenimiento,
+                    horometro=0  # Valor por defecto, se puede actualizar después
+                )
+
+                # Crear actividades basadas en las tareas del plan de mantenimiento
+                detalles_plan = DetallesPlanMantenimiento.objects.filter(
+                    idplanmantenimiento=plan_mantenimiento,
+                    intervalohorasoperacion=intervalohorasoperacion,
+                    activo=True
+                )
+
+                actividades_creadas = []
+                for detalle in detalles_plan:
+                    tarea = detalle.idtareaestandar
+                    actividad = ActividadesOrdenTrabajo.objects.create(
+                        idordentrabajo=nueva_ot,
+                        idtareaestandar=tarea,
+                        descripcionactividad=tarea.descripciontarea,
+                        tiempoestimadominutos=tarea.tiempoestimadominutos or 60,
+                        completada=False,
+                        fechainicioactividad=None,
+                        fechafinactividad=None
+                    )
+                    actividades_creadas.append(actividad)
+
+                # Crear evento en el calendario
+                Agendas.objects.create(
+                    tituloevento=f"Mantenimiento Preventivo - {equipo.nombreequipo}",
+                    descripcionevento=f"OT: {numero_ot} - {plan_mantenimiento.nombreplan}",
+                    fechahorainicio=timezone.datetime.combine(
+                        timezone.datetime.strptime(fechaejecucionprogramada, '%Y-%m-%d').date(),
+                        timezone.datetime.min.time()
+                    ),
+                    fechahorafin=timezone.datetime.combine(
+                        timezone.datetime.strptime(fechaejecucionprogramada, '%Y-%m-%d').date(),
+                        timezone.datetime.min.time()
+                    ) + timezone.timedelta(hours=4),  # Duración estimada de 4 horas
+                    tipoevento='Mantenimiento Preventivo',
+                    colorevento='#28a745',  # Verde para mantenimiento preventivo
+                    esdiacompleto=False,
+                    idequipo=equipo,
+                    idordentrabajo=nueva_ot,
+                    idplanmantenimiento=plan_mantenimiento,
+                    idusuarioasignado=tecnico_asignado,
+                    idusuariocreador=solicitante
+                )
+
+            # Serializar la respuesta
+            serializer = OrdenTrabajoSerializer(nueva_ot)
+            
+            return Response({
+                'message': 'Orden de trabajo planificada creada exitosamente',
+                'orden_trabajo': serializer.data,
+                'actividades_creadas': len(actividades_creadas),
+                'numero_ot': numero_ot
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response(
+                {'error': f'Error interno del servidor: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+

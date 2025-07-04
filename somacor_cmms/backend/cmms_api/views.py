@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.db import models, transaction
 from .models import *
 from .serializers import *
+from .permissions import IsAdminRole, IsSupervisorRole, IsOperadorRole, IsAdminOrSupervisorRole, IsAnyRole
 
 # --- Vistas de Autenticación ---
 class CustomAuthToken(ObtainAuthToken):
@@ -17,9 +18,33 @@ class CustomAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        
+        # Obtener información del usuario y su rol
         user_data = UserSerializer(user, context={'request': request}).data
+        
+        # Obtener información adicional del rol
+        try:
+            usuario_info = Usuarios.objects.get(user=user)
+            rol_info = {
+                'id': usuario_info.idrol.idrol,
+                'nombre': usuario_info.idrol.nombrerol,
+                'departamento': usuario_info.departamento
+            }
+        except Usuarios.DoesNotExist:
+            rol_info = {
+                'id': None,
+                'nombre': 'Sin rol asignado',
+                'departamento': ''
+            }
+        
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user': user_data})
+        
+        return Response({
+            'token': token.key,
+            'user': user_data,
+            'rol': rol_info,
+            'message': 'Login exitoso'
+        })
 
 class LogoutView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -32,32 +57,32 @@ class LogoutView(generics.GenericAPIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAdminRole]  # Solo Admin puede gestionar usuarios
 
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Roles.objects.all()
     serializer_class = RolSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAdminRole]  # Solo Admin puede gestionar roles
 
 class FaenaViewSet(viewsets.ModelViewSet):
     queryset = Faenas.objects.all()
     serializer_class = FaenaSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAnyRole]  # Todos los roles pueden ver faenas
 
 class TipoEquipoViewSet(viewsets.ModelViewSet):
     queryset = TiposEquipo.objects.all()
     serializer_class = TipoEquipoSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAnyRole]  # Todos los roles pueden ver tipos de equipo
 
 class EstadoEquipoViewSet(viewsets.ModelViewSet):
     queryset = EstadosEquipo.objects.all()
     serializer_class = EstadoEquipoSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAnyRole]  # Todos los roles pueden ver estados de equipo
 
 class EquipoViewSet(viewsets.ModelViewSet):
     queryset = Equipos.objects.all()
     serializer_class = EquipoSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAnyRole]  # Todos los roles pueden ver equipos
 
 # --- NUEVOS VIEWSETS PARA EL MÓDULO DE CHECKLISTS ---
 

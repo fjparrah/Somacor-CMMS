@@ -64,7 +64,7 @@ class ChecklistWorkflowViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             try:
                 with transaction.atomic():
-                    instance = serializer.save()                  
+                    instance = serializer.save()
                     # La lógica de análisis de respuestas y creación de OT sigue igual.
                     alertas = self._analizar_respuestas_criticas(instance)
                     

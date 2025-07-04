@@ -1,11 +1,13 @@
 // src/App.tsx
-// ARCHIVO ACTUALIZADO: Se añaden ErrorBoundary y optimizaciones de rendimiento
+// ARCHIVO ACTUALIZADO: Se añaden ErrorBoundary, optimizaciones de rendimiento y sistema de login
 
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ErrorBoundary from './components/shared/ErrorBoundary';
 import LoadingSpinner from './components/shared/LoadingSpinner';
 import AppLayout from './components/layout/AppLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+import { isAuthenticated } from './utils/auth';
 
 // Lazy loading de componentes para mejorar el rendimiento
 const DashboardView = React.lazy(() => import('./pages/DashboardView'));
@@ -25,12 +27,49 @@ const OrdenesTrabajoView = React.lazy(() => import('./pages/OrdenesTrabajoView')
 const EjecucionOTView = React.lazy(() => import('./pages/EjecucionOTView'));
 const ChecklistView = React.lazy(() => import('./pages/ChecklistView'));
 
+// Componentes de autenticación
+const LoginView = React.lazy(() => import('./pages/LoginView'));
+const AccesoDenegadoView = React.lazy(() => import('./pages/AccesoDenegadoView'));
+
 function App() {
   return (
     <ErrorBoundary>
       <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
+        {/* Ruta de login */}
+        <Route 
+          path="/login" 
+          element={
+            <Suspense fallback={<LoadingSpinner text="Cargando..." />}>
+              <LoginView />
+            </Suspense>
+          } 
+        />
+        
+        {/* Ruta de acceso denegado */}
+        <Route 
+          path="/acceso-denegado" 
+          element={
+            <Suspense fallback={<LoadingSpinner text="Cargando..." />}>
+              <AccesoDenegadoView />
+            </Suspense>
+          } 
+        />
+
+        {/* Rutas protegidas */}
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route 
+            index 
+            element={
+              isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+            } 
+          />
           
           <Route 
             path="dashboard" 

@@ -9,7 +9,7 @@ import { Server, Zap, ZapOff, Search, ChevronDown, ChevronUp } from 'lucide-reac
 // =================================================================================
 
 // --- Dependencia: apiClient ---
-const API_URL = 'http://127.0.0.1:8000/api'; // URL del backend de Django
+const API_URL = 'http://localhost:8000/api'; // URL del backend de Django
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {

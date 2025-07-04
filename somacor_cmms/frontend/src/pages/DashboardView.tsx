@@ -10,21 +10,22 @@ import { Truck, Wrench, AlertTriangle, CalendarCheck, BarChart2 } from 'lucide-r
 // =================================================================================
 
 // --- Dependencia: apiClient ---
-const API_URL = 'https://8000-iy1ndwd6rwjciifvad9i7-14fa1d09.manusvm.computer/api';
+const API_URL = 'http://localhost:8000/api';
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
-// En una aplicación real, se agregaría aquí el manejo de tokens de autenticación.
+
+// Agregar interceptor para manejo de tokens de autenticación
 apiClient.interceptors.request.use(config => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-        config.headers.Authorization = `Token ${token}`;
-    }
-    return config;
-});
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Token ${token}`;
+  }
+  return config;
+}, error => Promise.reject(error));
 
 // --- Dependencia: LoadingSpinner ---
 const LoadingSpinner: React.FC = () => (

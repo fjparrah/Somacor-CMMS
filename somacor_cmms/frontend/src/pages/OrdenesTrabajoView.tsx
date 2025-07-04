@@ -56,7 +56,7 @@ const OrdenesTrabajoView: React.FC = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' } | null>({ key: 'fechacreacionot', direction: 'desc' });
+  const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' } | null>({ key: 'fechacreacion', direction: 'desc' });
 
   // Hooks de datos originales del usuario
   const { ordenes, loading, error, refetch } = useOrdenesTrabajoFiltradas(filtros);
@@ -97,10 +97,10 @@ const OrdenesTrabajoView: React.FC = () => {
   };
 
   const sortedAndFilteredOrdenes = useMemo(() => {
-    let filteredOrdenes: OrdenTrabajoAPI[] = ordenes;
+    let filteredOrdenes = ordenes;
     
     if (searchTerm) {
-        filteredOrdenes = ordenes.filter((ot: OrdenTrabajoAPI) =>
+        filteredOrdenes = ordenes.filter((ot) =>
         Object.values(ot).some(value =>
             String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -236,7 +236,7 @@ const OrdenesTrabajoView: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{orden.numeroot}</div>
-                      <div className="text-sm text-gray-500">{new Date(orden.fechacreacionot).toLocaleDateString()}</div>
+                      <div className="text-sm text-gray-500">{new Date(orden.fechacreacion).toLocaleDateString()}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{orden.equipo_nombre}</td>

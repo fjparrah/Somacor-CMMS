@@ -215,9 +215,15 @@ class TareaEstandarSerializer(serializers.ModelSerializer):
 
 class PlanMantenimientoSerializer(serializers.ModelSerializer):
     tipo_equipo_nombre = serializers.CharField(source='idtipoequipo.nombretipo', read_only=True)
+    detalles = serializers.SerializerMethodField()
+    
     class Meta:
         model = PlanesMantenimiento
         fields = '__all__'
+    
+    def get_detalles(self, obj):
+        detalles = DetallesPlanMantenimiento.objects.filter(idplanmantenimiento=obj)
+        return [{'intervalohorasoperacion': detalle.intervalohorasoperacion} for detalle in detalles]
 
 class DetallesPlanMantenimientoSerializer(serializers.ModelSerializer):
     plan_nombre = serializers.CharField(source='idplanmantenimiento.nombreplan', read_only=True)

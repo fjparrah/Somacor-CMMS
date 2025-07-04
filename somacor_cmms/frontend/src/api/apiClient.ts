@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Se crea una instancia de Axios para centralizar la configuración de la API.
 const apiClient = axios.create({
-    baseURL: 'https://8000-iy1ndwd6rwjciifvad9i7-14fa1d09.manusvm.computer/api', // La URL base de tu backend de Django.
+    baseURL: 'http://localhost:8000/api', // La URL base de tu backend de Django.
 });
 
 // Se usa un interceptor para añadir el token de autenticación a cada petición.

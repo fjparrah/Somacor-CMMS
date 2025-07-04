@@ -9,7 +9,7 @@ import { AlertCircle, Send, UploadCloud } from 'lucide-react';
 // =================================================================================
 
 // --- Dependencia: apiClient (reemplaza import de ../api/apiClient) ---
-const API_URL = 'https://8000-iy1ndwd6rwjciifvad9i7-14fa1d09.manusvm.computer/api';
+const API_URL = 'http://localhost:8000/api';
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
@@ -349,7 +349,7 @@ const ChecklistView: React.FC = () => {
                                         <tr key={item.id_item} className={responses[item.id_item]?.estado === 'malo' ? 'bg-red-50' : ''}>
                                             <td className="px-4 py-2 whitespace-nowrap"><span className="text-sm text-gray-900">{item.texto}</span>{item.es_critico && <span title="Ítem Crítico" className="ml-2 text-red-500 font-bold"><AlertCircle className="inline-block h-4 w-4" /></span>}</td>
                                             <td className="px-4 py-2"><div className="flex justify-center space-x-2">{['bueno', 'malo', 'na'].map(estado => (<label key={estado} className="cursor-pointer"><input type="radio" name={`item-${item.id_item}`} value={estado} checked={responses[item.id_item]?.estado === estado} onChange={() => handleResponseChange(item.id_item, estado as 'bueno' | 'malo' | 'na')} className="sr-only" /><span className={`px-3 py-1 text-xs rounded-full ${responses[item.id_item]?.estado === estado ? (estado === 'bueno' ? 'bg-green-500 text-white' : estado === 'malo' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white') : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>{estado.toUpperCase()}</span></label>))}</div></td>
-                                            <td className="px-4 py-2"><input type="text" value={responses[item.id_item]?.observacion_item || ''} onChange={e => handleResponseChange(item.id_item, responses[item.id_item].estado, e.target.value)} className="w-full p-1 border border-gray-300 rounded-md" placeholder="Añadir observación..." /></td>
+                                            <td className="px-4 py-2"><input type="text" value={responses[item.id_item]?.observacion_item || ''} onChange={e => handleResponseChange(item.id_item, responses[item.id_item]?.estado || 'bueno', e.target.value)} className="w-full p-1 border border-gray-300 rounded-md" placeholder="Añadir observación..." /></td>
                                         </tr>
                                     ))}
                                     </tbody>
