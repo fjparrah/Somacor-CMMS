@@ -2446,277 +2446,425 @@ INFO 2025-07-03 13:23:05,353 basehttp 31316 39160 "GET /api/equipos/ HTTP/1.1" 2
 INFO 2025-07-03 13:23:05,361 basehttp 31316 39984 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
 INFO 2025-07-03 13:23:05,364 basehttp 31316 40560 "GET /api/users/ HTTP/1.1" 200 827
 INFO 2025-07-03 13:23:16,331 basehttp 31316 40560 "POST /api/mantenimiento-workflow/crear-ot-planificada/ HTTP/1.1" 201 1415
-INFO 2025-07-03 15:02:18,673 autoreload 20100 37628 Watching for file changes with StatReloader
-INFO 2025-07-03 15:02:32,738 basehttp 20100 18888 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:02:32,738 basehttp 20100 38168 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:02:32,766 basehttp 20100 38168 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:02:32,772 basehttp 20100 38168 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:02:38,460 basehttp 20100 34820 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:02:38,460 basehttp 20100 17868 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:02:38,467 basehttp 20100 17868 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:02:38,473 basehttp 20100 34820 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:03:31,923 basehttp 20100 34820 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:03:31,923 basehttp 20100 17868 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:03:31,933 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:03:31,939 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:03:32,703 basehttp 20100 34820 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:03:32,708 basehttp 20100 17868 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:03:38,802 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:03:38,809 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:03:41,458 basehttp 20100 34820 "OPTIONS /api/checklist-workflow/templates-por-equipo/1/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:03:41,469 basehttp 20100 34820 "GET /api/checklist-workflow/templates-por-equipo/1/ HTTP/1.1" 200 5098
-INFO 2025-07-03 15:05:29,376 basehttp 20100 34820 "OPTIONS /api/checklist-workflow/completar-checklist/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:29,399 basehttp 20100 34820 "POST /api/checklist-workflow/completar-checklist/ HTTP/1.1" 201 28042
-INFO 2025-07-03 15:05:32,573 basehttp 20100 34820 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,574 basehttp 20100 34820 "OPTIONS /api/users/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,575 basehttp 20100 34820 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,578 basehttp 20100 34820 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,580 basehttp 20100 34820 "OPTIONS /api/users/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,582 basehttp 20100 34820 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:05:32,585 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:05:32,595 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:05:32,602 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:05:32,611 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:05:32,618 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:05:32,628 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:05:32,658 basehttp 20100 34820 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 24945
-INFO 2025-07-03 15:05:32,695 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 24945
-INFO 2025-07-03 15:05:34,558 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:05:34,561 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:05:34,569 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:05:34,572 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:05:34,574 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:05:34,581 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:10,573 basehttp 20100 34820 "OPTIONS /api/mantenimiento-workflow/crear-ot-planificada/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:10,596 basehttp 20100 34820 "POST /api/mantenimiento-workflow/crear-ot-planificada/ HTTP/1.1" 201 1417
-INFO 2025-07-03 15:06:13,297 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:06:13,300 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:13,305 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:13,314 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:06:13,318 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:13,321 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:13,343 basehttp 20100 34820 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:06:13,376 basehttp 20100 41312 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:06:38,737 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:38,745 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:45,900 basehttp 20100 34820 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:45,900 basehttp 20100 41312 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:45,910 basehttp 20100 41312 "GET /api/agendas/ HTTP/1.1" 200 2293
-INFO 2025-07-03 15:06:45,920 basehttp 20100 34820 "GET /api/agendas/ HTTP/1.1" 200 2293
-INFO 2025-07-03 15:06:49,443 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:49,451 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:50,535 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:06:50,548 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:50,550 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:06:50,564 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:50,564 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:50,577 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:50,591 basehttp 20100 41312 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:06:50,636 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:06:54,765 basehttp 20100 17868 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,765 basehttp 20100 41312 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,765 basehttp 20100 7104 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,765 basehttp 20100 41904 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,765 basehttp 20100 34820 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,768 basehttp 20100 41312 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:54,771 basehttp 20100 7104 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:06:54,773 basehttp 20100 41904 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:06:54,776 basehttp 20100 41312 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:06:54,779 basehttp 20100 7104 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:06:54,782 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:54,788 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:54,794 basehttp 20100 34820 "GET /api/estados-equipo/ HTTP/1.1" 200 365
-INFO 2025-07-03 15:06:54,797 basehttp 20100 7104 "GET /api/estados-equipo/ HTTP/1.1" 200 365
-INFO 2025-07-03 15:06:54,803 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:54,809 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:55,606 basehttp 20100 7104 "OPTIONS /api/roles/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:55,606 basehttp 20100 34820 "OPTIONS /api/roles/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:06:55,611 basehttp 20100 34820 "GET /api/roles/ HTTP/1.1" 200 236
-INFO 2025-07-03 15:06:55,614 basehttp 20100 7104 "GET /api/roles/ HTTP/1.1" 200 236
-INFO 2025-07-03 15:06:55,618 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:55,625 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:06:57,764 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:06:57,769 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:04,230 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:04,238 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:06,842 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:06,846 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:07:06,852 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:06,857 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:06,866 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:07:06,869 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:06,894 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:07:06,933 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:07:07,925 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:07,931 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:09,092 basehttp 20100 7104 "GET /api/checklist-workflow/templates-por-equipo/1/ HTTP/1.1" 200 5098
-INFO 2025-07-03 15:07:44,334 basehttp 20100 7104 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:07:44,334 basehttp 20100 41904 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:07:44,342 basehttp 20100 17868 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:07:44,348 basehttp 20100 7104 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:07:44,348 basehttp 20100 41904 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:07:44,354 basehttp 20100 7104 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:07:44,358 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:44,366 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:46,445 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:46,453 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:47,372 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:47,378 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:48,094 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:48,097 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:48,106 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:07:48,107 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:48,113 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:07:48,118 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:07:48,721 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:07:48,729 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:08:46,217 basehttp 20100 7104 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:08:46,220 basehttp 20100 17868 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:08:46,225 basehttp 20100 7104 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:08:46,231 basehttp 20100 41904 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:08:46,232 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:08:46,236 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:08:48,076 basehttp 20100 41312 "OPTIONS /api/detalles-plan-mantenimiento/?idplanmantenimiento=3 HTTP/1.1" 200 0
-INFO 2025-07-03 15:08:48,076 basehttp 20100 41904 "OPTIONS /api/detalles-plan-mantenimiento/?idplanmantenimiento=3 HTTP/1.1" 200 0
-INFO 2025-07-03 15:08:48,084 basehttp 20100 41904 "GET /api/detalles-plan-mantenimiento/?idplanmantenimiento=3 HTTP/1.1" 200 2008
-INFO 2025-07-03 15:08:48,091 basehttp 20100 41312 "GET /api/detalles-plan-mantenimiento/?idplanmantenimiento=3 HTTP/1.1" 200 2008
-INFO 2025-07-03 15:09:09,603 basehttp 20100 41904 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:09:09,610 basehttp 20100 17868 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
-INFO 2025-07-03 15:09:09,610 basehttp 20100 41312 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:09:09,615 basehttp 20100 41904 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:09:09,628 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:09:09,634 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:09:52,277 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:09:52,284 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:09:53,978 basehttp 20100 7104 "GET /api/checklist-workflow/templates-por-equipo/1/ HTTP/1.1" 200 5098
-INFO 2025-07-03 15:11:42,062 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:11:42,077 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:11:42,079 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:11:42,079 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:11:42,092 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:11:42,098 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:11:42,119 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:11:42,155 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:11:45,809 basehttp 20100 17868 "OPTIONS /api/ordenes-trabajo/10/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:11:45,809 basehttp 20100 7104 "OPTIONS /api/ordenes-trabajo/10/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:11:45,816 basehttp 20100 7104 "GET /api/ordenes-trabajo/10/ HTTP/1.1" 200 1271
-INFO 2025-07-03 15:11:45,818 basehttp 20100 7104 "OPTIONS /api/actividades-ot/?idordentrabajo=10 HTTP/1.1" 200 0
-INFO 2025-07-03 15:11:45,826 basehttp 20100 17868 "GET /api/ordenes-trabajo/10/ HTTP/1.1" 200 1271
-INFO 2025-07-03 15:11:45,848 basehttp 20100 7104 "GET /api/actividades-ot/?idordentrabajo=10 HTTP/1.1" 200 18782
-INFO 2025-07-03 15:11:45,876 basehttp 20100 17868 "GET /api/actividades-ot/?idordentrabajo=10 HTTP/1.1" 200 18782
-INFO 2025-07-03 15:11:53,170 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:11:53,172 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:11:53,183 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:11:53,197 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:11:53,201 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:11:53,226 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:11:53,239 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:11:53,274 basehttp 20100 41312 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:23,914 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:23,935 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:24,410 basehttp 20100 17868 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:12:24,415 basehttp 20100 41312 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:12:24,947 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:24,950 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:24,957 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:24,971 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:24,978 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:25,012 basehttp 20100 41312 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:25,021 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:25,063 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:25,796 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:25,801 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:26,408 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:26,409 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:26,423 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:26,425 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:26,435 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:26,449 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:26,462 basehttp 20100 41904 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:26,495 basehttp 20100 34820 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:34,586 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:34,594 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:34,896 basehttp 20100 41904 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:12:34,900 basehttp 20100 34820 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:12:41,524 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:41,528 basehttp 20100 7104 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:41,534 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:41,540 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:41,548 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:41,553 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:41,577 basehttp 20100 34820 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:41,620 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:41,819 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:41,826 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:42,491 basehttp 20100 7104 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:42,499 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:42,499 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:42,508 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:42,514 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:42,515 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:42,817 basehttp 20100 17868 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:42,820 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:42,827 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:12:42,829 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:42,838 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:12:42,873 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:12:42,888 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:42,927 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:12:43,170 basehttp 20100 17868 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:12:43,176 basehttp 20100 7104 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:13:03,780 basehttp 20100 7104 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:13:03,784 basehttp 20100 17868 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:13:04,224 basehttp 20100 17868 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:13:04,227 basehttp 20100 7104 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:13:04,629 basehttp 20100 7104 "OPTIONS /api/tipos-tarea/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:13:04,629 basehttp 20100 17868 "OPTIONS /api/tipos-tarea/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:13:04,634 basehttp 20100 17868 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
-INFO 2025-07-03 15:13:04,637 basehttp 20100 7104 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
-INFO 2025-07-03 15:13:06,155 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:13:06,161 basehttp 20100 17868 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:14:55,423 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:14:55,433 basehttp 20100 41904 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:14:55,456 basehttp 20100 34820 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:14:55,468 basehttp 20100 41904 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:14:55,471 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:14:55,477 basehttp 20100 17868 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:14:55,513 basehttp 20100 7104 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26218
-INFO 2025-07-03 15:14:55,528 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:15:37,321 basehttp 20100 41904 "OPTIONS /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 200 0
-INFO 2025-07-03 15:15:37,337 basehttp 20100 41904 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 656
-INFO 2025-07-03 15:15:37,377 basehttp 20100 41904 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26875
-INFO 2025-07-03 15:15:47,714 basehttp 20100 41904 "OPTIONS /api/login/ HTTP/1.1" 200 0
-WARNING 2025-07-03 15:15:47,890 log 20100 41904 Bad Request: /api/login/
-WARNING 2025-07-03 15:15:47,890 basehttp 20100 41904 "POST /api/login/ HTTP/1.1" 400 86
-INFO 2025-07-03 15:15:53,821 basehttp 20100 41904 "POST /api/login/ HTTP/1.1" 200 357
-INFO 2025-07-03 15:15:54,138 basehttp 20100 41904 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:15:54,143 basehttp 20100 7104 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 673
-INFO 2025-07-03 15:15:59,766 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:15:59,773 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:02,106 basehttp 20100 17868 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:16:02,113 basehttp 20100 41312 "GET /api/users/ HTTP/1.1" 200 827
-INFO 2025-07-03 15:16:02,118 basehttp 20100 34820 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:16:02,121 basehttp 20100 7104 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:02,128 basehttp 20100 34820 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:02,150 basehttp 20100 41312 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
-INFO 2025-07-03 15:16:02,165 basehttp 20100 41904 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26875
-INFO 2025-07-03 15:16:02,203 basehttp 20100 41312 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 26875
-INFO 2025-07-03 15:16:30,428 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:30,435 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:34,862 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:34,870 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:16:40,057 basehttp 20100 41312 "GET /api/checklist-workflow/templates-por-equipo/1/ HTTP/1.1" 200 5098
-INFO 2025-07-03 15:19:18,067 basehttp 20100 41312 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:19:18,071 basehttp 20100 41904 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:19:18,828 basehttp 20100 41904 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:19:18,831 basehttp 20100 41312 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:19:19,453 basehttp 20100 41312 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
-INFO 2025-07-03 15:19:19,455 basehttp 20100 41904 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
-INFO 2025-07-03 15:19:19,937 basehttp 20100 41904 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:19:19,941 basehttp 20100 41312 "GET /api/tipos-equipo/ HTTP/1.1" 200 342
-INFO 2025-07-03 15:19:20,341 basehttp 20100 41312 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:19:20,344 basehttp 20100 41904 "GET /api/faenas/ HTTP/1.1" 200 442
-INFO 2025-07-03 15:19:59,144 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:19:59,151 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:20:06,152 basehttp 20100 41312 "GET /api/equipos/ HTTP/1.1" 200 1279
-INFO 2025-07-03 15:20:06,160 basehttp 20100 41904 "GET /api/equipos/ HTTP/1.1" 200 1279
+INFO 2025-07-07 11:29:26,747 autoreload 13635 139683550249600 Watching for file changes with StatReloader
+INFO 2025-07-07 11:30:03,760 basehttp 13635 139683497555520 "OPTIONS /api/login/ HTTP/1.1" 200 0
+WARNING 2025-07-07 11:30:04,168 log 13635 139683497555520 Bad Request: /api/login/
+WARNING 2025-07-07 11:30:04,169 basehttp 13635 139683497555520 "POST /api/login/ HTTP/1.1" 400 86
+WARNING 2025-07-07 11:30:36,286 log 13635 139683497555520 Bad Request: /api/login/
+WARNING 2025-07-07 11:30:36,286 basehttp 13635 139683497555520 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-07 11:31:22,285 basehttp 13635 139683497555520 "POST /api/login/ HTTP/1.1" 200 272
+INFO 2025-07-07 11:37:55,080 autoreload 13635 139683550249600 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/serializers.py changed, reloading.
+INFO 2025-07-07 11:37:55,409 autoreload 14589 139926119834240 Watching for file changes with StatReloader
+INFO 2025-07-07 11:38:04,783 autoreload 14589 139926119834240 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 11:38:05,146 autoreload 14606 140370944725632 Watching for file changes with StatReloader
+INFO 2025-07-07 11:38:14,587 autoreload 14606 140370944725632 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 11:38:14,964 autoreload 14623 140271628132992 Watching for file changes with StatReloader
+INFO 2025-07-07 11:38:37,529 autoreload 14833 140214286512768 Watching for file changes with StatReloader
+WARNING 2025-07-07 11:40:06,479 log 14833 140214167139904 Bad Request: /api/login/
+WARNING 2025-07-07 11:40:06,479 basehttp 14833 140214167139904 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-07 11:47:15,447 autoreload 15756 140101298094720 Watching for file changes with StatReloader
+WARNING 2025-07-07 11:47:21,130 log 14833 140214157698624 Unauthorized: /api/
+WARNING 2025-07-07 11:47:21,131 basehttp 14833 140214157698624 "GET /api/ HTTP/1.1" 401 65
+INFO 2025-07-07 12:51:03,018 autoreload 14833 140214286512768 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 12:51:28,565 autoreload 18182 140503261786752 Watching for file changes with StatReloader
+WARNING 2025-07-07 12:51:44,177 log 18182 140503142102592 Unauthorized: /api/
+WARNING 2025-07-07 12:51:44,177 basehttp 18182 140503142102592 "GET /api/ HTTP/1.1" 401 65
+WARNING 2025-07-07 12:52:34,491 log 18182 140503142102592 Bad Request: /api/login/
+WARNING 2025-07-07 12:52:34,491 basehttp 18182 140503142102592 "POST /api/login/ HTTP/1.1" 400 86
+WARNING 2025-07-07 12:53:06,528 log 18182 140503142102592 Bad Request: /api/login/
+WARNING 2025-07-07 12:53:06,529 basehttp 18182 140503142102592 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-07 12:53:16,727 basehttp 18182 140503132661312 "GET /api/planes-mantenimiento/1/detalles/ HTTP/1.1" 200 3183
+INFO 2025-07-07 13:30:02,167 autoreload 18182 140503261786752 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 13:30:02,750 autoreload 21233 140450439819904 Watching for file changes with StatReloader
+WARNING 2025-07-07 13:30:37,756 log 21233 140450321061440 Bad Request: /api/login/
+WARNING 2025-07-07 13:30:37,757 basehttp 21233 140450321061440 "POST /api/login/ HTTP/1.1" 400 86
+WARNING 2025-07-07 13:30:49,023 log 21233 140450321061440 Bad Request: /api/login/
+WARNING 2025-07-07 13:30:49,024 basehttp 21233 140450321061440 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-07 13:32:36,259 basehttp 21233 140450321061440 "POST /api/login/ HTTP/1.1" 200 327
+INFO 2025-07-07 13:32:47,223 basehttp 21233 140450321061440 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 721
+INFO 2025-07-07 15:52:33,213 autoreload 21233 140450439819904 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 15:53:22,010 autoreload 27548 140112745091712 Watching for file changes with StatReloader
+WARNING 2025-07-07 15:53:42,339 log 27548 140112693487168 Unauthorized: /api/
+WARNING 2025-07-07 15:53:42,339 basehttp 27548 140112693487168 "GET /api/ HTTP/1.1" 401 65
+INFO 2025-07-07 15:54:46,962 basehttp 27548 140112693487168 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-07 15:57:49,169 basehttp 27548 140112693487168 "OPTIONS /api/login/ HTTP/1.1" 200 0
+INFO 2025-07-07 15:57:49,583 basehttp 27548 140112693487168 "POST /api/login/ HTTP/1.1" 200 327
+INFO 2025-07-07 15:57:49,977 basehttp 27548 140112693487168 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+WARNING 2025-07-07 15:57:49,989 log 27548 140112693487168 Forbidden: /api/equipos/
+WARNING 2025-07-07 15:57:49,990 basehttp 27548 140112693487168 "GET /api/equipos/ HTTP/1.1" 403 63
+WARNING 2025-07-07 15:57:50,038 log 27548 140112684045888 Forbidden: /api/equipos/
+WARNING 2025-07-07 15:57:50,038 basehttp 27548 140112684045888 "GET /api/equipos/ HTTP/1.1" 403 63
+WARNING 2025-07-07 15:59:17,631 log 27548 140112675653184 Unauthorized: /api/ordenes-trabajo/reportar-falla/
+WARNING 2025-07-07 15:59:17,631 basehttp 27548 140112675653184 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 401 35
+INFO 2025-07-07 15:59:55,732 basehttp 27548 140112675653184 "POST /api/login/ HTTP/1.1" 200 327
+INFO 2025-07-07 16:00:44,808 basehttp 27548 140112675653184 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 721
+INFO 2025-07-07 16:01:09,783 basehttp 27548 140112675653184 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-07 16:26:18,528 autoreload 27548 140112745091712 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 16:26:18,905 autoreload 31011 140090121273984 Watching for file changes with StatReloader
+INFO 2025-07-07 16:26:54,549 autoreload 31011 140090121273984 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 16:26:54,882 autoreload 31058 140049026257536 Watching for file changes with StatReloader
+INFO 2025-07-07 16:28:47,473 autoreload 31421 139641610879616 Watching for file changes with StatReloader
+ERROR 2025-07-07 16:29:30,040 log 31058 140048974636608 Internal Server Error: /api/planes-mantenimiento/1/generar-agenda/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py", line 174, in generar_agenda
+    horas_restantes = detalle.intervalohorasoperacion - (equipo.horometroactual % detalle.intervalohorasoperacion)
+                                                         ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Equipos' object has no attribute 'horometroactual'
+ERROR 2025-07-07 16:29:30,042 basehttp 31058 140048974636608 "GET /api/planes-mantenimiento/1/generar-agenda/ HTTP/1.1" 500 95459
+WARNING 2025-07-07 16:30:02,767 log 31058 140048974636608 Unauthorized: /api/
+WARNING 2025-07-07 16:30:02,767 basehttp 31058 140048974636608 "GET /api/ HTTP/1.1" 401 65
+INFO 2025-07-07 16:30:36,694 basehttp 31058 140048974636608 "POST /api/login/ HTTP/1.1" 200 327
+ERROR 2025-07-07 16:31:04,642 log 31058 140048974636608 Internal Server Error: /api/planes-mantenimiento/1/generar-agenda/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.11/dist-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py", line 174, in generar_agenda
+    horas_restantes = detalle.intervalohorasoperacion - (equipo.horometroactual % detalle.intervalohorasoperacion)
+                                                         ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Equipos' object has no attribute 'horometroactual'
+ERROR 2025-07-07 16:31:04,643 basehttp 31058 140048974636608 "GET /api/planes-mantenimiento/1/generar-agenda/ HTTP/1.1" 500 95628
+INFO 2025-07-07 16:32:19,097 autoreload 31058 140049026257536 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 16:32:19,448 autoreload 31961 140239764546176 Watching for file changes with StatReloader
+INFO 2025-07-07 16:32:28,472 basehttp 31961 140239712925248 "GET /api/planes-mantenimiento/1/generar-agenda/ HTTP/1.1" 200 10657
+INFO 2025-07-07 18:10:21,294 autoreload 31961 140239764546176 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-07 18:17:17,751 autoreload 35112 140164752982656 Watching for file changes with StatReloader
+WARNING 2025-07-07 18:17:25,636 log 35112 140164701361728 Unauthorized: /api/
+WARNING 2025-07-07 18:17:25,636 basehttp 35112 140164701361728 "GET /api/ HTTP/1.1" 401 65
+WARNING 2025-07-07 18:17:34,348 log 35112 140164701361728 Unauthorized: /api/ordenes-trabajo/reportar-falla/
+WARNING 2025-07-07 18:17:34,348 basehttp 35112 140164701361728 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 401 35
+INFO 2025-07-08 00:45:11,334 autoreload 35112 140164752982656 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-08 00:45:43,120 autoreload 36821 139691408003712 Watching for file changes with StatReloader
+INFO 2025-07-08 00:45:52,961 basehttp 36821 139691356358208 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 705
+WARNING 2025-07-08 02:48:58,276 log 36821 139691356358208 Method Not Allowed: /api/ordenes-trabajo/reportar-falla/
+WARNING 2025-07-08 02:48:58,276 basehttp 36821 139691356358208 "HEAD /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 405 0
+INFO 2025-07-08 02:49:05,306 basehttp 36821 139691356358208 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 684
+INFO 2025-07-09 00:11:34,947 basehttp 36821 139691356358208 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 699
+INFO 2025-07-09 15:05:05,669 basehttp 36821 139691356358208 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 714
+INFO 2025-07-09 15:11:14,375 basehttp 36821 139691356358208 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 29196
+WARNING 2025-07-09 15:11:15,547 log 36821 139691356358208 Not Found: /favicon.ico
+WARNING 2025-07-09 15:11:15,547 basehttp 36821 139691356358208 "GET /favicon.ico HTTP/1.1" 404 2346
+INFO 2025-07-09 15:11:26,980 basehttp 36821 139691338524224 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 810
+INFO 2025-07-09 15:11:32,535 basehttp 36821 139691356358208 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 30007
+INFO 2025-07-09 15:14:10,963 basehttp 36821 139691346916928 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+WARNING 2025-07-09 15:14:10,986 log 36821 139691346916928 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:14:10,986 basehttp 36821 139691346916928 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:14:11,033 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:14:11,033 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:16:34,312 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:16:34,312 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:16:34,339 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:16:34,340 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+INFO 2025-07-09 15:20:16,198 basehttp 36821 139691338524224 "OPTIONS /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 200 0
+WARNING 2025-07-09 15:20:16,209 log 36821 139691338524224 Bad Request: /api/ordenes-trabajo/reportar-falla/
+WARNING 2025-07-09 15:20:16,209 basehttp 36821 139691338524224 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 400 94
+INFO 2025-07-09 15:20:50,134 basehttp 36821 139691338524224 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 1153
+INFO 2025-07-09 15:21:21,255 basehttp 36821 139691346916928 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 31161
+WARNING 2025-07-09 15:23:03,158 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:03,159 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:03,176 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:03,176 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:05,586 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:05,586 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:05,602 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:05,602 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+INFO 2025-07-09 15:23:06,877 basehttp 36821 139691338524224 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+WARNING 2025-07-09 15:23:06,895 log 36821 139691338524224 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:06,895 basehttp 36821 139691338524224 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:06,898 log 36821 139691356358208 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:06,901 basehttp 36821 139691356358208 "GET /api/equipos/ HTTP/1.1" 401 29
+INFO 2025-07-09 15:23:06,901 basehttp 36821 139691126945344 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-09 15:23:06,906 basehttp 36821 139691118552640 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+WARNING 2025-07-09 15:23:06,924 log 36821 139691118552640 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:06,925 basehttp 36821 139691118552640 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:06,956 log 36821 139691356358208 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:06,957 basehttp 36821 139691356358208 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:06,964 log 36821 139691126945344 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:06,965 basehttp 36821 139691126945344 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:06,979 log 36821 139691338524224 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:06,980 basehttp 36821 139691338524224 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:06,984 log 36821 139691110159936 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:06,985 basehttp 36821 139691110159936 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:07,045 log 36821 139691110159936 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:07,045 basehttp 36821 139691110159936 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:08,465 log 36821 139691110159936 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:08,465 basehttp 36821 139691110159936 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:08,477 log 36821 139691110159936 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:08,477 basehttp 36821 139691110159936 "GET /api/equipos/ HTTP/1.1" 401 29
+INFO 2025-07-09 15:23:23,924 basehttp 36821 139691110159936 "OPTIONS /api/login/ HTTP/1.1" 200 0
+INFO 2025-07-09 15:23:24,359 basehttp 36821 139691110159936 "POST /api/login/ HTTP/1.1" 200 357
+INFO 2025-07-09 15:23:24,769 basehttp 36821 139691110159936 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+WARNING 2025-07-09 15:23:24,785 log 36821 139691110159936 Unauthorized: /api/mantenimiento-workflow/dashboard/
+WARNING 2025-07-09 15:23:24,785 basehttp 36821 139691110159936 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:24,833 log 36821 139691338524224 Unauthorized: /api/mantenimiento-workflow/dashboard/
+WARNING 2025-07-09 15:23:24,833 basehttp 36821 139691338524224 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,823 log 36821 139691338524224 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:28,823 basehttp 36821 139691338524224 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,831 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:28,831 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,835 log 36821 139691110159936 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:28,836 basehttp 36821 139691110159936 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,845 log 36821 139691110159936 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:28,845 basehttp 36821 139691110159936 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,849 log 36821 139691118552640 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:28,850 basehttp 36821 139691118552640 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,861 log 36821 139691118552640 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:28,861 basehttp 36821 139691118552640 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,882 log 36821 139691126945344 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:28,882 basehttp 36821 139691126945344 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:28,900 log 36821 139691126945344 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:28,900 basehttp 36821 139691126945344 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,380 log 36821 139691126945344 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:33,380 basehttp 36821 139691126945344 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,393 log 36821 139691126945344 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:33,393 basehttp 36821 139691126945344 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,398 log 36821 139691118552640 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:33,398 basehttp 36821 139691118552640 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,405 log 36821 139691118552640 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:33,405 basehttp 36821 139691118552640 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,413 log 36821 139691110159936 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-09 15:23:33,413 basehttp 36821 139691110159936 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,424 log 36821 139691110159936 Unauthorized: /api/users/
+WARNING 2025-07-09 15:23:33,425 basehttp 36821 139691110159936 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,452 log 36821 139691338524224 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:33,452 basehttp 36821 139691338524224 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:33,462 log 36821 139691126945344 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-09 15:23:33,462 basehttp 36821 139691126945344 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+INFO 2025-07-09 15:23:45,713 basehttp 36821 139691126945344 "POST /api/login/ HTTP/1.1" 200 357
+WARNING 2025-07-09 15:23:46,084 log 36821 139691126945344 Unauthorized: /api/mantenimiento-workflow/dashboard/
+WARNING 2025-07-09 15:23:46,084 basehttp 36821 139691126945344 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:46,094 log 36821 139691126945344 Unauthorized: /api/mantenimiento-workflow/dashboard/
+WARNING 2025-07-09 15:23:46,094 basehttp 36821 139691126945344 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:52,352 log 36821 139691126945344 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:52,352 basehttp 36821 139691126945344 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:23:52,376 log 36821 139691126945344 Unauthorized: /api/equipos/
+WARNING 2025-07-09 15:23:52,376 basehttp 36821 139691126945344 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-09 15:33:34,080 log 36821 139691346916928 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:33:34,080 basehttp 36821 139691346916928 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+INFO 2025-07-09 15:34:24,312 autoreload 36821 139691408003712 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/serializers.py changed, reloading.
+INFO 2025-07-09 15:34:41,242 autoreload 52901 139690021835392 Watching for file changes with StatReloader
+WARNING 2025-07-09 15:34:55,536 log 52901 139689970230848 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:34:55,536 basehttp 52901 139689970230848 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+INFO 2025-07-09 15:35:06,926 autoreload 53131 139872975377024 Watching for file changes with StatReloader
+WARNING 2025-07-09 15:35:17,128 log 52901 139689970230848 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:35:17,129 basehttp 52901 139689970230848 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+INFO 2025-07-09 15:35:32,826 autoreload 53173 139965304185472 Watching for file changes with StatReloader
+WARNING 2025-07-09 15:35:42,520 log 53173 139965252552256 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:35:42,520 basehttp 53173 139965252552256 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+WARNING 2025-07-09 15:41:20,707 log 53173 139965252552256 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:41:20,707 basehttp 53173 139965252552256 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+INFO 2025-07-09 15:41:40,563 autoreload 54022 140448316121728 Watching for file changes with StatReloader
+WARNING 2025-07-09 15:41:50,457 log 54022 140448264508992 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:41:50,457 basehttp 54022 140448264508992 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+WARNING 2025-07-09 15:42:29,952 log 54022 140448264508992 Bad Request: /api/evidencias-ot/
+WARNING 2025-07-09 15:42:29,953 basehttp 54022 140448264508992 "POST /api/evidencias-ot/ HTTP/1.1" 400 47
+INFO 2025-07-09 15:43:04,594 autoreload 54022 140448316121728 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/models.py changed, reloading.
+INFO 2025-07-09 15:43:05,007 autoreload 54331 140385981387392 Watching for file changes with StatReloader
+INFO 2025-07-09 15:43:34,438 basehttp 54331 140385929782848 "POST /api/evidencias-ot/ HTTP/1.1" 201 408
+INFO 2025-07-10 00:28:39,832 basehttp 54331 140385929782848 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 31161
+INFO 2025-07-10 00:29:34,086 basehttp 54331 140385929782848 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-10 00:29:34,104 basehttp 54331 140385920341568 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+WARNING 2025-07-10 00:29:34,106 log 54331 140385929782848 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-10 00:29:34,106 basehttp 54331 140385929782848 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+INFO 2025-07-10 00:29:34,110 basehttp 54331 140385703687744 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-10 00:29:34,111 basehttp 54331 140385920341568 "OPTIONS /api/users/ HTTP/1.1" 200 0
+WARNING 2025-07-10 00:29:34,126 log 54331 140385703687744 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:29:34,126 basehttp 54331 140385703687744 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:29:34,136 log 54331 140385695295040 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-10 00:29:34,136 basehttp 54331 140385695295040 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+INFO 2025-07-10 00:29:34,138 basehttp 54331 140385686902336 "OPTIONS /api/users/ HTTP/1.1" 200 0
+WARNING 2025-07-10 00:29:34,145 log 54331 140385686902336 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-10 00:29:34,146 basehttp 54331 140385686902336 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:29:34,174 log 54331 140385695295040 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-10 00:29:34,174 basehttp 54331 140385695295040 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-10 00:29:34,195 log 54331 140385920341568 Unauthorized: /api/users/
+WARNING 2025-07-10 00:29:34,196 basehttp 54331 140385920341568 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:29:34,208 log 54331 140385929782848 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:29:34,208 basehttp 54331 140385929782848 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:29:34,256 log 54331 140385695295040 Unauthorized: /api/users/
+WARNING 2025-07-10 00:29:34,256 basehttp 54331 140385695295040 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:40,015 log 54331 140385929782848 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:53:40,015 basehttp 54331 140385929782848 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:40,029 log 54331 140385929782848 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:53:40,029 basehttp 54331 140385929782848 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,434 log 54331 140385929782848 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-10 00:53:58,434 basehttp 54331 140385929782848 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,567 log 54331 140385695295040 Unauthorized: /api/users/
+WARNING 2025-07-10 00:53:58,568 log 54331 140385929782848 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:53:58,568 basehttp 54331 140385929782848 "GET /api/equipos/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,569 log 54331 140385686902336 Unauthorized: /api/ordenes-trabajo/
+WARNING 2025-07-10 00:53:58,569 log 54331 140385920341568 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-10 00:53:58,569 basehttp 54331 140385695295040 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,570 basehttp 54331 140385686902336 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,570 basehttp 54331 140385920341568 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,573 log 54331 140385703687744 Unauthorized: /api/users/
+WARNING 2025-07-10 00:53:58,573 basehttp 54331 140385703687744 "GET /api/users/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,577 log 54331 140385695295040 Unauthorized: /api/planes-mantenimiento/
+WARNING 2025-07-10 00:53:58,577 basehttp 54331 140385695295040 "GET /api/planes-mantenimiento/ HTTP/1.1" 401 29
+WARNING 2025-07-10 00:53:58,623 log 54331 140385703687744 Unauthorized: /api/equipos/
+WARNING 2025-07-10 00:53:58,623 basehttp 54331 140385703687744 "GET /api/equipos/ HTTP/1.1" 401 29
+INFO 2025-07-10 00:54:31,119 basehttp 54331 140385678509632 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 31161
+INFO 2025-07-10 00:54:56,660 basehttp 54331 140385678509632 "GET /api/ordenes-trabajo/17/ HTTP/1.1" 200 1153
+INFO 2025-07-10 00:55:19,132 autoreload 54331 140385981387392 /home/ubuntu/cmms_somacor/somacor_cmms/backend/cmms_api/views.py changed, reloading.
+INFO 2025-07-10 00:56:19,262 autoreload 59755 139995340956288 Watching for file changes with StatReloader
+INFO 2025-07-10 00:56:26,314 basehttp 59755 139995289347648 "GET /api/ordenes-trabajo/ HTTP/1.1" 200 31161
+INFO 2025-07-10 00:56:36,183 basehttp 59755 139995289347648 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 845
+INFO 2025-07-10 00:56:42,838 basehttp 59755 139995289347648 "POST /api/ordenes-trabajo/18/completar/ HTTP/1.1" 200 1021
+INFO 2025-07-10 03:29:12,554 autoreload 3044 15540 Watching for file changes with StatReloader
+INFO 2025-07-10 03:29:18,898 basehttp 3044 38676 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:18,899 basehttp 3044 36588 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:18,921 basehttp 3044 36588 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-10 03:29:18,926 basehttp 3044 36588 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-10 03:29:23,970 basehttp 3044 36588 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:23,970 basehttp 3044 38676 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:23,985 basehttp 3044 38676 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:23,997 basehttp 3044 36588 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:25,495 basehttp 3044 38676 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,495 basehttp 3044 36588 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,495 basehttp 3044 41632 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,497 basehttp 3044 41632 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,497 basehttp 3044 38676 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,497 basehttp 3044 36588 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:25,506 basehttp 3044 38676 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:25,518 basehttp 3044 38676 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:25,531 basehttp 3044 38676 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:25,542 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:25,549 basehttp 3044 38676 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:25,577 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:25,592 basehttp 3044 36588 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:29:25,637 basehttp 3044 36588 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:29:32,696 basehttp 3044 36588 "OPTIONS /api/ordenes-trabajo/18/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:32,696 basehttp 3044 41632 "OPTIONS /api/ordenes-trabajo/18/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:32,701 basehttp 3044 41632 "GET /api/ordenes-trabajo/18/ HTTP/1.1" 200 957
+INFO 2025-07-10 03:29:32,702 basehttp 3044 36588 "OPTIONS /api/actividades-ot/?idordentrabajo=18 HTTP/1.1" 200 0
+INFO 2025-07-10 03:29:32,706 basehttp 3044 41632 "GET /api/ordenes-trabajo/18/ HTTP/1.1" 200 957
+INFO 2025-07-10 03:29:32,738 basehttp 3044 36588 "GET /api/actividades-ot/?idordentrabajo=18 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:29:32,760 basehttp 3044 36588 "GET /api/actividades-ot/?idordentrabajo=18 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:29:45,288 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:45,292 basehttp 3044 38676 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:45,317 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:45,320 basehttp 3044 38676 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:45,335 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:45,366 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:45,369 basehttp 3044 36588 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:29:45,414 basehttp 3044 36588 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:29:47,895 basehttp 3044 36588 "GET /api/ordenes-trabajo/18/ HTTP/1.1" 200 957
+INFO 2025-07-10 03:29:47,903 basehttp 3044 36588 "GET /api/ordenes-trabajo/18/ HTTP/1.1" 200 957
+INFO 2025-07-10 03:29:47,931 basehttp 3044 41632 "GET /api/actividades-ot/?idordentrabajo=18 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:29:47,955 basehttp 3044 41632 "GET /api/actividades-ot/?idordentrabajo=18 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:29:55,168 basehttp 3044 36588 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:55,173 basehttp 3044 12624 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:55,191 basehttp 3044 38676 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:55,194 basehttp 3044 12624 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:29:55,202 basehttp 3044 19144 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:29:55,212 basehttp 3044 36588 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:29:55,225 basehttp 3044 41632 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:29:55,275 basehttp 3044 41632 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32119
+INFO 2025-07-10 03:30:04,172 basehttp 3044 36588 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:04,176 basehttp 3044 19144 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:04,185 basehttp 3044 36588 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:04,189 basehttp 3044 19144 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:04,192 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:04,204 basehttp 3044 19144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:04,435 basehttp 3044 19144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:04,448 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:05,028 basehttp 3044 41632 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:05,028 basehttp 3044 19144 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:05,069 basehttp 3044 19144 "GET /api/agendas/ HTTP/1.1" 200 25309
+INFO 2025-07-10 03:30:05,111 basehttp 3044 41632 "GET /api/agendas/ HTTP/1.1" 200 25309
+INFO 2025-07-10 03:30:05,542 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:05,554 basehttp 3044 19144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:13,529 basehttp 3044 19144 "OPTIONS /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:13,537 basehttp 3044 19144 "POST /api/ordenes-trabajo/reportar-falla/ HTTP/1.1" 201 677
+INFO 2025-07-10 03:30:14,834 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:14,842 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:14,842 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:14,854 basehttp 3044 36588 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:14,867 basehttp 3044 36588 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:14,873 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:14,913 basehttp 3044 19144 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-10 03:30:14,961 basehttp 3044 19144 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-10 03:30:17,725 basehttp 3044 19144 "OPTIONS /api/ordenes-trabajo/19/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:17,725 basehttp 3044 41632 "OPTIONS /api/ordenes-trabajo/19/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:17,730 basehttp 3044 19144 "GET /api/ordenes-trabajo/19/ HTTP/1.1" 200 677
+INFO 2025-07-10 03:30:17,734 basehttp 3044 41632 "OPTIONS /api/actividades-ot/?idordentrabajo=19 HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:17,739 basehttp 3044 19144 "GET /api/ordenes-trabajo/19/ HTTP/1.1" 200 677
+INFO 2025-07-10 03:30:17,762 basehttp 3044 41632 "GET /api/actividades-ot/?idordentrabajo=19 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:30:17,791 basehttp 3044 19144 "GET /api/actividades-ot/?idordentrabajo=19 HTTP/1.1" 200 18300
+INFO 2025-07-10 03:30:19,932 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:19,945 basehttp 3044 36588 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:19,958 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:19,958 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:19,978 basehttp 3044 38676 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-10 03:30:19,994 basehttp 3044 41632 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:20,010 basehttp 3044 19144 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-10 03:30:20,061 basehttp 3044 41632 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-10 03:30:27,736 basehttp 3044 41632 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-10 03:30:27,743 basehttp 3044 41632 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-10 03:30:28,857 basehttp 3044 41632 "GET /api/agendas/ HTTP/1.1" 200 25309
+INFO 2025-07-10 03:30:28,892 basehttp 3044 19144 "GET /api/agendas/ HTTP/1.1" 200 25309
+WARNING 2025-07-10 03:30:33,966 log 3044 19144 Bad Request: /api/agendas/
+WARNING 2025-07-10 03:30:33,966 basehttp 3044 19144 "POST /api/agendas/ HTTP/1.1" 400 184
+INFO 2025-07-10 03:30:37,503 basehttp 3044 19144 "OPTIONS /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:37,506 basehttp 3044 19144 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-10 03:30:38,810 basehttp 3044 19144 "GET /api/agendas/ HTTP/1.1" 200 25309
+INFO 2025-07-10 03:30:41,256 basehttp 3044 19144 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:41,257 basehttp 3044 41632 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:41,259 basehttp 3044 38676 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:41,267 basehttp 3044 19144 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-10 03:30:41,267 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:41,271 basehttp 3044 38676 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-10 03:30:41,274 basehttp 3044 19144 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-10 03:30:41,278 basehttp 3044 38676 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-10 03:30:41,281 basehttp 3044 12624 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-10 03:30:42,951 basehttp 3044 12624 "OPTIONS /api/planes-mantenimiento/1/detalles/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:42,951 basehttp 3044 38676 "OPTIONS /api/planes-mantenimiento/1/detalles/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:42,958 basehttp 3044 38676 "GET /api/planes-mantenimiento/1/detalles/ HTTP/1.1" 200 3183
+INFO 2025-07-10 03:30:42,964 basehttp 3044 38676 "GET /api/planes-mantenimiento/1/detalles/ HTTP/1.1" 200 3183
+INFO 2025-07-10 03:30:43,617 basehttp 3044 38676 "OPTIONS /api/planes-mantenimiento/1/generar-agenda/ HTTP/1.1" 200 0
+INFO 2025-07-10 03:30:43,747 basehttp 3044 38676 "GET /api/planes-mantenimiento/1/generar-agenda/ HTTP/1.1" 200 10664
+INFO 2025-07-10 03:30:55,418 basehttp 3044 38676 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:55,435 basehttp 3044 38676 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-10 03:30:55,918 basehttp 3044 38676 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 679
+INFO 2025-07-10 03:30:55,924 basehttp 3044 38676 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 679

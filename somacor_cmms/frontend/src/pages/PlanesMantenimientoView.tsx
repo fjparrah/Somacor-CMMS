@@ -17,6 +17,7 @@ interface PlanDetailsProps {
 const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, tareasEstandar, onClose, onDataChange }) => {
   const [detalles, setDetalles] = useState<DetallePlanMantenimiento[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generandoAgenda, setGenerandoAgenda] = useState(false);
   const [nuevaTarea, setNuevaTarea] = useState({ 
     idtareaestandar: '', 
     intervalohorasoperacion: '' 
@@ -94,11 +95,30 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, tareasEstandar, onClose
 
   const handleGenerarAgenda = async () => {
     try {
-      await planesMantenimientoService.generarAgenda(plan.idplanmantenimiento);
-      alert('Agenda generada exitosamente');
+      setGenerandoAgenda(true);
+      const resultado = await planesMantenimientoService.generarAgenda(plan.idplanmantenimiento);
+      
+      // Mostrar mensaje con detalles de los eventos creados
+      const numEventos = resultado.eventos.length;
+      let mensaje = `¡Agenda generada exitosamente! Se crearon ${numEventos} eventos.`;
+      
+      if (numEventos > 0) {
+        mensaje += '\n\nEventos creados:';
+        resultado.eventos.slice(0, 5).forEach((evento: any, index: number) => {
+          mensaje += `\n${index + 1}. ${evento.tituloevento} - ${new Date(evento.fechahorainicio).toLocaleDateString()}`;
+        });
+        
+        if (numEventos > 5) {
+          mensaje += `\n... y ${numEventos - 5} más.`;
+        }
+      }
+      
+      alert(mensaje);
     } catch (err) {
-      alert('Error al generar la agenda');
-      console.error(err);
+      console.error('Error al generar la agenda:', err);
+      alert('Error al generar la agenda. Por favor, inténtelo de nuevo.');
+    } finally {
+      setGenerandoAgenda(false);
     }
   };
 
@@ -124,10 +144,22 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, tareasEstandar, onClose
         </div>
         <button
           onClick={handleGenerarAgenda}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center"
+          disabled={generandoAgenda}
+          className={`${
+            generandoAgenda ? 'bg-green-400' : 'bg-green-600 hover:bg-green-700'
+          } text-white px-4 py-2 rounded-lg flex items-center transition-colors`}
         >
-          <AlertCircle size={16} className="mr-2" />
-          Generar Agenda
+          {generandoAgenda ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Generando...
+            </>
+          ) : (
+            <>
+              <AlertCircle size={16} className="mr-2" />
+              Generar Agenda
+            </>
+          )}
         </button>
       </div>
 

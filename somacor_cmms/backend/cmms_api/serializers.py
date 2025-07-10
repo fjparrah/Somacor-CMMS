@@ -7,7 +7,7 @@ import json
 from .models import (
     Roles, Usuarios, TiposEquipo, Faenas, EstadosEquipo, Equipos,
     ChecklistTemplate, ChecklistCategory, ChecklistItem,
-    ChecklistInstance, ChecklistAnswer, TiposTarea, TareasEstandar,
+    ChecklistInstance, ChecklistAnswer, ChecklistImage, TiposTarea, TareasEstandar,
     PlanesMantenimiento, DetallesPlanMantenimiento, TiposMantenimientoOT,
     EstadosOrdenTrabajo, OrdenesTrabajo, ActividadesOrdenTrabajo, Agendas,
     EvidenciaOT
@@ -146,58 +146,73 @@ class ChecklistAnswerSerializer(serializers.ModelSerializer):
         model = ChecklistAnswer
         fields = ['item', 'estado', 'observacion_item']
 
+class ChecklistImageSerializer(serializers.ModelSerializer):
+    """ Serializer para procesar las imágenes de un checklist. """
+    usuario_subida_nombre = serializers.CharField(source='usuario_subida.get_full_name', read_only=True)
+    
+    class Meta:
+        model = ChecklistImage
+        fields = ['id_imagen', 'descripcion', 'imagen_base64', 'fecha_subida', 'usuario_subida_nombre']
+        read_only_fields = ['id_imagen', 'fecha_subida', 'usuario_subida_nombre']
+
 class ChecklistInstanceSerializer(serializers.ModelSerializer):
     """
     Serializer principal para crear y leer un checklist completado.
-    Maneja la creación anidada de las respuestas y la subida de imágenes.
+    Maneja la creación anidada de las respuestas y la subida de múltiples imágenes.
     """
     answers = ChecklistAnswerSerializer(many=True, write_only=True)
+    imagenes = ChecklistImageSerializer(many=True, write_only=True, required=False)
     
     # Campos de solo lectura para visualizar la información relacionada
     operador_nombre = serializers.CharField(source='operador.get_full_name', read_only=True)
     equipo_nombre = serializers.CharField(source='equipo.nombreequipo', read_only=True)
     template_nombre = serializers.CharField(source='template.nombre', read_only=True)
+    imagenes_list = ChecklistImageSerializer(source='imagenes', many=True, read_only=True)
     
-    # Campo para la imagen de evidencia
+    # Mantener compatibilidad con imagen_evidencia para casos legacy
     imagen_evidencia = serializers.CharField(allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         model = ChecklistInstance
-        # --- INICIO DE LA CORRECCIÓN ---
-        # Se elimina 'operador' de la lista de campos.
-        # El campo se sigue asignando en el método `create`, pero ya no forma parte
-        # de los campos que el serializador espera recibir del frontend.
         fields = [
             'id_instance', 'template', 'equipo', 'fecha_inspeccion', 
             'horometro_inspeccion', 'lugar_inspeccion', 'observaciones_generales', 
-            'fecha_creacion', 'answers', 'operador_nombre', 'equipo_nombre', 
-            'template_nombre', 'imagen_evidencia'
+            'fecha_creacion', 'answers', 'imagenes', 'operador_nombre', 'equipo_nombre', 
+            'template_nombre', 'imagenes_list', 'imagen_evidencia'
         ]
-        # --- FIN DE LA CORRECCIÓN ---
 
     def create(self, validated_data):
         """
         Sobrescribe el método de creación para manejar la creación anidada de
-        la instancia del checklist, sus respuestas y la asignación del operador.
+        la instancia del checklist, sus respuestas y múltiples imágenes.
         """
         answers_data = validated_data.pop('answers')
+        imagenes_data = validated_data.pop('imagenes', [])
         
         # Asignamos el usuario de la solicitud actual como el operador.
-        # Esto es posible porque pasamos el contexto desde la vista.
         user = self.context["request"].user
         if user and user.is_authenticated:
             validated_data["operador"] = user
         else:
-            # Manejar el caso de usuario no autenticado o no disponible
-            # Podrías lanzar un error de validación o asignar un valor por defecto
             raise serializers.ValidationError("Usuario no autenticado para asignar como operador.")
         
         with transaction.atomic():
             instance = ChecklistInstance.objects.create(**validated_data)
+            
+            # Crear respuestas
             for answer_data in answers_data:
                 item_id = answer_data.pop('item')
                 item = ChecklistItem.objects.get(id_item=item_id)
                 ChecklistAnswer.objects.create(instance=instance, item=item, **answer_data)
+            
+            # Crear imágenes
+            for imagen_data in imagenes_data:
+                ChecklistImage.objects.create(
+                    instance=instance,
+                    usuario_subida=user,
+                    **imagen_data
+                )
+                
         return instance
 
 # --- SERIALIZERS PARA AGENDA DE MANTENIMIENTO PREVENTIVO ---
@@ -228,6 +243,8 @@ class PlanMantenimientoSerializer(serializers.ModelSerializer):
 class DetallesPlanMantenimientoSerializer(serializers.ModelSerializer):
     plan_nombre = serializers.CharField(source='idplanmantenimiento.nombreplan', read_only=True)
     tarea_nombre = serializers.CharField(source='idtareaestandar.nombretarea', read_only=True)
+    tarea_estandar = TareaEstandarSerializer(source='idtareaestandar', read_only=True)
+    
     class Meta:
         model = DetallesPlanMantenimiento
         fields = '__all__'
@@ -288,7 +305,21 @@ class EvidenciaOTSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
     def create(self, validated_data):
-        # Asignar automáticamente el usuario actual como quien sube la evidencia
-        validated_data['usuario_subida'] = self.context['request'].user
+        # Obtener o crear usuario por defecto si no hay autenticación
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            validated_data['usuario_subida'] = request.user
+        else:
+            # Crear o usar usuario por defecto para evidencias
+            usuario_defecto, created = User.objects.get_or_create(
+                username='operador_evidencias',
+                defaults={
+                    'first_name': 'Operador',
+                    'last_name': 'Evidencias',
+                    'email': 'evidencias@somacor.com'
+                }
+            )
+            validated_data['usuario_subida'] = usuario_defecto
+        
         return super().create(validated_data)
 

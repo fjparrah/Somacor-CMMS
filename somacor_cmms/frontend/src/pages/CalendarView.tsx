@@ -198,6 +198,23 @@ const CalendarView = () => {
         }
     }, [modalState.mode, fetchEvents]);
     
+    const handleSyncMaintenance = useCallback(async () => {
+        try {
+            setLoading(true);
+            const response = await apiClient.post('agendas/sincronizar-mantenciones/');
+            
+            if (response.data.message) {
+                alert(`Sincronización exitosa: ${response.data.message}`);
+                fetchEvents(); // Recargar eventos después de la sincronización
+            }
+        } catch (error) {
+            console.error("Error al sincronizar mantenciones:", error);
+            alert("Error al sincronizar mantenciones. Revise la consola para más detalles.");
+        } finally {
+            setLoading(false);
+        }
+    }, [fetchEvents]);
+    
     const handleDeleteEvent = useCallback(async (eventId: number) => {
         if (window.confirm("¿Está seguro de que desea eliminar este evento?")) {
             try {
@@ -259,7 +276,28 @@ const CalendarView = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">Calendario de Mantenimiento</h1>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">Calendario de Mantenimiento</h1>
+                <button 
+                    onClick={handleSyncMaintenance}
+                    disabled={loading}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                >
+                    {loading ? (
+                        <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            Sincronizando...
+                        </>
+                    ) : (
+                        <>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Sincronizar Mantenciones
+                        </>
+                    )}
+                </button>
+            </div>
             <div className="bg-white p-6 rounded-xl shadow-md h-[75vh]">
                 <Calendar
                     localizer={localizer}

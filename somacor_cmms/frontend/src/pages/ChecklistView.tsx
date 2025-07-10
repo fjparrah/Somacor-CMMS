@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { AlertCircle, Send, UploadCloud } from 'lucide-react';
+import MultipleImageUpload from '../components/MultipleImageUpload';
 
 // =================================================================================
 // INICIO DE DEPENDENCIAS LOCALES
-// Para asegurar que el componente sea autocontenido y funcione en el entorno de
-// previsualización, las dependencias que antes se importaban ahora se definen aquí.
 // =================================================================================
 
-// --- Dependencia: apiClient (reemplaza import de ../api/apiClient) ---
 const API_URL = 'http://localhost:8000/api';
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -16,9 +14,8 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
-// Se agrega un interceptor para añadir el token de autenticación a cada solicitud.
+
 apiClient.interceptors.request.use(config => {
-    // En una aplicación real, obtendrías el token del AuthContext o localStorage.
     const token = localStorage.getItem('authToken'); 
     if (token) {
         config.headers.Authorization = `Token ${token}`;
@@ -26,14 +23,12 @@ apiClient.interceptors.request.use(config => {
     return config;
 });
 
-// --- Dependencia: LoadingSpinner (reemplaza import de ../components/shared/LoadingSpinner) ---
 const LoadingSpinner: React.FC = () => (
   <div className="flex justify-center items-center">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
   </div>
 );
 
-// --- Dependencias: Componentes de Card (reemplaza import de ../components/ui/Card) ---
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
   <div ref={ref} className={`rounded-lg border bg-white text-gray-900 shadow-sm ${className}`} {...props} />
 ));
@@ -59,13 +54,11 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 ));
 CardFooter.displayName = 'CardFooter';
 
-
 // =================================================================================
 // FIN DE DEPENDENCIAS LOCALES
 // =================================================================================
 
-
-// Tipos de datos basados en la estructura del backend y los JSON
+// Tipos de datos
 interface Equipo {
   idequipo: number;
   nombreequipo: string;
@@ -105,6 +98,13 @@ interface GeneralInfo {
     [key: string]: string | number;
 }
 
+interface ImageData {
+  id: string;
+  descripcion: string;
+  imagen_base64: string;
+  preview?: string;
+}
+
 const ChecklistView: React.FC = () => {
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [selectedEquipoId, setSelectedEquipoId] = useState<string>('');
@@ -114,7 +114,7 @@ const ChecklistView: React.FC = () => {
     horometro_inspeccion: '',
     lugar_inspeccion: '',
   });
-  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [images, setImages] = useState<ImageData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -183,7 +183,7 @@ const ChecklistView: React.FC = () => {
         horometro_inspeccion: '',
         lugar_inspeccion: '',
     });
-    setImageBase64(null);
+    setImages([]);
     setError(null);
     setSubmitSuccess(null);
   };
@@ -201,24 +201,6 @@ const ChecklistView: React.FC = () => {
   const handleGeneralInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setGeneralInfo(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImageBase64(reader.result as string);
-      };
-      reader.onerror = () => {
-        setError("Error al leer el archivo de imagen.");
-      }
-    }
-  };
-
-  const clearImage = () => {
-    setImageBase64(null);
   };
 
   const selectedEquipo = useMemo(() => {
@@ -256,6 +238,12 @@ const ChecklistView: React.FC = () => {
         };
     });
 
+    // Preparar imágenes para el payload
+    const imagenesPayload = images.map(img => ({
+      descripcion: img.descripcion,
+      imagen_base64: img.imagen_base64
+    }));
+
     const payload = {
         template: template.id_template,
         equipo: selectedEquipo.idequipo,
@@ -263,7 +251,7 @@ const ChecklistView: React.FC = () => {
         horometro_inspeccion: Number(generalInfo.horometro_inspeccion),
         lugar_inspeccion: generalInfo.lugar_inspeccion as string,
         answers: answersPayload,
-        imagen_evidencia: imageBase64, // Enviar la imagen como string Base64
+        imagenes: imagenesPayload,
     };
     
     try {
@@ -290,18 +278,38 @@ const ChecklistView: React.FC = () => {
             <CardTitle>1. Seleccionar Equipo</CardTitle>
           </CardHeader>
           <CardContent>
-            <select id="equipo-select" value={selectedEquipoId} onChange={e => setSelectedEquipoId(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled={isLoading}>
+            <select 
+              id="equipo-select" 
+              value={selectedEquipoId} 
+              onChange={e => setSelectedEquipoId(e.target.value)} 
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+              disabled={isLoading}
+            >
               <option value="">-- Por favor, seleccione un equipo --</option>
               {equipos.map(equipo => (
-                <option key={equipo.idequipo} value={equipo.idequipo}>{equipo.nombreequipo} ({equipo.codigointerno})</option>
+                <option key={equipo.idequipo} value={equipo.idequipo}>
+                  {equipo.nombreequipo} ({equipo.codigointerno})
+                </option>
               ))}
             </select>
           </CardContent>
         </Card>
 
         {isLoading && selectedEquipoId && <LoadingSpinner />}
-        {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-md" role="alert"><p className="font-bold">Error</p><p>{error}</p></div>}
-        {submitSuccess && <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert"><p className="font-bold">Éxito</p><p>{submitSuccess}</p></div>}
+        
+        {error && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-md" role="alert">
+            <p className="font-bold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
+        
+        {submitSuccess && (
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert">
+            <p className="font-bold">Éxito</p>
+            <p>{submitSuccess}</p>
+          </div>
+        )}
 
         {template && selectedEquipo && (
           <form onSubmit={handleSubmit}>
@@ -311,45 +319,114 @@ const ChecklistView: React.FC = () => {
                 <p className="text-sm text-gray-500">Equipo: {selectedEquipo.nombreequipo}</p>
               </CardHeader>
               <CardContent>
+                {/* Información General */}
                 <div className="mb-8 p-4 border rounded-lg bg-gray-50">
                     <h3 className="font-bold text-lg text-gray-700 mb-4">2. Información General</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label htmlFor="fecha" className="block text-sm font-medium text-gray-700">Fecha</label>
-                            <input type="date" id="fecha" name="fecha" value={currentDate} readOnly className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" />
+                            <input 
+                              type="date" 
+                              id="fecha" 
+                              name="fecha" 
+                              value={currentDate} 
+                              readOnly 
+                              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" 
+                            />
                         </div>
                         <div>
-                            <label htmlFor="horometro_inspeccion" className="block text-sm font-medium text-gray-700">Horómetro / Km Actual</label>
-                            <input type="number" id="horometro_inspeccion" name="horometro_inspeccion" value={generalInfo.horometro_inspeccion} onChange={handleGeneralInfoChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required />
+                            <label htmlFor="horometro_inspeccion" className="block text-sm font-medium text-gray-700">
+                              Horómetro / Km Actual
+                            </label>
+                            <input 
+                              type="number" 
+                              id="horometro_inspeccion" 
+                              name="horometro_inspeccion" 
+                              value={generalInfo.horometro_inspeccion} 
+                              onChange={handleGeneralInfoChange} 
+                              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" 
+                              required 
+                            />
                         </div>
                         <div>
-                            <label htmlFor="lugar_inspeccion" className="block text-sm font-medium text-gray-700">Lugar de Inspección</label>
-                            <input type="text" id="lugar_inspeccion" name="lugar_inspeccion" value={generalInfo.lugar_inspeccion as string} onChange={handleGeneralInfoChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="lugar_inspeccion" className="block text-sm font-medium text-gray-700">
+                              Lugar de Inspección
+                            </label>
+                            <input 
+                              type="text" 
+                              id="lugar_inspeccion" 
+                              name="lugar_inspeccion" 
+                              value={generalInfo.lugar_inspeccion as string} 
+                              onChange={handleGeneralInfoChange} 
+                              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" 
+                            />
                         </div>
                     </div>
                 </div>
 
+                {/* Checklists */}
                 <h3 className="font-bold text-lg text-gray-700 mb-2">3. Chequear Estado de Operatividad</h3>
                 <p className="text-sm text-gray-600 mb-4">(B=Bueno / M=Malo / NA=No Aplica)</p>
                 <div className="space-y-6">
                     {template.categories.sort((a,b) => a.orden - b.orden).map(category => (
                         <div key={category.id_category}>
-                            <h4 className="font-semibold text-md text-gray-800 bg-gray-100 p-2 rounded-t-lg border-b">{category.nombre}</h4>
+                            <h4 className="font-semibold text-md text-gray-800 bg-gray-100 p-2 rounded-t-lg border-b">
+                              {category.nombre}
+                            </h4>
                             <div className="overflow-x-auto" style={{maxHeight: '400px', overflowY: 'auto'}}>
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="sticky top-0 z-10 bg-gray-100">
                                         <tr>
-                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ítem a Revisar</th>
-                                            <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-40">Estado</th>
-                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Observaciones</th>
+                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                              Ítem a Revisar
+                                            </th>
+                                            <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                                              Estado
+                                            </th>
+                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                              Observaciones
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
                                     {category.items.sort((a,b) => a.orden - b.orden).map(item => (
                                         <tr key={item.id_item} className={responses[item.id_item]?.estado === 'malo' ? 'bg-red-50' : ''}>
-                                            <td className="px-4 py-2 whitespace-nowrap"><span className="text-sm text-gray-900">{item.texto}</span>{item.es_critico && <span title="Ítem Crítico" className="ml-2 text-red-500 font-bold"><AlertCircle className="inline-block h-4 w-4" /></span>}</td>
-                                            <td className="px-4 py-2"><div className="flex justify-center space-x-2">{['bueno', 'malo', 'na'].map(estado => (<label key={estado} className="cursor-pointer"><input type="radio" name={`item-${item.id_item}`} value={estado} checked={responses[item.id_item]?.estado === estado} onChange={() => handleResponseChange(item.id_item, estado as 'bueno' | 'malo' | 'na')} className="sr-only" /><span className={`px-3 py-1 text-xs rounded-full ${responses[item.id_item]?.estado === estado ? (estado === 'bueno' ? 'bg-green-500 text-white' : estado === 'malo' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white') : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>{estado.toUpperCase()}</span></label>))}</div></td>
-                                            <td className="px-4 py-2"><input type="text" value={responses[item.id_item]?.observacion_item || ''} onChange={e => handleResponseChange(item.id_item, responses[item.id_item]?.estado || 'bueno', e.target.value)} className="w-full p-1 border border-gray-300 rounded-md" placeholder="Añadir observación..." /></td>
+                                            <td className="px-4 py-2 whitespace-nowrap">
+                                              <span className="text-sm text-gray-900">{item.texto}</span>
+                                              {item.es_critico && (
+                                                <span title="Ítem Crítico" className="ml-2 text-red-500 font-bold">
+                                                  <AlertCircle className="inline-block h-4 w-4" />
+                                                </span>
+                                              )}
+                                            </td>
+                                            <td className="px-4 py-2 text-center">
+                                                <div className="flex justify-center space-x-2">
+                                                    {['bueno', 'malo', 'na'].map(estado => (
+                                                        <label key={estado} className="flex items-center">
+                                                            <input
+                                                                type="radio"
+                                                                name={`item_${item.id_item}`}
+                                                                value={estado}
+                                                                checked={responses[item.id_item]?.estado === estado}
+                                                                onChange={() => handleResponseChange(item.id_item, estado as 'bueno' | 'malo' | 'na')}
+                                                                className="mr-1"
+                                                            />
+                                                            <span className="text-xs">
+                                                              {estado === 'bueno' ? 'B' : estado === 'malo' ? 'M' : 'NA'}
+                                                            </span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-2">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Observaciones..."
+                                                    value={responses[item.id_item]?.observacion_item || ''}
+                                                    onChange={(e) => handleResponseChange(item.id_item, responses[item.id_item]?.estado as 'bueno' | 'malo' | 'na', e.target.value)}
+                                                    className="w-full text-sm border border-gray-300 rounded px-2 py-1"
+                                                />
+                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
@@ -358,35 +435,70 @@ const ChecklistView: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                
-                <div className="mt-8">
-                    <h3 className="font-bold text-lg text-gray-700 mb-2">4. Evidencia Fotográfica (Opcional)</h3>
-                    <div className="mt-2 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                        {imageBase64 ? (
-                            <div className="text-center">
-                                <img src={imageBase64} alt="Previsualización de evidencia" className="mx-auto h-48 w-auto rounded-lg object-contain" />
-                                <button type="button" onClick={clearImage} className="mt-4 px-3 py-1.5 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200">Quitar Imagen</button>
-                            </div>
-                        ) : (
-                            <div className="space-y-1 text-center">
-                                <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
-                                <div className="flex text-sm text-gray-600">
-                                    <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                                        <span>Subir un archivo</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
-                                    </label>
-                                    <p className="pl-1">o arrastrar y soltar</p>
-                                </div>
-                                <p className="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
-                            </div>
-                        )}
-                    </div>
+
+                {/* Sección de imágenes */}
+                <div className="mt-8 p-4 border rounded-lg bg-gray-50">
+                  <h3 className="font-bold text-lg text-gray-700 mb-4">4. Evidencias Fotográficas</h3>
+                  <MultipleImageUpload
+                    images={images}
+                    onImagesChange={setImages}
+                    maxImages={5}
+                    maxSizeKB={2048}
+                    disabled={isSubmitting}
+                  />
                 </div>
 
-                {criticalItemsInBadState.length > 0 && <div className="mt-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-800 rounded-md"><h4 className="font-bold flex items-center"><AlertCircle className="mr-2"/>¡Atención! Ítems Críticos en Mal Estado</h4><p className="mt-2">El equipo no debe ser operado hasta que los siguientes problemas sean resueltos. El checklist será enviado para generar la alerta correspondiente.</p><ul className="list-disc list-inside mt-2">{criticalItemsInBadState.map(item => <li key={item.id_item}>{item.texto}</li>)}</ul></div>}
+                {/* Alertas de elementos críticos */}
+                {criticalItemsInBadState.length > 0 && (
+                    <div className="mt-6 p-4 bg-red-100 border border-red-400 rounded-lg">
+                        <div className="flex items-center mb-2">
+                            <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                            <h4 className="font-bold text-red-700">¡ATENCIÓN! Elementos Críticos en Mal Estado</h4>
+                        </div>
+                        <p className="text-red-700 text-sm mb-2">
+                            Los siguientes elementos críticos están marcados como "Malo". 
+                            El equipo NO PUEDE ser utilizado hasta que se reparen:
+                        </p>
+                        <ul className="list-disc list-inside text-red-700 text-sm">
+                            {criticalItemsInBadState.map(item => (
+                                <li key={item.id_item}>{item.texto}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
               </CardContent>
-              <CardFooter className="flex justify-end">
-                <button type="submit" className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400" disabled={isSubmitting}>{isSubmitting ? <LoadingSpinner /> : <Send className="mr-2 h-5 w-5"/>} Enviar Checklist</button>
+              
+              <CardFooter>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || criticalItemsInBadState.length > 0}
+                  className={`
+                    flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors
+                    ${criticalItemsInBadState.length > 0 
+                      ? 'bg-red-500 text-white cursor-not-allowed' 
+                      : isSubmitting 
+                        ? 'bg-gray-400 text-white cursor-not-allowed' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    }
+                  `}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Enviando...
+                    </>
+                  ) : criticalItemsInBadState.length > 0 ? (
+                    <>
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      No se puede enviar - Elementos críticos en mal estado
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Enviar Checklist
+                    </>
+                  )}
+                </button>
               </CardFooter>
             </Card>
           </form>
@@ -397,3 +509,4 @@ const ChecklistView: React.FC = () => {
 };
 
 export default ChecklistView;
+

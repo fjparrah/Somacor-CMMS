@@ -8,9 +8,35 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import models, transaction
+import uuid
+import random
 from .models import *
 from .serializers import *
 from .permissions import IsAdminRole, IsSupervisorRole, IsOperadorRole, IsAdminOrSupervisorRole, IsAnyRole
+
+# --- Funciones Auxiliares ---
+def generar_numero_ot_unico(equipo, tipo_mantenimiento='CORR'):
+    """
+    Genera un número de OT único para evitar conflictos de constraint UNIQUE
+    """
+    max_intentos = 10
+    for intento in range(max_intentos):
+        # Generar timestamp con microsegundos para mayor unicidad
+        timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
+        
+        # Agregar componente aleatorio para evitar colisiones
+        componente_aleatorio = random.randint(100, 999)
+        
+        # Generar número de OT
+        numero_ot = f"OT-{tipo_mantenimiento}-{equipo.codigointerno or equipo.idequipo}-{timestamp}-{componente_aleatorio}"
+        
+        # Verificar si ya existe
+        if not OrdenesTrabajo.objects.filter(numeroot=numero_ot).exists():
+            return numero_ot
+    
+    # Si después de 10 intentos no se puede generar un número único, usar UUID
+    uuid_suffix = str(uuid.uuid4())[:8].upper()
+    return f"OT-{tipo_mantenimiento}-{equipo.codigointerno or equipo.idequipo}-{timezone.now().strftime('%Y%m%d%H%M%S')}-{uuid_suffix}"
 
 # --- Vistas de Autenticación ---
 class CustomAuthToken(ObtainAuthToken):
@@ -128,7 +154,7 @@ class PlanMantenimientoViewSet(viewsets.ModelViewSet):
     serializer_class = PlanMantenimientoSerializer
     permission_classes = [permissions.AllowAny]
 
-    @action(detail=True, methods=['get'], url_path='generar-agenda')
+    @action(detail=True, methods=['get', 'post'], url_path='generar-agenda')
     def generar_agenda(self, request, pk=None):
         """
         Genera eventos de agenda basados en el plan de mantenimiento y los equipos asociados
@@ -141,11 +167,25 @@ class PlanMantenimientoViewSet(viewsets.ModelViewSet):
             detalles = DetallesPlanMantenimiento.objects.filter(
                 idplanmantenimiento=plan, 
                 activo=True
-            ).order_by('intervalohorasoperacion')
+            ).select_related('idtareaestandar').order_by('intervalohorasoperacion')
             
             for detalle in detalles:
-                # Calcular próxima fecha de mantenimiento basada en horometro actual
-                horas_restantes = detalle.intervalohorasoperacion - (equipo.horometroactual % detalle.intervalohorasoperacion)
+                # Calcular próxima fecha de mantenimiento basada en horometro estimado
+                # Como el modelo Equipos no tiene un campo de horómetro, usamos un valor predeterminado
+                # o podríamos obtenerlo de la última orden de trabajo
+                horometro_estimado = 0  # Valor predeterminado
+                
+                # Intentar obtener el último horómetro registrado en órdenes de trabajo
+                ultima_ot = OrdenesTrabajo.objects.filter(
+                    idequipo=equipo,
+                    horometro__isnull=False
+                ).order_by('-fechacreacionot').first()
+                
+                if ultima_ot and ultima_ot.horometro:
+                    horometro_estimado = ultima_ot.horometro
+                
+                # Calcular horas restantes
+                horas_restantes = detalle.intervalohorasoperacion - (horometro_estimado % detalle.intervalohorasoperacion)
                 if horas_restantes == detalle.intervalohorasoperacion:
                     horas_restantes = 0  # Ya es tiempo de mantenimiento
                 
@@ -165,15 +205,47 @@ class PlanMantenimientoViewSet(viewsets.ModelViewSet):
                     idplanmantenimiento=plan,
                     idusuariocreador=request.user if request.user.is_authenticated else User.objects.first()
                 )
-                eventos_creados.append(AgendaSerializer(evento).data)
+                eventos_creados.append({
+                    'id': evento.idagenda,
+                    'tituloevento': evento.tituloevento,
+                    'fechahorainicio': evento.fechahorainicio,
+                    'fechahorafin': evento.fechahorafin,
+                    'tipoevento': evento.tipoevento,
+                    'equipo': equipo.nombreequipo,
+                    'tarea': detalle.idtareaestandar.nombretarea,
+                    'intervalo': detalle.intervalohorasoperacion
+                })
         
         return Response({
             'message': f'Se crearon {len(eventos_creados)} eventos de agenda',
-            'eventos': eventos_creados
+            'eventos': eventos_creados,
+            'plan': {
+                'id': plan.idplanmantenimiento,
+                'nombre': plan.nombreplan,
+                'tipo_equipo': plan.idtipoequipo.nombretipo if plan.idtipoequipo else 'N/A'
+            },
+            'equipos_afectados': len(set([e['equipo'] for e in eventos_creados])) if eventos_creados else 0
         })
 
+    @action(detail=True, methods=['get'], url_path='detalles')
+    def get_detalles(self, request, pk=None):
+        """
+        Obtiene los detalles de un plan con todas las relaciones incluidas
+        """
+        plan = self.get_object()
+        detalles = DetallesPlanMantenimiento.objects.filter(
+            idplanmantenimiento=plan,
+            activo=True
+        ).select_related(
+            'idtareaestandar',
+            'idtareaestandar__idtipotarea'
+        ).order_by('intervalohorasoperacion')
+        
+        serializer = DetallesPlanMantenimientoSerializer(detalles, many=True)
+        return Response(serializer.data)
+
 class DetallesPlanMantenimientoViewSet(viewsets.ModelViewSet):
-    queryset = DetallesPlanMantenimiento.objects.all()
+    queryset = DetallesPlanMantenimiento.objects.select_related('idtareaestandar', 'idplanmantenimiento').all()
     serializer_class = DetallesPlanMantenimientoSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -282,16 +354,39 @@ class OrdenTrabajoViewSet(viewsets.ModelViewSet):
         """
         Crea una orden de trabajo correctiva por falla reportada
         """
-        id_equipo = request.data.get('idequipo')
-        descripcion = request.data.get('descripcionproblemareportado')
-
-        if not all([id_equipo, descripcion]):
-            return Response({'error': 'Faltan datos requeridos.'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            equipo = Equipos.objects.get(pk=id_equipo)
-            # Asignar automáticamente el usuario actual como solicitante
-            solicitante = request.user
+            # Validar datos requeridos
+            id_equipo = request.data.get('idequipo')
+            descripcion = request.data.get('descripcionproblemareportado')
+
+            if not all([id_equipo, descripcion]):
+                return Response({
+                    'error': 'Faltan datos requeridos: idequipo y descripcionproblemareportado son obligatorios.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Validar que el equipo existe
+            try:
+                equipo = Equipos.objects.get(pk=id_equipo)
+            except Equipos.DoesNotExist:
+                return Response({
+                    'error': f'El equipo con ID {id_equipo} no existe.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Obtener o crear usuario por defecto para reportes
+            if request.user and request.user.is_authenticated:
+                solicitante = request.user
+            else:
+                # Crear o usar usuario por defecto para reportes de falla
+                from django.contrib.auth.models import User
+                solicitante, created = User.objects.get_or_create(
+                    username='operador_reportes',
+                    defaults={
+                        'first_name': 'Operador',
+                        'last_name': 'Reportes',
+                        'email': 'operador@somacor.cl',
+                        'is_active': True
+                    }
+                )
 
             # Obtener o crear el estado y tipo de OT
             try:
@@ -310,25 +405,114 @@ class OrdenTrabajoViewSet(viewsets.ModelViewSet):
                     descripcion='Mantenimiento por falla no planificada.'
                 )
 
-            with transaction.atomic():
-                nueva_ot = OrdenesTrabajo.objects.create(
-                    numeroot=f"OT-CORR-{equipo.codigointerno or equipo.idequipo}-{timezone.now().strftime('%Y%m%d%H%M')}",
-                    idequipo=equipo,
-                    idtipomantenimientoot=tipo_ot,
-                    idestadoot=estado_inicial,
-                    descripcionproblemareportado=descripcion,
-                    fechareportefalla=timezone.now(),
-                    idsolicitante=solicitante,
-                    idtecnicoasignado=solicitante,
-                    prioridad=request.data.get('prioridad', 'Alta')
+            # Preparar datos para la OT
+            horometro = request.data.get('horometro')
+            if horometro:
+                try:
+                    horometro = int(horometro)
+                except (ValueError, TypeError):
+                    horometro = None
+
+            prioridad = request.data.get('prioridad', 'Alta')
+            if prioridad not in ['Baja', 'Media', 'Alta', 'Crítica']:
+                prioridad = 'Alta'
+
+            observaciones = request.data.get('observacionesfinales') or request.data.get('observacionesadicionales') or ''
+
+            try:
+                with transaction.atomic():
+                    # Establecer fechas automáticamente
+                    fecha_actual = timezone.now()
+                    fecha_emision = fecha_actual.date()  # Solo fecha para fechaemision
+                    
+                    # Para mantenimiento correctivo, programar ejecución para el mismo día
+                    fecha_ejecucion = fecha_emision
+                    
+                    nueva_ot = OrdenesTrabajo.objects.create(
+                        numeroot=generar_numero_ot_unico(equipo, 'CORR'),
+                        idequipo=equipo,
+                        idtipomantenimientoot=tipo_ot,
+                        idestadoot=estado_inicial,
+                        descripcionproblemareportado=descripcion,
+                        fechareportefalla=fecha_actual,
+                        fechaemision=fecha_emision,
+                        fechaejecucion=fecha_ejecucion,
+                        idsolicitante=solicitante,
+                        idtecnicoasignado=solicitante,
+                        prioridad=prioridad,
+                        horometro=horometro,
+                        observacionesfinales=observaciones
+                    )
+                
+                serializer = self.get_serializer(nueva_ot)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({
+                    'error': f'Error al crear la orden de trabajo: {str(e)}'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+        except Exception as e:
+            import traceback
+            error_detail = traceback.format_exc()
+            print(f"Error en reportar_falla: {error_detail}")  # Para debugging
+            return Response({
+                'error': f'Error interno del servidor: {str(e)}'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=True, methods=['post'], url_path='completar')
+    def completar_orden(self, request, pk=None):
+        """
+        Completa una orden de trabajo estableciendo fechacompletado automáticamente
+        """
+        try:
+            orden = self.get_object()
+            
+            # Verificar que la orden no esté ya completada
+            if orden.fechacompletado:
+                return Response({
+                    'error': 'Esta orden de trabajo ya está completada.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Obtener o crear estado "Completada"
+            try:
+                estado_completada = EstadosOrdenTrabajo.objects.get(nombreestadoot='Completada')
+            except EstadosOrdenTrabajo.DoesNotExist:
+                estado_completada = EstadosOrdenTrabajo.objects.create(
+                    nombreestadoot='Completada',
+                    descripcion='Orden de trabajo completada exitosamente.'
                 )
             
-            serializer = self.get_serializer(nueva_ot)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Actualizar la orden con fecha de completado y estado
+            orden.fechacompletado = timezone.now()
+            orden.idestadoot = estado_completada
+            
+            # Agregar observaciones finales si se proporcionan
+            observaciones_finales = request.data.get('observacionesfinales', '')
+            if observaciones_finales:
+                if orden.observacionesfinales:
+                    orden.observacionesfinales += f"\n\nCompletado: {observaciones_finales}"
+                else:
+                    orden.observacionesfinales = observaciones_finales
+            
+            # Calcular tiempo total si hay actividades
+            tiempo_total = request.data.get('tiempototalminutos')
+            if tiempo_total:
+                try:
+                    orden.tiempototalminutos = int(tiempo_total)
+                except (ValueError, TypeError):
+                    pass
+            
+            orden.save()
+            
+            serializer = self.get_serializer(orden)
+            return Response({
+                'message': 'Orden de trabajo completada exitosamente.',
+                'orden': serializer.data
+            }, status=status.HTTP_200_OK)
             
         except Exception as e:
             return Response({
-                'error': f'Ocurrió un error inesperado: {str(e)}'
+                'error': f'Error al completar la orden de trabajo: {str(e)}'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ActividadOrdenTrabajoViewSet(viewsets.ModelViewSet):
@@ -374,6 +558,174 @@ class AgendaViewSet(viewsets.ModelViewSet):
             })
         
         return Response(eventos)
+
+    @action(detail=False, methods=['post'], url_path='sincronizar-mantenciones')
+    def sincronizar_mantenciones(self, request):
+        """
+        Sincroniza las mantenciones programadas con el calendario
+        """
+        try:
+            eventos_creados = []
+            
+            # Obtener órdenes de trabajo programadas que no tienen evento en agenda
+            ordenes_programadas = OrdenesTrabajo.objects.filter(
+                fechaejecucion__isnull=False,
+                idestadoot__nombreestadoot__in=['Abierta', 'En Progreso'],
+                idordentrabajo__isnull=True  # No tienen evento en agenda
+            ).exclude(
+                idordentrabajo__in=Agendas.objects.values_list('idordentrabajo', flat=True)
+            )
+            
+            for orden in ordenes_programadas:
+                # Determinar el tipo de evento basado en el tipo de mantenimiento
+                tipo_evento = 'preventivo'
+                color_evento = '#3B82F6'  # Azul para preventivo
+                
+                if orden.idtipomantenimientoot.nombretipomantenimientoot == 'Correctivo':
+                    tipo_evento = 'correctivo'
+                    color_evento = '#F59E0B'  # Naranja para correctivo
+                elif orden.idtipomantenimientoot.nombretipomantenimientoot == 'Predictivo':
+                    tipo_evento = 'predictivo'
+                    color_evento = '#10B981'  # Verde para predictivo
+                
+                # Crear título descriptivo
+                titulo = f"Mantenimiento {orden.idtipomantenimientoot.nombretipomantenimientoot} - {orden.idequipo.nombreequipo}"
+                
+                # Crear descripción
+                descripcion = f"OT: {orden.numeroot}\n"
+                descripcion += f"Equipo: {orden.idequipo.nombreequipo}\n"
+                descripcion += f"Tipo: {orden.idtipomantenimientoot.nombretipomantenimientoot}\n"
+                descripcion += f"Prioridad: {orden.prioridad}\n"
+                if orden.descripcionproblemareportado:
+                    descripcion += f"Problema: {orden.descripcionproblemareportado}\n"
+                if orden.horometro:
+                    descripcion += f"Horómetro: {orden.horometro}h\n"
+                
+                # Calcular fechas de inicio y fin (asumiendo 4 horas de duración por defecto)
+                fecha_inicio = timezone.datetime.combine(
+                    orden.fechaejecucion, 
+                    timezone.datetime.min.time().replace(hour=8)  # 8:00 AM por defecto
+                )
+                fecha_fin = fecha_inicio + timezone.timedelta(hours=4)
+                
+                # Crear evento en agenda
+                evento = Agendas.objects.create(
+                    tituloevento=titulo,
+                    fechahorainicio=fecha_inicio,
+                    fechahorafin=fecha_fin,
+                    descripcionevento=descripcion,
+                    tipoevento=tipo_evento,
+                    colorevento=color_evento,
+                    esdiacompleto=False,
+                    idequipo=orden.idequipo,
+                    idordentrabajo=orden,
+                    idusuarioasignado=orden.idtecnicoasignado
+                )
+                
+                eventos_creados.append({
+                    'id': evento.idagenda,
+                    'titulo': evento.tituloevento,
+                    'fecha': evento.fechahorainicio.isoformat(),
+                    'orden_trabajo': orden.numeroot,
+                    'equipo': orden.idequipo.nombreequipo
+                })
+            
+            # Sincronizar planes de mantenimiento próximos a vencer
+            self._sincronizar_planes_mantenimiento(eventos_creados)
+            
+            return Response({
+                'message': f'Se crearon {len(eventos_creados)} eventos de agenda',
+                'eventos': eventos_creados
+            })
+            
+        except Exception as e:
+            return Response({
+                'error': f'Error al sincronizar mantenciones: {str(e)}'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _sincronizar_planes_mantenimiento(self, eventos_creados):
+        """
+        Método auxiliar para sincronizar planes de mantenimiento próximos a vencer
+        """
+        try:
+            from datetime import datetime, timedelta
+            
+            # Obtener equipos con planes de mantenimiento activos
+            equipos_con_planes = Equipos.objects.filter(
+                planesmantenimiento__activo=True
+            ).distinct()
+            
+            for equipo in equipos_con_planes:
+                planes = PlanesMantenimiento.objects.filter(
+                    idequipo=equipo,
+                    activo=True
+                )
+                
+                for plan in planes:
+                    # Obtener detalles del plan ordenados por intervalo
+                    detalles = DetallesPlanMantenimiento.objects.filter(
+                        idplanmantenimiento=plan,
+                        activo=True
+                    ).order_by('intervalohorasoperacion')
+                    
+                    for detalle in detalles:
+                        # Calcular próxima fecha de mantenimiento basada en horómetro actual
+                        # (Esta es una lógica simplificada, se puede mejorar)
+                        horometro_actual = equipo.horometro if hasattr(equipo, 'horometro') else 0
+                        horas_hasta_mantenimiento = detalle.intervalohorasoperacion - (horometro_actual % detalle.intervalohorasoperacion)
+                        
+                        # Estimar fecha basada en uso promedio (asumiendo 8 horas/día)
+                        dias_hasta_mantenimiento = horas_hasta_mantenimiento / 8
+                        fecha_estimada = timezone.now().date() + timedelta(days=dias_hasta_mantenimiento)
+                        
+                        # Solo crear eventos para mantenciones en los próximos 30 días
+                        if dias_hasta_mantenimiento <= 30:
+                            # Verificar si ya existe un evento para esta tarea
+                            evento_existente = Agendas.objects.filter(
+                                idequipo=equipo,
+                                idplanmantenimiento=plan,
+                                tituloevento__icontains=detalle.idtareaestandar.nombretarea,
+                                fechahorainicio__date=fecha_estimada
+                            ).exists()
+                            
+                            if not evento_existente:
+                                titulo = f"Mantenimiento Preventivo - {equipo.nombreequipo} - {detalle.idtareaestandar.nombretarea}"
+                                descripcion = f"Plan: {plan.nombreplan}\n"
+                                descripcion += f"Tarea: {detalle.idtareaestandar.nombretarea}\n"
+                                descripcion += f"Intervalo: {detalle.intervalohorasoperacion}h\n"
+                                descripcion += f"Equipo: {equipo.nombreequipo}\n"
+                                descripcion += f"Horómetro estimado: {horometro_actual + horas_hasta_mantenimiento}h"
+                                
+                                fecha_inicio = timezone.datetime.combine(
+                                    fecha_estimada,
+                                    timezone.datetime.min.time().replace(hour=9)  # 9:00 AM
+                                )
+                                fecha_fin = fecha_inicio + timezone.timedelta(
+                                    minutes=detalle.idtareaestandar.tiempoestimadominutos or 120
+                                )
+                                
+                                evento = Agendas.objects.create(
+                                    tituloevento=titulo,
+                                    fechahorainicio=fecha_inicio,
+                                    fechahorafin=fecha_fin,
+                                    descripcionevento=descripcion,
+                                    tipoevento='preventivo',
+                                    colorevento='#3B82F6',  # Azul
+                                    esdiacompleto=False,
+                                    idequipo=equipo,
+                                    idplanmantenimiento=plan
+                                )
+                                
+                                eventos_creados.append({
+                                    'id': evento.idagenda,
+                                    'titulo': evento.tituloevento,
+                                    'fecha': evento.fechahorainicio.isoformat(),
+                                    'plan': plan.nombreplan,
+                                    'equipo': equipo.nombreequipo
+                                })
+                                
+        except Exception as e:
+            print(f"Error en sincronización de planes: {str(e)}")  # Para debugging
 
 
 # --- VIEWSET PARA EVIDENCIAS FOTOGRÁFICAS ---
