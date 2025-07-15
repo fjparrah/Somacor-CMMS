@@ -106,14 +106,14 @@ export const canAccessRoute = (routePath: string): boolean => {
     '/estado-maquina': ['Supervisor', 'Operador', 'Técnico'],
     '/checklist': ['Supervisor', 'Operador', 'Técnico'],
     '/ordenes-trabajo': ['Supervisor', 'Operador', 'Técnico'],
-    '/calendario': ['Supervisor'],
+    '/calendario': ['Supervisor', 'Operador', 'Técnico'],
     '/mantenimiento-planificado': ['Supervisor'],
     '/mantenimiento-no-planificado': ['Supervisor', 'Operador', 'Técnico'],
     '/control/ordenes-trabajo': ['Supervisor', 'Operador', 'Técnico'],
     '/control/checklist-diario': ['Supervisor', 'Operador', 'Técnico'],
     '/control/crear-mantenimiento': ['Supervisor'],
     '/control/reportar-falla': ['Supervisor', 'Operador', 'Técnico'],
-    '/control/calendario': ['Supervisor'],
+    '/control/calendario': ['Supervisor', 'Operador', 'Técnico'],
     '/administracion': ['Supervisor'],
     '/administracion/perfiles': ['Supervisor'],
     '/administracion/equipos-moviles': ['Supervisor'],
@@ -135,12 +135,12 @@ export const getDefaultRoute = (): string => {
     case 'Admin':
     case 'Administrador':
     case 'Supervisor':
-      return '/dashboard';
+      return '/dashboard'; // Administradores y Supervisores van al Dashboard
     case 'Operador':
     case 'Técnico':
-      return '/estado-maquina';
+      return '/estado-maquina'; // Operadores y Técnicos van al Estado de la Máquina
     default:
-      return '/dashboard';
+      return '/estado-maquina'; // Por defecto, ir al Estado de la Máquina
   }
 };
 

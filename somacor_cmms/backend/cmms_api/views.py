@@ -570,8 +570,7 @@ class AgendaViewSet(viewsets.ModelViewSet):
             # Obtener órdenes de trabajo programadas que no tienen evento en agenda
             ordenes_programadas = OrdenesTrabajo.objects.filter(
                 fechaejecucion__isnull=False,
-                idestadoot__nombreestadoot__in=['Abierta', 'En Progreso'],
-                idordentrabajo__isnull=True  # No tienen evento en agenda
+                idestadoot__nombreestadoot__in=['Abierta', 'En Progreso']
             ).exclude(
                 idordentrabajo__in=Agendas.objects.values_list('idordentrabajo', flat=True)
             )
@@ -602,11 +601,22 @@ class AgendaViewSet(viewsets.ModelViewSet):
                     descripcion += f"Horómetro: {orden.horometro}h\n"
                 
                 # Calcular fechas de inicio y fin (asumiendo 4 horas de duración por defecto)
-                fecha_inicio = timezone.datetime.combine(
-                    orden.fechaejecucion, 
-                    timezone.datetime.min.time().replace(hour=8)  # 8:00 AM por defecto
+                from datetime import datetime, time
+                fecha_inicio = timezone.make_aware(
+                    datetime.combine(orden.fechaejecucion, time(8, 0))  # 8:00 AM
                 )
                 fecha_fin = fecha_inicio + timezone.timedelta(hours=4)
+                
+                # Obtener o crear usuario por defecto para eventos automáticos
+                usuario_sistema, created = User.objects.get_or_create(
+                    username='sistema_agenda',
+                    defaults={
+                        'first_name': 'Sistema',
+                        'last_name': 'Agenda',
+                        'email': 'sistema@somacor.com',
+                        'is_active': True
+                    }
+                )
                 
                 # Crear evento en agenda
                 evento = Agendas.objects.create(
@@ -619,7 +629,8 @@ class AgendaViewSet(viewsets.ModelViewSet):
                     esdiacompleto=False,
                     idequipo=orden.idequipo,
                     idordentrabajo=orden,
-                    idusuarioasignado=orden.idtecnicoasignado
+                    idusuarioasignado=orden.idtecnicoasignado,
+                    idusuariocreador=usuario_sistema
                 )
                 
                 eventos_creados.append({
@@ -639,8 +650,12 @@ class AgendaViewSet(viewsets.ModelViewSet):
             })
             
         except Exception as e:
+            import traceback
+            error_detail = traceback.format_exc()
+            print(f"Error detallado en sincronización: {error_detail}")
             return Response({
-                'error': f'Error al sincronizar mantenciones: {str(e)}'
+                'error': f'Error al sincronizar mantenciones: {str(e)}',
+                'detalle': error_detail
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def _sincronizar_planes_mantenimiento(self, eventos_creados):
@@ -704,6 +719,17 @@ class AgendaViewSet(viewsets.ModelViewSet):
                                     minutes=detalle.idtareaestandar.tiempoestimadominutos or 120
                                 )
                                 
+                                # Obtener usuario sistema para eventos automáticos
+                                usuario_sistema, created = User.objects.get_or_create(
+                                    username='sistema_agenda',
+                                    defaults={
+                                        'first_name': 'Sistema',
+                                        'last_name': 'Agenda',
+                                        'email': 'sistema@somacor.com',
+                                        'is_active': True
+                                    }
+                                )
+                                
                                 evento = Agendas.objects.create(
                                     tituloevento=titulo,
                                     fechahorainicio=fecha_inicio,
@@ -713,7 +739,8 @@ class AgendaViewSet(viewsets.ModelViewSet):
                                     colorevento='#3B82F6',  # Azul
                                     esdiacompleto=False,
                                     idequipo=equipo,
-                                    idplanmantenimiento=plan
+                                    idplanmantenimiento=plan,
+                                    idusuariocreador=usuario_sistema
                                 )
                                 
                                 eventos_creados.append({

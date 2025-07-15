@@ -2868,3 +2868,805 @@ INFO 2025-07-10 03:30:55,418 basehttp 3044 38676 "GET /api/equipos/ HTTP/1.1" 20
 INFO 2025-07-10 03:30:55,435 basehttp 3044 38676 "GET /api/equipos/ HTTP/1.1" 200 4417
 INFO 2025-07-10 03:30:55,918 basehttp 3044 38676 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 679
 INFO 2025-07-10 03:30:55,924 basehttp 3044 38676 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 679
+INFO 2025-07-15 01:34:43,956 autoreload 43752 13164 Watching for file changes with StatReloader
+INFO 2025-07-15 01:34:57,280 basehttp 43752 21900 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:34:57,280 basehttp 43752 23928 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:34:57,305 basehttp 43752 21900 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 01:34:57,311 basehttp 43752 21900 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 01:35:15,136 basehttp 43752 21900 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:15,137 basehttp 43752 23928 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:15,153 basehttp 43752 21900 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:15,170 basehttp 43752 21900 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:17,576 basehttp 43752 21900 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:17,589 basehttp 43752 23928 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:18,174 basehttp 43752 21900 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:18,174 basehttp 43752 37468 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:18,174 basehttp 43752 23928 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:18,176 basehttp 43752 37468 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:18,182 basehttp 43752 37468 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 01:35:18,186 basehttp 43752 37468 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 01:35:18,195 basehttp 43752 23928 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:18,200 basehttp 43752 23928 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:18,215 basehttp 43752 21900 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:18,230 basehttp 43752 23928 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:19,160 basehttp 43752 23928 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:19,175 basehttp 43752 23928 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:20,157 basehttp 43752 23928 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:20,157 basehttp 43752 21900 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:20,207 basehttp 43752 21900 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:35:20,254 basehttp 43752 23928 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:35:20,756 basehttp 43752 23928 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:20,770 basehttp 43752 21900 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:29,309 basehttp 43752 21900 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:35:29,355 basehttp 43752 21900 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:35:30,468 basehttp 43752 21900 "OPTIONS /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:30,472 basehttp 43752 21900 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 01:35:32,329 basehttp 43752 21900 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:35:34,922 basehttp 43752 21900 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:34,923 basehttp 43752 23928 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:34,923 basehttp 43752 21900 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:34,927 basehttp 43752 37468 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:34,927 basehttp 43752 42940 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:34,932 basehttp 43752 23928 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:35:34,937 basehttp 43752 21900 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:34,938 basehttp 43752 23928 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:35:34,944 basehttp 43752 21900 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:34,945 basehttp 43752 21316 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:35:34,949 basehttp 43752 21316 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:35:34,961 basehttp 43752 25476 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:35:34,968 basehttp 43752 25476 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:35:34,982 basehttp 43752 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:34,997 basehttp 43752 25476 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:35,510 basehttp 43752 25476 "OPTIONS /api/roles/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:35,510 basehttp 43752 21316 "OPTIONS /api/roles/ HTTP/1.1" 200 0
+INFO 2025-07-15 01:35:35,514 basehttp 43752 21316 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 01:35:35,518 basehttp 43752 21316 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 01:35:35,523 basehttp 43752 25476 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:35,531 basehttp 43752 25476 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:36,095 basehttp 43752 25476 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:35:36,099 basehttp 43752 21900 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:35:36,101 basehttp 43752 21316 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:35:36,105 basehttp 43752 42940 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:35:36,105 basehttp 43752 25476 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:35:36,114 basehttp 43752 23928 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:36,126 basehttp 43752 23928 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:35:36,128 basehttp 43752 21316 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:35:36,135 basehttp 43752 25476 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:35:36,148 basehttp 43752 25476 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:36:01,977 autoreload 5964 25380 Watching for file changes with StatReloader
+INFO 2025-07-15 01:36:12,207 basehttp 5964 10280 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:36:12,207 basehttp 5964 40408 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:36:12,207 basehttp 5964 34044 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:36:12,216 basehttp 5964 8892 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:36:12,216 basehttp 5964 40408 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 01:36:12,218 basehttp 5964 34044 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 01:36:12,229 basehttp 5964 10280 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 01:36:12,229 basehttp 5964 8892 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 01:36:12,237 basehttp 5964 34044 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:36:12,249 basehttp 5964 34044 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 01:36:13,350 basehttp 5964 34044 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:36:13,402 basehttp 5964 34044 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:36:17,379 basehttp 5964 34044 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 01:36:18,509 basehttp 5964 34044 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:39:10,598 basehttp 5964 34044 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 01:49:28,308 basehttp 5964 44080 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 01:49:30,456 basehttp 5964 44080 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 01:49:30,461 basehttp 5964 44080 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:05:01,606 autoreload 42824 21976 Watching for file changes with StatReloader
+INFO 2025-07-15 02:05:11,221 basehttp 42824 10696 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:05:11,227 basehttp 42824 10696 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:05:14,299 basehttp 42824 10696 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-15 02:05:14,308 basehttp 42824 10696 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:14,309 basehttp 42824 10696 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-15 02:05:14,322 basehttp 42824 5596 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:14,333 basehttp 42824 5596 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:14,339 basehttp 42824 5596 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:14,355 basehttp 42824 5596 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:14,378 basehttp 42824 5596 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:14,407 basehttp 42824 10696 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:05:14,452 basehttp 42824 10696 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:05:16,132 basehttp 42824 5596 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:16,142 basehttp 42824 10696 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:16,151 basehttp 42824 5596 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:16,153 basehttp 42824 6840 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:16,161 basehttp 42824 38620 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:16,176 basehttp 42824 6840 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:17,115 basehttp 42824 6840 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:17,128 basehttp 42824 38620 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:17,825 basehttp 42824 38620 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:05:17,880 basehttp 42824 38620 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:05:23,474 basehttp 42824 38620 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 02:05:24,255 basehttp 42824 38620 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:05:25,976 basehttp 42824 10696 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:25,983 basehttp 42824 10696 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:05:25,991 basehttp 42824 5596 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:25,991 basehttp 42824 6840 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:26,002 basehttp 42824 5596 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:05:26,011 basehttp 42824 10696 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:05:26,070 basehttp 42824 38620 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:05:26,115 basehttp 42824 38620 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:11:59,947 basehttp 42824 43720 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:11:59,953 basehttp 42824 43720 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:14:45,636 autoreload 19144 7564 Watching for file changes with StatReloader
+INFO 2025-07-15 02:14:53,555 basehttp 19144 44300 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:14:53,562 basehttp 19144 44300 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:14:59,428 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:14:59,442 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:01,304 basehttp 19144 44300 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:15:01,306 basehttp 19144 44300 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:15:01,316 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:01,324 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:03,145 basehttp 19144 1000 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:03,149 basehttp 19144 1000 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:15:03,155 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:03,159 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:03,160 basehttp 19144 1000 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:03,164 basehttp 19144 44300 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:15:03,167 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:03,180 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:03,184 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:03,198 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:03,928 basehttp 19144 1000 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-15 02:15:03,928 basehttp 19144 44300 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-15 02:15:03,936 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:03,937 basehttp 19144 43308 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:03,940 basehttp 19144 44300 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:15:03,946 basehttp 19144 44300 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:15:03,951 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:03,952 basehttp 19144 43308 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:04,432 basehttp 19144 43308 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:04,432 basehttp 19144 44300 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:15:04,432 basehttp 19144 44612 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:04,439 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:04,440 basehttp 19144 43308 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:04,449 basehttp 19144 44300 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:15:04,450 basehttp 19144 44612 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:04,452 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:04,467 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:04,481 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:09,743 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:09,745 basehttp 19144 44612 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:09,755 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:09,759 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:09,762 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:09,788 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:09,824 basehttp 19144 43308 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:09,878 basehttp 19144 42832 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:10,856 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:10,868 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:11,592 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:11,601 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:11,610 basehttp 19144 42832 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:11,617 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:11,626 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:15:11,640 basehttp 19144 42832 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:13,455 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:13,469 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:15,169 basehttp 19144 1000 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:15:15,217 basehttp 19144 1000 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:15:16,390 basehttp 19144 1000 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 02:15:17,628 basehttp 19144 1000 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:15:20,742 basehttp 19144 1000 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:20,746 basehttp 19144 1000 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:21,355 basehttp 19144 1000 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:21,357 basehttp 19144 1000 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:15:21,939 basehttp 19144 1000 "OPTIONS /api/tipos-tarea/ HTTP/1.1" 200 0
+INFO 2025-07-15 02:15:21,940 basehttp 19144 1000 "OPTIONS /api/tipos-tarea/ HTTP/1.1" 200 0
+INFO 2025-07-15 02:15:21,942 basehttp 19144 42832 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
+INFO 2025-07-15 02:15:21,945 basehttp 19144 42832 "GET /api/tipos-tarea/ HTTP/1.1" 200 650
+INFO 2025-07-15 02:15:22,571 basehttp 19144 42832 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:22,575 basehttp 19144 42832 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:15:28,332 basehttp 19144 42832 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:15:28,338 basehttp 19144 42832 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:15:41,903 basehttp 19144 42832 "OPTIONS /api/login/ HTTP/1.1" 200 0
+WARNING 2025-07-15 02:15:42,062 log 19144 42832 Bad Request: /api/login/
+WARNING 2025-07-15 02:15:42,062 basehttp 19144 42832 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-15 02:15:47,085 basehttp 19144 42832 "POST /api/login/ HTTP/1.1" 200 322
+INFO 2025-07-15 02:15:47,410 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:47,424 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+WARNING 2025-07-15 02:15:50,026 log 19144 43308 Forbidden: /api/users/
+WARNING 2025-07-15 02:15:50,029 basehttp 19144 43308 "GET /api/users/ HTTP/1.1" 403 63
+WARNING 2025-07-15 02:15:50,033 log 19144 44612 Forbidden: /api/users/
+INFO 2025-07-15 02:15:50,033 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+WARNING 2025-07-15 02:15:50,033 basehttp 19144 44612 "GET /api/users/ HTTP/1.1" 403 63
+INFO 2025-07-15 02:15:50,048 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:50,064 basehttp 19144 1000 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:50,093 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:50,128 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:50,138 basehttp 19144 1000 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:50,875 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:50,891 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:51,473 basehttp 19144 44612 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:51,483 basehttp 19144 44612 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+WARNING 2025-07-15 02:15:51,494 log 19144 44300 Forbidden: /api/users/
+WARNING 2025-07-15 02:15:51,495 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 403 63
+WARNING 2025-07-15 02:15:51,500 log 19144 44300 Forbidden: /api/users/
+WARNING 2025-07-15 02:15:51,501 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 403 63
+INFO 2025-07-15 02:15:51,518 basehttp 19144 42832 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:51,547 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:51,554 basehttp 19144 1000 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:51,604 basehttp 19144 1000 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:52,360 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:52,374 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:52,972 basehttp 19144 1000 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 02:15:53,033 basehttp 19144 1000 "GET /api/agendas/ HTTP/1.1" 200 33993
+WARNING 2025-07-15 02:15:53,564 log 19144 42832 Forbidden: /api/users/
+WARNING 2025-07-15 02:15:53,565 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 403 63
+INFO 2025-07-15 02:15:53,570 basehttp 19144 44612 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+WARNING 2025-07-15 02:15:53,575 log 19144 42832 Forbidden: /api/users/
+WARNING 2025-07-15 02:15:53,575 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 403 63
+INFO 2025-07-15 02:15:53,585 basehttp 19144 44612 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:15:53,597 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:53,627 basehttp 19144 1000 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:15:53,643 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:15:53,690 basehttp 19144 44612 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+WARNING 2025-07-15 02:16:00,227 log 19144 44612 Bad Request: /api/login/
+WARNING 2025-07-15 02:16:00,227 basehttp 19144 44612 "POST /api/login/ HTTP/1.1" 400 86
+WARNING 2025-07-15 02:16:04,859 log 19144 44612 Bad Request: /api/login/
+WARNING 2025-07-15 02:16:04,859 basehttp 19144 44612 "POST /api/login/ HTTP/1.1" 400 86
+WARNING 2025-07-15 02:16:11,027 log 19144 44612 Bad Request: /api/login/
+WARNING 2025-07-15 02:16:11,027 basehttp 19144 44612 "POST /api/login/ HTTP/1.1" 400 86
+INFO 2025-07-15 02:16:15,888 basehttp 19144 44612 "POST /api/login/ HTTP/1.1" 200 357
+INFO 2025-07-15 02:16:16,204 basehttp 19144 44612 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:16,210 basehttp 19144 44612 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:18,223 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:16:18,224 basehttp 19144 1000 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:18,227 basehttp 19144 44300 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:16:18,235 basehttp 19144 1000 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:18,238 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:16:18,238 basehttp 19144 44300 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:16:18,671 basehttp 19144 44612 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:16:18,671 basehttp 19144 1000 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:16:18,680 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:16:18,685 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:16:18,689 basehttp 19144 44612 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:16:18,689 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:16:18,693 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:16:18,706 basehttp 19144 1000 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:16:18,707 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:18,719 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:19,127 basehttp 19144 44612 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:16:19,132 basehttp 19144 44612 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:16:19,137 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:16:19,145 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1257
+INFO 2025-07-15 02:16:27,967 basehttp 19144 1000 "OPTIONS /api/users/6/ HTTP/1.1" 200 0
+INFO 2025-07-15 02:16:27,983 basehttp 19144 1000 "DELETE /api/users/6/ HTTP/1.1" 204 0
+INFO 2025-07-15 02:16:27,991 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:16:36,956 basehttp 19144 1000 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:36,963 basehttp 19144 1000 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:37,381 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:37,393 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:38,412 basehttp 19144 44612 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:38,417 basehttp 19144 44612 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 02:16:39,423 basehttp 19144 42832 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:39,432 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:16:39,443 basehttp 19144 42832 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:39,480 basehttp 19144 44300 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:16:39,492 basehttp 19144 1000 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:39,516 basehttp 19144 44612 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:16:39,520 basehttp 19144 44300 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:39,575 basehttp 19144 44612 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 02:16:41,166 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:41,169 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:16:41,178 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:16:41,182 basehttp 19144 42832 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:16:41,185 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:41,200 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:41,461 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:16:41,475 basehttp 19144 44612 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:17:24,569 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:17:24,572 basehttp 19144 42832 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:17:24,574 basehttp 19144 44612 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:17:24,587 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:17:24,589 basehttp 19144 42832 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 02:17:24,602 basehttp 19144 44300 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 02:17:24,939 basehttp 19144 44612 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:17:24,940 basehttp 19144 42832 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:17:24,945 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:17:24,946 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:17:24,951 basehttp 19144 42832 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 02:17:24,955 basehttp 19144 1000 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:17:24,958 basehttp 19144 44300 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 02:17:24,958 basehttp 19144 44612 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 02:17:24,986 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:17:25,002 basehttp 19144 43308 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 02:17:25,250 basehttp 19144 43308 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:17:25,255 basehttp 19144 43308 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 02:17:25,261 basehttp 19144 44612 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:17:25,268 basehttp 19144 44612 "GET /api/users/ HTTP/1.1" 200 1053
+INFO 2025-07-15 02:18:01,685 basehttp 19144 44612 "POST /api/users/ HTTP/1.1" 201 183
+INFO 2025-07-15 02:18:01,693 basehttp 19144 44612 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 13:59:43,272 autoreload 24384 15552 Watching for file changes with StatReloader
+INFO 2025-07-15 13:59:52,714 basehttp 24384 21316 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:52,715 basehttp 24384 34844 "OPTIONS /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:52,744 basehttp 24384 21316 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 13:59:52,762 basehttp 24384 34844 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 13:59:57,597 basehttp 24384 34844 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:57,597 basehttp 24384 21316 "OPTIONS /api/equipos/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:57,610 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:57,623 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:58,963 basehttp 24384 34844 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,964 basehttp 24384 29844 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,964 basehttp 24384 34844 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,964 basehttp 24384 29844 "OPTIONS /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,965 basehttp 24384 34844 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,965 basehttp 24384 29844 "OPTIONS /api/planes-mantenimiento/ HTTP/1.1" 200 0
+INFO 2025-07-15 13:59:58,983 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 13:59:58,996 basehttp 24384 29844 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 13:59:59,003 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:59,025 basehttp 24384 21316 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 13:59:59,029 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 13:59:59,053 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:59,055 basehttp 24384 34844 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 13:59:59,103 basehttp 24384 21316 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 13:59:59,439 basehttp 24384 34844 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 13:59:59,446 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 13:59:59,449 basehttp 24384 28144 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 13:59:59,456 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:59,460 basehttp 24384 34844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 13:59:59,471 basehttp 24384 28144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:59,622 basehttp 24384 28144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 13:59:59,637 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:00:00,269 basehttp 24384 34844 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:00:00,269 basehttp 24384 28144 "OPTIONS /api/agendas/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:00:00,315 basehttp 24384 28144 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:00:00,361 basehttp 24384 34844 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:00:00,726 basehttp 24384 21316 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:00:00,735 basehttp 24384 28144 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:00:00,738 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:00:00,742 basehttp 24384 21316 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:00:00,743 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:00:00,757 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:00:01,352 basehttp 24384 21316 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:00:01,364 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:00:02,185 basehttp 24384 34844 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:00:02,231 basehttp 24384 21316 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:00:08,631 basehttp 24384 21316 "OPTIONS /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:00:08,635 basehttp 24384 21316 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 14:00:09,515 basehttp 24384 21316 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:02:38,245 basehttp 24384 28144 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:02:38,267 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:02:38,269 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:02:38,276 basehttp 24384 28144 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:02:38,282 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:02:38,307 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:02:38,316 basehttp 24384 21316 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 14:02:38,361 basehttp 24384 34844 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 14:03:13,153 basehttp 24384 34844 "OPTIONS /api/ordenes-trabajo/crear-desde-plan/ HTTP/1.1" 200 0
+WARNING 2025-07-15 14:03:13,158 log 24384 34844 Bad Request: /api/ordenes-trabajo/crear-desde-plan/
+WARNING 2025-07-15 14:03:13,159 basehttp 24384 34844 "POST /api/ordenes-trabajo/crear-desde-plan/ HTTP/1.1" 400 66
+WARNING 2025-07-15 14:03:16,715 log 24384 34844 Bad Request: /api/ordenes-trabajo/crear-desde-plan/
+WARNING 2025-07-15 14:03:16,716 basehttp 24384 34844 "POST /api/ordenes-trabajo/crear-desde-plan/ HTTP/1.1" 400 66
+INFO 2025-07-15 14:03:22,657 basehttp 24384 29844 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:03:22,670 basehttp 24384 21316 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:03:22,670 basehttp 24384 28144 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:03:22,675 basehttp 24384 34844 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:03:22,675 basehttp 24384 29844 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:03:22,686 basehttp 24384 28144 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:04:41,148 autoreload 28148 8492 Watching for file changes with StatReloader
+WARNING 2025-07-15 14:04:43,374 log 28148 26876 Not Found: /
+WARNING 2025-07-15 14:04:43,374 basehttp 28148 26876 "GET / HTTP/1.1" 404 2295
+WARNING 2025-07-15 14:04:43,590 log 28148 26876 Not Found: /favicon.ico
+WARNING 2025-07-15 14:04:43,590 basehttp 28148 26876 "GET /favicon.ico HTTP/1.1" 404 2346
+WARNING 2025-07-15 14:04:49,930 log 28148 4532 Not Found: /
+WARNING 2025-07-15 14:04:49,930 basehttp 28148 4532 "GET / HTTP/1.1" 404 2295
+WARNING 2025-07-15 14:04:49,964 log 28148 4532 Not Found: /favicon.ico
+WARNING 2025-07-15 14:04:49,964 basehttp 28148 4532 "GET /favicon.ico HTTP/1.1" 404 2346
+INFO 2025-07-15 14:04:55,315 basehttp 28148 4532 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-07-15 14:04:55,391 basehttp 28148 4532 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4249
+INFO 2025-07-15 14:04:55,506 basehttp 28148 33256 "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2025-07-15 14:04:55,507 basehttp 28148 23760 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2025-07-15 14:04:55,519 basehttp 28148 23760 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-07-15 14:04:55,521 basehttp 28148 18500 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2025-07-15 14:04:55,527 basehttp 28148 30084 "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+INFO 2025-07-15 14:04:55,527 basehttp 28148 4532 "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+INFO 2025-07-15 14:04:55,533 basehttp 28148 37080 "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-07-15 14:05:03,221 basehttp 28148 37080 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-07-15 14:05:03,246 basehttp 28148 37080 "GET /admin/ HTTP/1.1" 200 11234
+INFO 2025-07-15 14:05:03,268 basehttp 28148 37080 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-07-15 14:05:03,268 basehttp 28148 30084 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-07-15 14:05:03,271 basehttp 28148 4532 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-07-15 14:05:06,392 basehttp 28148 4532 "GET /admin/auth/user/ HTTP/1.1" 200 17610
+INFO 2025-07-15 14:05:06,420 basehttp 28148 4532 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+INFO 2025-07-15 14:05:06,421 basehttp 28148 37080 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-07-15 14:05:06,427 basehttp 28148 18500 "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2025-07-15 14:05:06,427 basehttp 28148 33256 "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2025-07-15 14:05:06,427 basehttp 28148 23760 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2025-07-15 14:05:06,431 basehttp 28148 37080 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-07-15 14:05:06,431 basehttp 28148 4532 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-07-15 14:05:06,436 basehttp 28148 33256 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:05:06,439 basehttp 28148 4532 "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-07-15 14:05:06,439 basehttp 28148 23760 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-15 14:05:06,446 basehttp 28148 23760 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-07-15 14:05:06,451 basehttp 28148 30084 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2025-07-15 14:05:06,463 basehttp 28148 30084 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-07-15 14:05:06,466 basehttp 28148 18500 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-07-15 14:05:06,477 basehttp 28148 30084 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-07-15 14:05:06,477 basehttp 28148 18500 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-07-15 14:05:24,925 basehttp 28148 27100 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:05:24,972 basehttp 28148 27100 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:05:26,041 basehttp 28148 27100 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,041 basehttp 28148 35416 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,041 basehttp 28148 28260 "OPTIONS /api/tipos-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,043 basehttp 28148 27100 "OPTIONS /api/tareas-estandar/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,050 basehttp 28148 28260 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:05:26,053 basehttp 28148 35416 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:05:26,056 basehttp 28148 27100 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 14:05:26,056 basehttp 28148 28260 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:05:26,062 basehttp 28148 27100 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 14:05:26,068 basehttp 28148 35416 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:05:26,311 basehttp 28148 35416 "OPTIONS /api/roles/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,311 basehttp 28148 27100 "OPTIONS /api/roles/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:26,316 basehttp 28148 27100 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:05:26,319 basehttp 28148 35416 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:05:26,325 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:05:26,332 basehttp 28148 35416 "GET /api/users/ HTTP/1.1" 200 1237
+INFO 2025-07-15 14:05:32,705 basehttp 28148 35416 "OPTIONS /api/users/7/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:05:32,721 basehttp 28148 35416 "DELETE /api/users/7/ HTTP/1.1" 204 0
+INFO 2025-07-15 14:05:32,728 basehttp 28148 35416 "GET /api/users/ HTTP/1.1" 200 1114
+INFO 2025-07-15 14:05:39,806 basehttp 28148 35416 "OPTIONS /api/users/8/ HTTP/1.1" 200 0
+ERROR 2025-07-15 14:05:39,953 log 28148 35416 Internal Server Error: /api/users/8/
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 637, in get
+    raise self.model.DoesNotExist(
+cmms_api.models.Usuarios.DoesNotExist: Usuarios matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: usuarios.IDRol
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\mixins.py", line 68, in update
+    self.perform_update(serializer)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\mixins.py", line 78, in perform_update
+    serializer.save()
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 205, in save
+    self.instance = self.update(self.instance, validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\OneDrive\Documentos\GitHub\cmms_somacor\somacor_cmms\backend\cmms_api\serializers.py", line 80, in update
+    usuarios_instance, created = Usuarios.objects.get_or_create(user=instance)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 923, in get_or_create
+    return self.create(**params), True
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 658, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: usuarios.IDRol
+ERROR 2025-07-15 14:05:39,957 basehttp 28148 35416 "PUT /api/users/8/ HTTP/1.1" 500 222838
+ERROR 2025-07-15 14:05:45,161 log 28148 35416 Internal Server Error: /api/users/8/
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 637, in get
+    raise self.model.DoesNotExist(
+cmms_api.models.Usuarios.DoesNotExist: Usuarios matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: usuarios.IDRol
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\mixins.py", line 68, in update
+    self.perform_update(serializer)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\mixins.py", line 78, in perform_update
+    serializer.save()
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 205, in save
+    self.instance = self.update(self.instance, validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\OneDrive\Documentos\GitHub\cmms_somacor\somacor_cmms\backend\cmms_api\serializers.py", line 80, in update
+    usuarios_instance, created = Usuarios.objects.get_or_create(user=instance)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 923, in get_or_create
+    return self.create(**params), True
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 658, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\elect.DESKTOP-S2LKP0V\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: usuarios.IDRol
+ERROR 2025-07-15 14:05:45,164 basehttp 28148 35416 "PUT /api/users/8/ HTTP/1.1" 500 222842
+INFO 2025-07-15 14:06:00,504 basehttp 28148 18500 "GET /admin/cmms_api/roles/ HTTP/1.1" 200 13099
+INFO 2025-07-15 14:06:00,523 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:09,631 basehttp 28148 18500 "GET /admin/cmms_api/faenas/ HTTP/1.1" 200 12910
+INFO 2025-07-15 14:06:09,651 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:10,335 basehttp 28148 18500 "GET /admin/cmms_api/estadosequipo/ HTTP/1.1" 200 13457
+INFO 2025-07-15 14:06:10,351 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:10,925 basehttp 28148 18500 "GET /admin/cmms_api/equipos/ HTTP/1.1" 200 23248
+INFO 2025-07-15 14:06:10,941 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:12,244 basehttp 28148 18500 "GET /admin/cmms_api/checklisttemplate/ HTTP/1.1" 200 16490
+INFO 2025-07-15 14:06:12,261 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:13,120 basehttp 28148 18500 "GET /admin/cmms_api/checklistinstance/ HTTP/1.1" 200 17996
+INFO 2025-07-15 14:06:13,136 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:13,868 basehttp 28148 18500 "GET /admin/cmms_api/checklistitem/ HTTP/1.1" 200 56222
+INFO 2025-07-15 14:06:13,886 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:20,461 basehttp 28148 18500 "GET /admin/cmms_api/checklistitem/?p=3 HTTP/1.1" 200 47906
+INFO 2025-07-15 14:06:20,481 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:25,364 basehttp 28148 18500 "GET /admin/cmms_api/checklistitem/?p=1 HTTP/1.1" 200 58848
+INFO 2025-07-15 14:06:25,383 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:27,062 basehttp 28148 18500 "GET /admin/cmms_api/checklistinstance/ HTTP/1.1" 200 17996
+INFO 2025-07-15 14:06:27,077 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:28,354 basehttp 28148 18500 "GET /admin/cmms_api/checklistcategory/ HTTP/1.1" 200 22387
+INFO 2025-07-15 14:06:28,371 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:33,638 basehttp 28148 18500 "GET /admin/cmms_api/checklistanswer/ HTTP/1.1" 200 34873
+INFO 2025-07-15 14:06:33,653 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:39,921 basehttp 28148 18500 "GET /admin/cmms_api/tiposequipo/ HTTP/1.1" 200 13642
+INFO 2025-07-15 14:06:39,936 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:42,490 basehttp 28148 18500 "GET /admin/authtoken/tokenproxy/ HTTP/1.1" 200 13012
+INFO 2025-07-15 14:06:45,549 basehttp 28148 18500 "GET /admin/authtoken/tokenproxy/1/change/ HTTP/1.1" 200 13401
+INFO 2025-07-15 14:06:45,570 basehttp 28148 30084 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:45,574 basehttp 28148 23760 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-07-15 14:06:45,574 basehttp 28148 18500 "GET /static/admin/css/forms.css HTTP/1.1" 200 9090
+INFO 2025-07-15 14:06:45,576 basehttp 28148 4532 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-07-15 14:06:45,582 basehttp 28148 23760 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11921
+INFO 2025-07-15 14:06:45,584 basehttp 28148 18500 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-07-15 14:06:49,001 basehttp 28148 18500 "GET /admin/authtoken/tokenproxy/ HTTP/1.1" 200 13012
+INFO 2025-07-15 14:06:50,025 basehttp 28148 18500 "GET /admin/auth/user/ HTTP/1.1" 200 17165
+INFO 2025-07-15 14:06:50,046 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:50,939 basehttp 28148 18500 "GET /admin/auth/group/ HTTP/1.1" 200 11403
+INFO 2025-07-15 14:06:50,957 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:06:51,865 basehttp 28148 18500 "GET /admin/auth/user/ HTTP/1.1" 200 17165
+INFO 2025-07-15 14:06:51,881 basehttp 28148 18500 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:07:02,607 basehttp 28148 18500 "GET /admin/auth/user/9/change/ HTTP/1.1" 200 39397
+INFO 2025-07-15 14:07:02,632 basehttp 28148 37080 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:07:02,641 basehttp 28148 37080 "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-07-15 14:07:02,643 basehttp 28148 30084 "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-07-15 14:07:02,643 basehttp 28148 33256 "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15292
+INFO 2025-07-15 14:07:02,645 basehttp 28148 4532 "GET /static/admin/js/inlines.js HTTP/1.1" 200 15526
+INFO 2025-07-15 14:07:02,645 basehttp 28148 18500 "GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+INFO 2025-07-15 14:07:02,645 basehttp 28148 23760 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-07-15 14:07:02,672 basehttp 28148 4532 "GET /static/admin/img/inline-delete.svg HTTP/1.1" 200 560
+INFO 2025-07-15 14:07:02,682 basehttp 28148 18500 "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
+INFO 2025-07-15 14:07:02,682 basehttp 28148 33256 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-07-15 14:07:02,682 basehttp 28148 23760 "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-07-15 14:07:02,682 basehttp 28148 4532 "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2025-07-15 14:07:02,682 basehttp 28148 30084 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-07-15 14:07:09,928 basehttp 28148 4532 "POST /admin/auth/user/9/change/ HTTP/1.1" 302 0
+INFO 2025-07-15 14:07:09,942 basehttp 28148 4532 "GET /admin/auth/user/ HTTP/1.1" 200 17371
+INFO 2025-07-15 14:07:09,961 basehttp 28148 4532 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:07:16,265 basehttp 28148 4532 "GET /admin/auth/user/8/change/ HTTP/1.1" 200 39384
+INFO 2025-07-15 14:07:16,281 basehttp 28148 4532 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:07:19,511 basehttp 28148 4532 "POST /admin/auth/user/8/change/ HTTP/1.1" 302 0
+INFO 2025-07-15 14:07:19,526 basehttp 28148 4532 "GET /admin/auth/user/ HTTP/1.1" 200 17366
+INFO 2025-07-15 14:07:19,544 basehttp 28148 4532 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-07-15 14:07:23,521 basehttp 28148 35416 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:07:23,525 basehttp 28148 27100 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:07:23,530 basehttp 28148 35416 "GET /api/users/ HTTP/1.1" 200 1226
+INFO 2025-07-15 14:07:23,538 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1226
+INFO 2025-07-15 14:07:59,043 basehttp 28148 27100 "POST /api/users/ HTTP/1.1" 201 186
+INFO 2025-07-15 14:07:59,054 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+WARNING 2025-07-15 14:08:31,372 log 28148 4756 Not Found: /favicon.ico
+WARNING 2025-07-15 14:08:31,372 basehttp 28148 4756 "GET /favicon.ico HTTP/1.1" 404 2346
+INFO 2025-07-15 14:08:49,867 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:49,882 basehttp 28148 35416 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:50,546 basehttp 28148 35416 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 14:08:50,553 basehttp 28148 27100 "GET /api/mantenimiento-workflow/dashboard/ HTTP/1.1" 200 678
+INFO 2025-07-15 14:08:51,941 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:51,957 basehttp 28148 35416 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:52,743 basehttp 28148 28260 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:08:52,770 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:52,782 basehttp 28148 28260 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:08:52,791 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:08:52,806 basehttp 28148 27100 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:08:52,819 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:52,830 basehttp 28148 35416 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 14:08:52,881 basehttp 28148 28260 "GET /api/ordenes-trabajo/?fechaInicio=&fechaFin= HTTP/1.1" 200 32797
+INFO 2025-07-15 14:08:53,337 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:53,349 basehttp 28148 35416 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:53,964 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:08:53,976 basehttp 28148 27304 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:08:53,982 basehttp 28148 35416 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:53,998 basehttp 28148 27304 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:53,999 basehttp 28148 28260 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:08:54,006 basehttp 28148 27304 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:08:54,458 basehttp 28148 27304 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:54,471 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:08:55,803 basehttp 28148 28260 "OPTIONS /api/checklist-workflow/templates-por-equipo/10/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:08:55,811 basehttp 28148 28260 "GET /api/checklist-workflow/templates-por-equipo/10/ HTTP/1.1" 200 5538
+INFO 2025-07-15 14:09:17,156 basehttp 28148 28260 "OPTIONS /api/checklist-workflow/completar-checklist/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:09:17,189 basehttp 28148 28260 "POST /api/checklist-workflow/completar-checklist/ HTTP/1.1" 201 13204
+INFO 2025-07-15 14:09:19,458 basehttp 28148 35416 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:09:19,469 basehttp 28148 27304 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:09:19,477 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:09:19,479 basehttp 28148 35416 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:09:19,481 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:09:19,492 basehttp 28148 27304 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:09:36,713 basehttp 28148 27304 "OPTIONS /api/mantenimiento-workflow/crear-ot-planificada/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:09:36,741 basehttp 28148 27304 "POST /api/mantenimiento-workflow/crear-ot-planificada/ HTTP/1.1" 201 1411
+INFO 2025-07-15 14:09:38,850 basehttp 28148 27304 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:09:38,863 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:09:39,885 basehttp 28148 27100 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:09:39,935 basehttp 28148 27304 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:09:47,670 basehttp 28148 27304 "POST /api/agendas/sincronizar-mantenciones/ HTTP/1.1" 200 57
+INFO 2025-07-15 14:09:48,711 basehttp 28148 27304 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:10:14,405 basehttp 28148 27304 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:10:14,411 basehttp 28148 27100 "GET /api/roles/ HTTP/1.1" 200 236
+INFO 2025-07-15 14:10:14,415 basehttp 28148 27304 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:14,423 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:15,786 basehttp 28148 27304 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:15,787 basehttp 28148 35416 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:15,789 basehttp 28148 28260 "OPTIONS /api/estados-equipo/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:15,789 basehttp 28148 27100 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:10:15,789 basehttp 28148 27304 "OPTIONS /api/faenas/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:15,797 basehttp 28148 27100 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:10:15,797 basehttp 28148 27304 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 14:10:15,801 basehttp 28148 27304 "GET /api/faenas/ HTTP/1.1" 200 442
+INFO 2025-07-15 14:10:15,811 basehttp 28148 28260 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 14:10:15,815 basehttp 28148 27304 "GET /api/estados-equipo/ HTTP/1.1" 200 365
+INFO 2025-07-15 14:10:15,816 basehttp 28148 35416 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:15,826 basehttp 28148 27304 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:15,847 basehttp 28148 35416 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:15,862 basehttp 28148 27304 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:16,591 basehttp 28148 27304 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:10:16,594 basehttp 28148 28260 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:10:16,601 basehttp 28148 27304 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:10:16,601 basehttp 28148 27100 "GET /api/tipos-equipo/ HTTP/1.1" 200 384
+INFO 2025-07-15 14:10:16,604 basehttp 28148 35416 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 14:10:16,612 basehttp 28148 27100 "GET /api/tareas-estandar/ HTTP/1.1" 200 2473
+INFO 2025-07-15 14:10:22,792 basehttp 28148 27100 "OPTIONS /api/planes-mantenimiento/3/detalles/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:22,792 basehttp 28148 35416 "OPTIONS /api/planes-mantenimiento/3/detalles/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:22,796 basehttp 28148 35416 "GET /api/planes-mantenimiento/3/detalles/ HTTP/1.1" 200 469
+INFO 2025-07-15 14:10:22,800 basehttp 28148 27100 "GET /api/planes-mantenimiento/3/detalles/ HTTP/1.1" 200 469
+INFO 2025-07-15 14:10:25,539 basehttp 28148 27100 "OPTIONS /api/planes-mantenimiento/3/generar-agenda/ HTTP/1.1" 200 0
+INFO 2025-07-15 14:10:25,587 basehttp 28148 27100 "GET /api/planes-mantenimiento/3/generar-agenda/ HTTP/1.1" 200 1622
+INFO 2025-07-15 14:10:30,291 basehttp 28148 35416 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:10:30,297 basehttp 28148 28260 "GET /api/planes-mantenimiento/ HTTP/1.1" 200 1131
+INFO 2025-07-15 14:10:30,308 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:30,311 basehttp 28148 27304 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:30,319 basehttp 28148 27100 "GET /api/users/ HTTP/1.1" 200 1413
+INFO 2025-07-15 14:10:30,344 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:30,828 basehttp 28148 28260 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:30,844 basehttp 28148 27100 "GET /api/equipos/ HTTP/1.1" 200 4417
+INFO 2025-07-15 14:10:31,629 basehttp 28148 27100 "GET /api/agendas/ HTTP/1.1" 200 33993
+INFO 2025-07-15 14:10:31,683 basehttp 28148 28260 "GET /api/agendas/ HTTP/1.1" 200 33993
+WARNING 2025-07-15 14:11:02,669 log 28148 28260 Bad Request: /api/agendas/
+WARNING 2025-07-15 14:11:02,669 basehttp 28148 28260 "POST /api/agendas/ HTTP/1.1" 400 184
+WARNING 2025-07-15 14:11:25,392 log 28148 24504 Not Found: /favicon.ico
+WARNING 2025-07-15 14:11:25,392 basehttp 28148 24504 "GET /favicon.ico HTTP/1.1" 404 2346

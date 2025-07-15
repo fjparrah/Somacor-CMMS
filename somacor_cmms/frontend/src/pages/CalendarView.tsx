@@ -35,10 +35,14 @@ interface ApiEvent {
 // --- Componentes Personalizados (sin cambios) ---
 const CustomEvent: React.FC<{ event: MyEvent }> = ({ event }) => {
     const eventTypeClasses: { [key: string]: string } = {
-        preventivo: 'bg-blue-500 hover:bg-blue-600',
-        correctivo: 'bg-orange-500 hover:bg-orange-600',
-        inspeccion: 'bg-teal-500 hover:bg-teal-600',
-        general: 'bg-gray-500 hover:bg-gray-600',
+        'mantenimiento preventivo': 'bg-blue-500 hover:bg-blue-600',
+        'mantenimiento correctivo': 'bg-orange-500 hover:bg-orange-600',
+        'mantenimiento predictivo': 'bg-green-500 hover:bg-green-600',
+        'preventivo': 'bg-blue-500 hover:bg-blue-600',
+        'correctivo': 'bg-orange-500 hover:bg-orange-600',
+        'predictivo': 'bg-green-500 hover:bg-green-600',
+        'inspeccion': 'bg-teal-500 hover:bg-teal-600',
+        'general': 'bg-gray-500 hover:bg-gray-600',
     };
     const baseClasses = 'p-1 text-white rounded-lg text-xs truncate transition-colors h-full flex items-center';
     const eventClasses = `${baseClasses} ${eventTypeClasses[event.type] || eventTypeClasses.general}`;
@@ -142,16 +146,17 @@ const CalendarView = () => {
     const fetchEvents = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await apiClient.get<{results: ApiEvent[]}>('agendas/');
+            const response = await apiClient.get<{results: any[]}>('agendas/');
             const formattedEvents: MyEvent[] = (Array.isArray(response.data) ? response.data : response.data.results || []).map((event: any) => ({
-                id: event.id,
-                title: event.title,
-                start: new Date(event.start),
-                end: new Date(event.end),
-                type: event.type,
-                notes: event.notes,
+                id: event.idagenda,
+                title: event.tituloevento,
+                start: new Date(event.fechahorainicio),
+                end: new Date(event.fechahorafin),
+                type: event.tipoevento?.toLowerCase() || 'general',
+                notes: event.descripcionevento,
             }));
             setEvents(formattedEvents);
+            console.log('Eventos cargados:', formattedEvents.length);
         } catch (error) {
             console.error("Error al cargar los eventos:", error);
             alert("No se pudieron cargar los eventos del calendario.");
