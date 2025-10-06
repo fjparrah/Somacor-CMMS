@@ -6,6 +6,7 @@ import NavLink from './NavLink';
 import NavGroup from './NavGroup';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { getUserInfo, getUserRole, logout } from '../../utils/auth';
+import ChatWidget from '../ChatWidget';
 
 import { 
     LayoutDashboard, ClipboardList, Settings, Activity, Calendar as CalendarIcon, 
@@ -194,6 +195,7 @@ const AppLayout = () => {
             <main className="flex-1 overflow-y-auto p-8">
                 <Outlet />
             </main>
+            <ChatWidget />
         </div>
     );
 };
