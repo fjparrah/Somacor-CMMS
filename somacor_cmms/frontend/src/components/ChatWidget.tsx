@@ -47,13 +47,14 @@ const ChatWidget: React.FC = () => {
 
     // Simular respuesta del bot (aquí se integraría con la API del bot)
     try {
-      const response = await fetch('https://5000-iy7mh09a9ivs0xdzc4g3t-a9297ea2.manus.computer/whatsapp', {
+      const response = await fetch('https://5000-iy7mh09a9ivs0xdzc4g3t-a9297ea2.manus.computer/chat', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams({
-          Body: inputMessage,
+        body: JSON.stringify({
+          message: inputMessage,
+          user_id: 'web_user',
         }),
       });
 
