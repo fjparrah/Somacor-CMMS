@@ -1,3 +1,4 @@
+_enhanced.py para usar Redis en la gestión de sesiones
 from flask import Flask, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from flask_cors import CORS
@@ -5,18 +6,18 @@ import os
 import requests
 import re
 from datetime import datetime
+from session_manager import RedisSessionManager
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}) # Permitir todas las origenes por ahora, ajustar para producción
 
 # Configuración de la API del CMMS
 CMMS_API_BASE_URL = os.environ.get('CMMS_API_BASE_URL', 'http://localhost:8000/api/')
 
-# Almacenamiento temporal de sesiones de usuario (en producción, usar Redis o base de datos)
-user_sessions = {}
+# Gestor de sesiones de Redis
+session_manager = RedisSessionManager()
 
 class ConversationState:
-    """Clase para manejar el estado de la conversación"""
     IDLE = 'idle'
     REPORTING_FAULT = 'reporting_fault'
     AWAITING_EQUIPMENT = 'awaiting_equipment'
@@ -26,23 +27,19 @@ class ConversationState:
     QUERYING_OT = 'querying_ot'
 
 def get_user_session(user_id):
-    """Obtiene o crea una sesión de usuario"""
-    if user_id not in user_sessions:
-        user_sessions[user_id] = {
+    session = session_manager.get_session(user_id)
+    if not session:
+        session = {
             'state': ConversationState.IDLE,
             'data': {}
         }
-    return user_sessions[user_id]
+        session_manager.save_session(user_id, session)
+    return session
 
 def reset_user_session(user_id):
-    """Reinicia la sesión del usuario"""
-    user_sessions[user_id] = {
-        'state': ConversationState.IDLE,
-        'data': {}
-    }
+    session_manager.delete_session(user_id)
 
 def get_equipos():
-    """Obtiene la lista de equipos del CMMS"""
     try:
         response = requests.get(f'{CMMS_API_BASE_URL}equipos/', timeout=5)
         if response.status_code == 200:
@@ -53,7 +50,6 @@ def get_equipos():
         return []
 
 def get_equipo_by_name_or_code(search_term):
-    """Busca un equipo por nombre o código"""
     equipos = get_equipos()
     search_term = search_term.lower().strip()
     
@@ -67,9 +63,7 @@ def get_equipo_by_name_or_code(search_term):
     return None
 
 def get_orden_trabajo(numero_ot):
-    """Obtiene los detalles de una orden de trabajo"""
     try:
-        # Primero, obtener todas las órdenes de trabajo y buscar por número
         response = requests.get(f'{CMMS_API_BASE_URL}ordenes-trabajo/', timeout=5)
         if response.status_code == 200:
             ordenes = response.json()
@@ -82,9 +76,7 @@ def get_orden_trabajo(numero_ot):
         return None
 
 def create_fault_report(equipo_id, descripcion, prioridad='Media'):
-    """Crea un reporte de falla en el CMMS"""
     try:
-        # Obtener el primer usuario disponible como solicitante (en producción, usar el usuario autenticado)
         usuarios_response = requests.get(f'{CMMS_API_BASE_URL}users/', timeout=5)
         if usuarios_response.status_code != 200:
             return None, "No se pudo obtener información de usuarios"
@@ -95,7 +87,6 @@ def create_fault_report(equipo_id, descripcion, prioridad='Media'):
         
         solicitante_id = usuarios[0]['id']
         
-        # Crear el reporte de falla
         data = {
             'idequipo': equipo_id,
             'descripcionproblemareportado': descripcion,
@@ -119,7 +110,6 @@ def create_fault_report(equipo_id, descripcion, prioridad='Media'):
         return None, f"Error de conexión: {str(e)}"
 
 def format_orden_trabajo_info(orden):
-    """Formatea la información de una orden de trabajo para mostrarla al usuario"""
     numero = orden.get('numeroot', 'N/A')
     estado = orden.get('estado_nombre', 'N/A')
     equipo = orden.get('equipo_nombre', 'N/A')
@@ -144,12 +134,10 @@ def format_orden_trabajo_info(orden):
     return mensaje
 
 def process_message(user_id, message):
-    """Procesa el mensaje del usuario según el estado de la conversación"""
     session = get_user_session(user_id)
     state = session['state']
     message_lower = message.lower().strip()
     
-    # Comandos globales
     if message_lower in ['cancelar', 'salir', 'reiniciar']:
         reset_user_session(user_id)
         return "❌ Operación cancelada. ¿En qué más puedo ayudarte?"
@@ -167,7 +155,6 @@ def process_message(user_id, message):
             "También puedes escribir 'cancelar' en cualquier momento para reiniciar."
         )
     
-    # Estado IDLE - esperando comando inicial
     if state == ConversationState.IDLE:
         if 'hola' in message_lower or 'buenos' in message_lower or 'buenas' in message_lower:
             return (
@@ -182,6 +169,7 @@ def process_message(user_id, message):
         elif 'reportar' in message_lower and 'falla' in message_lower:
             session['state'] = ConversationState.AWAITING_EQUIPMENT
             session['data'] = {}
+            session_manager.save_session(user_id, session)
             return (
                 "🔧 *Reporte de Falla*\n\n"
                 "Por favor, indícame el nombre o código del equipo que presenta la falla.\n\n"
@@ -189,7 +177,6 @@ def process_message(user_id, message):
             )
         
         elif 'estado' in message_lower or 'consultar' in message_lower:
-            # Buscar número de OT en el mensaje
             ot_match = re.search(r'OT-[\w-]+', message, re.IGNORECASE)
             if ot_match:
                 numero_ot = ot_match.group(0)
@@ -201,6 +188,7 @@ def process_message(user_id, message):
                     return f"❌ No se encontró la orden de trabajo '{numero_ot}'. Verifica el número e intenta nuevamente."
             else:
                 session['state'] = ConversationState.QUERYING_OT
+                session_manager.save_session(user_id, session)
                 return (
                     "🔍 *Consulta de Orden de Trabajo*\n\n"
                     "Por favor, indícame el número de la OT que deseas consultar.\n\n"
@@ -211,7 +199,7 @@ def process_message(user_id, message):
             equipos = get_equipos()
             if equipos:
                 mensaje = "📋 *Equipos Disponibles:*\n\n"
-                for i, equipo in enumerate(equipos[:10], 1):  # Limitar a 10 equipos
+                for i, equipo in enumerate(equipos[:10], 1):
                     nombre = equipo.get('nombreequipo', 'N/A')
                     codigo = equipo.get('codigointerno', 'N/A')
                     estado = equipo.get('estado_nombre', 'N/A')
@@ -234,13 +222,13 @@ def process_message(user_id, message):
                 "• 'ayuda'\n"
             )
     
-    # Estado AWAITING_EQUIPMENT - esperando información del equipo
     elif state == ConversationState.AWAITING_EQUIPMENT:
         equipo = get_equipo_by_name_or_code(message)
         
         if equipo:
             session['data']['equipo'] = equipo
             session['state'] = ConversationState.AWAITING_DESCRIPTION
+            session_manager.save_session(user_id, session)
             return (
                 f"✅ Equipo seleccionado: *{equipo.get('nombreequipo')}*\n\n"
                 f"Ahora, describe detalladamente la falla que presenta el equipo.\n\n"
@@ -256,7 +244,6 @@ def process_message(user_id, message):
                 f"Escribe 'equipos' para ver la lista completa."
             )
     
-    # Estado AWAITING_DESCRIPTION - esperando descripción de la falla
     elif state == ConversationState.AWAITING_DESCRIPTION:
         if len(message) < 10:
             return (
@@ -266,6 +253,7 @@ def process_message(user_id, message):
         
         session['data']['descripcion'] = message
         session['state'] = ConversationState.AWAITING_PRIORITY
+        session_manager.save_session(user_id, session)
         return (
             "📊 *Prioridad de la Falla*\n\n"
             "¿Qué prioridad tiene esta falla?\n\n"
@@ -276,7 +264,6 @@ def process_message(user_id, message):
             "Responde con: Baja, Media, Alta o Crítica"
         )
     
-    # Estado AWAITING_PRIORITY - esperando prioridad
     elif state == ConversationState.AWAITING_PRIORITY:
         prioridad_map = {
             'baja': 'Baja',
@@ -295,6 +282,7 @@ def process_message(user_id, message):
         if prioridad:
             session['data']['prioridad'] = prioridad
             session['state'] = ConversationState.CONFIRMING_REPORT
+            session_manager.save_session(user_id, session)
             
             equipo = session['data']['equipo']
             descripcion = session['data']['descripcion']
@@ -312,14 +300,12 @@ def process_message(user_id, message):
                 "Por favor, responde con: Baja, Media, Alta o Crítica"
             )
     
-    # Estado CONFIRMING_REPORT - confirmando el reporte
     elif state == ConversationState.CONFIRMING_REPORT:
         if message_lower in ['si', 'sí', 'yes', 'confirmar', 'ok']:
             equipo = session['data']['equipo']
             descripcion = session['data']['descripcion']
             prioridad = session['data']['prioridad']
             
-            # Crear el reporte de falla
             resultado, error = create_fault_report(
                 equipo['idequipo'],
                 descripcion,
@@ -332,7 +318,7 @@ def process_message(user_id, message):
                 numero_ot = resultado.get('numeroot', 'N/A')
                 return (
                     f"✅ *Reporte Creado Exitosamente*\n\n"
-                    f"📋 Número de OT: *{numero_ot}*\n"
+                    f"📋 Número de OT: **{numero_ot}**\n"
                     f"🔧 Equipo: {equipo.get('nombreequipo')}\n"
                     f"⚠️ Prioridad: {prioridad}\n\n"
                     f"El técnico será notificado y se asignará la orden de trabajo pronto.\n\n"
@@ -352,9 +338,7 @@ def process_message(user_id, message):
         else:
             return "Por favor, responde 'Sí' para confirmar o 'No' para cancelar."
     
-    # Estado QUERYING_OT - consultando OT
     elif state == ConversationState.QUERYING_OT:
-        # Buscar número de OT en el mensaje
         ot_match = re.search(r'OT-[\w-]+', message, re.IGNORECASE)
         
         if ot_match:
@@ -376,21 +360,18 @@ def process_message(user_id, message):
                 "Por favor, proporciona el número en el formato: OT-XXX-XXX"
             )
     
-    # Estado desconocido
     else:
         reset_user_session(user_id)
         return "❌ Hubo un error. Por favor, intenta nuevamente."
 
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp_webhook():
-    """Webhook para mensajes de WhatsApp vía Twilio"""
     incoming_msg = request.values.get('Body', '').strip()
     from_number = request.values.get('From', 'unknown')
     
     resp = MessagingResponse()
     msg = resp.message()
     
-    # Procesar el mensaje
     response_text = process_message(from_number, incoming_msg)
     msg.body(response_text)
     
@@ -398,7 +379,6 @@ def whatsapp_webhook():
 
 @app.route('/chat', methods=['POST'])
 def chat_endpoint():
-    """Endpoint para el widget de chat web"""
     data = request.get_json()
     message = data.get('message', '').strip()
     user_id = data.get('user_id', 'web_user')
@@ -406,7 +386,6 @@ def chat_endpoint():
     if not message:
         return jsonify({'error': 'Mensaje vacío'}), 400
     
-    # Procesar el mensaje
     response_text = process_message(user_id, message)
     
     return jsonify({
@@ -416,7 +395,6 @@ def chat_endpoint():
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Endpoint de salud para verificar que el servicio está activo"""
     return jsonify({
         'status': 'ok',
         'service': 'Somacor CMMS Bot',
@@ -425,3 +403,4 @@ def health_check():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
