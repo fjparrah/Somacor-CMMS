@@ -2,7 +2,7 @@
 ### DAG de Consulta de Estado de OT
 
 Este DAG se encarga de consultar el estado de una Orden de Trabajo (OT) específica y
-enviar la respuesta a través de un webhook.
+enviar la respuesta a través del nuevo servicio de notificaciones.
 """
 
 from airflow.decorators import dag, task
@@ -10,12 +10,10 @@ from pendulum import datetime
 import requests
 import re
 
-# URL del webhook del API Gateway
-WEBHOOK_URL = "http://localhost:5001/api/bot/webhook"
+# URL del servicio de notificaciones
+NOTIFICATION_URL = "http://localhost:5001/api/notify"
 
 def get_orden_trabajo(numero_ot):
-    # Esta función debería estar en un módulo de utilidades
-    # pero la incluimos aquí por simplicidad
     try:
         response = requests.get(f'http://localhost:8000/api/ordenes-trabajo/', timeout=5)
         if response.status_code == 200:
@@ -62,16 +60,21 @@ def query_ot_status_workflow():
         return format_orden_trabajo_info(ot_data)
 
     @task
-    def send_response_to_webhook(user_id: str, message: str):
+    def send_notification(user_id: str, message: str, service_name: str = 'telegram'):
         try:
-            requests.post(WEBHOOK_URL, json={'user_id': user_id, 'message': message})
+            payload = {
+                'service_name': service_name,
+                'user_id': user_id,
+                'message': message
+            }
+            requests.post(NOTIFICATION_URL, json=payload)
         except Exception as e:
-            print(f"Error al enviar respuesta al webhook: {str(e)}")
+            print(f"Error al enviar la notificación: {str(e)}")
 
     ot_number = extract_ot_number(message="{{ dag_run.conf.message }}")
     ot_data = query_ot_api(ot_number=ot_number)
     formatted_message = format_ot_response(ot_data=ot_data)
-    send_response_to_webhook(user_id="{{ dag_run.conf.user_id }}", message=formatted_message)
+    send_notification(user_id="{{ dag_run.conf.user_id }}", message=formatted_message)
 
 query_ot_status_workflow_dag = query_ot_status_workflow()
 

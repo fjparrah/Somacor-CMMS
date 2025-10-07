@@ -116,3 +116,27 @@ def handle_webhook():
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
 
+
+
+from notification_services.factory import get_notification_service
+import asyncio
+
+@app.route('/api/notify', methods=['POST'])
+async def notify_user():
+    data = request.get_json()
+    service_name = data.get('service_name')
+    user_id = data.get('user_id')
+    message = data.get('message')
+
+    if not all([service_name, user_id, message]):
+        return jsonify({'error': 'Faltan parámetros: service_name, user_id, message'}), 400
+
+    try:
+        service = get_notification_service(service_name)
+        await service.send_message(user_id, message)
+        return jsonify({'status': 'ok', 'message': f'Notificación enviada a {user_id} a través de {service_name}.'})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al enviar la notificación: {str(e)}'}), 500
+
