@@ -1,6 +1,6 @@
 # Sistema CMMS Somacor
 
-Este repositorio contiene el código fuente del Sistema de Gestión de Mantenimiento Computarizado (CMMS) desarrollado para Somacor. El sistema está diseñado para optimizar la gestión de equipos, órdenes de trabajo, planes de mantenimiento y checklists, mejorando la eficiencia operativa y la trazabilidad de las actividades de mantenimiento.
+Este repositorio contiene el código fuente del Sistema de Gestión de Mantenimiento Computarizado (CMMS) desarrollado para Somacor. El sistema está diseñado para optimizar la gestión de equipos, órdenes de trabajo, planes de mantenimiento y checklists, mejorando la eficiencia operativa y la trazabilidad de las actividades de mantenimiento con un bot ia asistente.
 
 ## 🚀 Características Principales
 
