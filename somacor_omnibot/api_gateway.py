@@ -1,4 +1,3 @@
-_gateway.py`
 """
 API Gateway para el Bot Omnicanal de Somacor-CMMS
 

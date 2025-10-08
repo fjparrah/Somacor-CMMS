@@ -1,12 +1,11 @@
 # Dependencias del Bot Omnicanal Somacor-CMMS
 
-# Framework web
-flask==3.0.0
+# Framework web (compatible con Airflow)
+flask>=2.2,<2.3
 flask-cors==4.0.0
 
 # Apache Airflow
 apache-airflow==2.8.0
-apache-airflow[postgres]==2.8.0
 
 # Gestión de sesiones
 redis==5.0.1
