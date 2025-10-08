@@ -10,7 +10,7 @@ from datetime import timedelta
 class RedisSessionManager:
     """Gestiona las sesiones de usuario en Redis."""
 
-    def __init__(self, host=\'localhost\', port=6379, db=0, session_ttl=3600):
+    def __init__(self, host='localhost', port=6379, db=0, session_ttl=3600):
         """
         Inicializa el gestor de sesiones de Redis.
 

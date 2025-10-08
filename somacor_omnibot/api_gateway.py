@@ -1,4 +1,3 @@
-_gateway.py`
 """
 API Gateway para el Bot Omnicanal de Somacor-CMMS
 
@@ -10,14 +9,63 @@ o disparar un DAG de Airflow (para flujos de trabajo complejos).
 from flask import Flask, request, jsonify
 from datetime import datetime
 import uuid
-from airflow.api.client.local_client import Client
-from session_manager import RedisSessionManager
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
+
+try:
+    from airflow.api.client.local_client import Client
+    airflow_available = True
+except ImportError:
+    airflow_available = False
+    print("⚠️ Airflow no disponible. Funcionando en modo degradado.")
+
+try:
+    from session_manager import RedisSessionManager
+    redis_available = True
+except ImportError:
+    redis_available = False
+    print("⚠️ Redis no disponible. Usando sesiones en memoria.")
 
 app = Flask(__name__)
 
 # Cliente de Airflow y gestor de sesiones
-airflow_client = Client(None, None)
-session_manager = RedisSessionManager()
+if airflow_available:
+    airflow_client = Client(None, None)
+else:
+    airflow_client = None
+
+if redis_available:
+    session_manager = RedisSessionManager()
+else:
+    # Fallback a diccionario en memoria
+    session_manager = {}
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Endpoint de verificación de salud del sistema"""
+    status = {
+        'status': 'ok',
+        'timestamp': datetime.now().isoformat(),
+        'services': {
+            'api_gateway': 'ok',
+            'airflow': 'ok' if airflow_available else 'unavailable',
+            'redis': 'ok' if redis_available else 'unavailable'
+        }
+    }
+    
+    # Verificar conectividad con CMMS
+    try:
+        import requests
+        cmms_url = os.getenv('CMMS_API_BASE_URL', 'http://localhost:8000/api/')
+        response = requests.get(f'{cmms_url}equipos/', timeout=5)
+        status['services']['cmms'] = 'ok' if response.status_code == 200 else 'error'
+    except:
+        status['services']['cmms'] = 'unavailable'
+    
+    return jsonify(status)
 
 @app.route('/api/bot/message', methods=['POST'])
 def handle_message():
@@ -29,7 +77,10 @@ def handle_message():
         return jsonify({'error': 'Mensaje vacío'}), 400
 
     # Obtener la sesión del usuario
-    session = session_manager.get_session(user_id) or {'state': 'idle', 'data': {}}
+    if redis_available:
+        session = session_manager.get_session(user_id) or {'state': 'idle', 'data': {}}
+    else:
+        session = session_manager.get(user_id, {'state': 'idle', 'data': {}})
 
     # Lógica del enfoque híbrido
     intent = analyze_intent(message, session)
@@ -40,17 +91,21 @@ def handle_message():
         return jsonify({'response': response_text, 'timestamp': datetime.now().isoformat()})
     else:
         # Disparar un DAG para flujos complejos
-        dag_id = get_dag_id_for_intent(intent)
-        run_id = f'manual__{uuid.uuid4()}'
-        
-        airflow_client.trigger_dag(
-            dag_id=dag_id,
-            run_id=run_id,
-            conf={'user_id': user_id, 'message': message, 'session': session}
-        )
-        
-        # Respuesta inmediata al usuario mientras se procesa el flujo
-        response_text = get_processing_message(intent)
+        if airflow_available:
+            dag_id = get_dag_id_for_intent(intent)
+            run_id = f'manual__{uuid.uuid4()}'
+            
+            airflow_client.trigger_dag(
+                dag_id=dag_id,
+                run_id=run_id,
+                conf={'user_id': user_id, 'message': message, 'session': session}
+            )
+            
+            # Respuesta inmediata al usuario mientras se procesa el flujo
+            response_text = get_processing_message(intent)
+        else:
+            response_text = "⚠️ Sistema en mantenimiento. Intenta más tarde."
+            
         return jsonify({'response': response_text, 'timestamp': datetime.now().isoformat()})
 
 def analyze_intent(message, session):
@@ -114,7 +169,14 @@ def handle_webhook():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    port = int(os.getenv('API_GATEWAY_PORT', 5001))
+    debug = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    
+    print(f"🚀 Iniciando API Gateway en puerto {port}")
+    print(f"🔧 Airflow disponible: {'Sí' if airflow_available else 'No'}")
+    print(f"🔧 Redis disponible: {'Sí' if redis_available else 'No'}")
+    
+    app.run(debug=debug, host='0.0.0.0', port=port)
 
 
 
